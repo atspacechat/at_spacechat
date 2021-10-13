@@ -145,6 +145,6 @@ class Homeview extends GetView<HomeController> {
 
     String unikey = MixedConstants.regex + uuid.v1().replaceAll('-', '_');
 
-    controller.shareSignal({'Message': msg, 'Unisignal': unikey});
+    controller.shareSignal({'Message': msg, 'unisignal': unikey});
   }
 }

@@ -30,7 +30,7 @@ class HomeController extends GetxController {
 
   Future<void> shareSignal(Map data) async {
     AtKey atKey = AtKey();
-    
+    atKey.key =  data['unisignal'];
     var metadata = Metadata()..isPublic = true;
     atKey.metadata = metadata;
 
@@ -74,7 +74,7 @@ class HomeController extends GetxController {
 
   Future<void> readSharedByMeSignal(Map data) async {
     /// need to be defined clientSdkService.atsign
-    String? atSign = clientSdkService.atsign;
+    String? atSign = clientSdkService.currentAtsign;
 
     List<AtKey> response;
     response = await clientSdkService.getAtKeys(sharedBy: atSign);

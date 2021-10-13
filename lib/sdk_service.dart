@@ -7,15 +7,13 @@ import 'package:spacesignal/utils/constants.dart';
 import 'package:at_commons/at_commons.dart';
 
 class AtService {
-  static final AtService _singleton = AtService._internal();
-
-  AtService._internal();
   static final KeyChainManager _keyChainManager = KeyChainManager.getInstance();
-
+  static final AtService _singleton = AtService._internal();
+  AtService._internal();
   factory AtService.getInstance() {
     return _singleton;
   }
-  String? atsign;
+  String? currentAtsign;
 
   Future<AtClientPreference> getAtClientPreference() async {
     Directory appDocumentDirectory =
@@ -33,25 +31,31 @@ class AtService {
   Map<String?, AtClientService> atClientServiceMap =
       <String, AtClientService>{};
 
-   AtClient _getAtClientForAtsign() {
+  AtClient _getAtClientForAtsign() {
     return AtClientManager.getInstance().atClient;
   }
 
 
+  // AtClient? _getAtClientForAtsign({String? atsign}) {
+  //   atsign ??= atsign;
+  //   if (atClientServiceMap.containsKey(atsign)) {
+  //     return AtClientManager.getInstance().atClient;
+  //   }
+  //   return null;
+  // }
+
   ///Fetches atsign from device keychain.
   Future<String?> getAtSign() async {
-    return _keyChainManager.getAtSign();
+    return await _keyChainManager.getAtSign();
   }
 
   Future<bool> put(AtKey atKey, String value) async {
-    return await _getAtClientForAtsign()
-        .put(atKey, value);
+    return _getAtClientForAtsign().put(atKey, value);
   }
-
 
   Future<bool> delete({String? key}) async {
     at_commons.AtKey atKey = at_commons.AtKey()..key = key;
-    return _getAtClientForAtsign().delete(atKey);
+    return await  _getAtClientForAtsign().delete(atKey);
   }
 
   Future<String> get(AtKey atKey) async {
@@ -60,13 +64,16 @@ class AtService {
   }
 
   Future<List<AtKey>> getAtKeys({String? sharedBy}) async {
-    return await _getAtClientForAtsign()
-        .getAtKeys(sharedBy:sharedBy,regex: MixedConstants.regex);
+    return await _getAtClientForAtsign().getAtKeys(regex: MixedConstants.regex);
   }
 
   Future<bool> makeAtsignPrimary(String atsign) async {
     atsign = formatAtSign(atsign)!;
     return _keyChainManager.makeAtSignPrimary(atsign);
+  }
+
+  Future<void> deleteAtsign(String atsign) async {
+    return await KeychainUtil.deleteAtSignFromKeychain(atsign);
   }
 
   ///Returns null if [atsign] is null else the formatted [atsign].
