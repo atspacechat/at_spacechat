@@ -35,7 +35,11 @@ class AtService {
     return AtClientManager.getInstance().atClient;
   }
 
-
+  Future<bool> makeAtSignPrimary(String atsign) async {
+    AtClientManager.getInstance().setCurrentAtSign(atsign, MixedConstants.appNamespace, AtClientPreference());
+    currentAtsign = atsign;
+    return await _keyChainManager.makeAtSignPrimary(atsign);
+  }
   // AtClient? _getAtClientForAtsign({String? atsign}) {
   //   atsign ??= atsign;
   //   if (atClientServiceMap.containsKey(atsign)) {

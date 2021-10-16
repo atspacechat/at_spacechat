@@ -7,7 +7,6 @@ import 'package:spacesignal/utils/constants.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 
 import '../../../../sdk_service.dart';
-import 'homeview.dart';
 
 class OnbordingScreen extends StatefulWidget {
   const OnbordingScreen({Key? key}) : super(key: key);
@@ -31,6 +30,8 @@ class HexColor extends Color {
 class OnbordingScreenState extends State<OnbordingScreen> {
   late AtClientPreference atClientPrefernce;
   final _logger = AtSignLogger('Spacesignal');
+    AtService clientSdkService = AtService.getInstance();
+
   @override
   void initState() {
     AtService.getInstance()
@@ -115,7 +116,9 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                           .atClientServiceMap = value;
                                       _logger.finer(
                                           'Successfully onboarded $atsign');
+                                          clientSdkService.currentAtsign =  atsign; 
                                     },
+                                 
                                     onError: (Object? error) {
                                       _logger.severe(
                                           'Onboarding throws $error error');
@@ -124,7 +127,9 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                     appAPIKey: MixedConstants.apiKey,
                                     rootEnvironment:
                                         RootEnvironment.Production);
+                                        
                               },
+                              
                               child: Text(
                                 "Let's start!",
                                 style: TextStyle(

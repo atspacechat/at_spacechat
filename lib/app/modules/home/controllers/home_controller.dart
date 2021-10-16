@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:spacesignal/sdk_service.dart';
 
-
-
 class HomeController extends GetxController {
   TextEditingController? signalEditingController;
   AtService clientSdkService = AtService.getInstance();
@@ -13,14 +11,12 @@ class HomeController extends GetxController {
   var signalByMelist = List<Map<String, dynamic>>.empty(growable: true).obs;
   var atClientPreference;
   String? currentAtsign;
-  
-  
-    
 
   @override
   void onInit() {
     super.onInit();
     readSignal();
+    readSharedByMeSignal();
     signalEditingController = TextEditingController();
   }
 
@@ -30,7 +26,7 @@ class HomeController extends GetxController {
 
   Future<void> shareSignal(Map data) async {
     AtKey atKey = AtKey();
-    atKey.key =  data['unisignal'];
+    atKey.key = data['unisignal'];
     var metadata = Metadata()..isPublic = true;
     atKey.metadata = metadata;
 
@@ -38,10 +34,13 @@ class HomeController extends GetxController {
     print(encoded);
 
     bool result = await clientSdkService.put(atKey, encoded);
-
-    clearSignalEditingController();
-    readSignal();
-    print('$result');
+    if (result == true) {
+      clearSignalEditingController();
+      signallist.clear();
+      signalByMelist.clear();
+      readSignal();
+      readSharedByMeSignal();
+    }
   }
 
   Future<dynamic> readSignalValue(AtKey atKey) async {
@@ -51,8 +50,6 @@ class HomeController extends GetxController {
     }
     return '';
   }
-
-
 
   Future<void> readSignal() async {
     List<AtKey> response;
@@ -72,10 +69,9 @@ class HomeController extends GetxController {
   //shared  signal by me
 //specify sharedby with the current  atsign
 
-  Future<void> readSharedByMeSignal(Map data) async {
+  Future<void> readSharedByMeSignal() async {
     /// need to be defined clientSdkService.atsign
     String? atSign = clientSdkService.currentAtsign;
-
     List<AtKey> response;
     response = await clientSdkService.getAtKeys(sharedBy: atSign);
     response.retainWhere((element) => !element.metadata!.isCached);

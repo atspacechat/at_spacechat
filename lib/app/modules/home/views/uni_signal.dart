@@ -14,17 +14,17 @@ class UniSignal extends GetView<HomeController> {
         children: [
           Expanded(child: Obx(() {
             return ListView.builder(
-                itemCount: controller.signalByMelist.length,
+                itemCount: controller.signallist.length,
                 itemBuilder: (context, index) {
-                  var _item = controller.signalByMelist[index];
-                  String key = controller.signalByMelist[index]['Unisignal'];
+                  var _item = controller.signallist[index];
+                  String key =_item['unisignal'];
                   return ListTile(
                     leading: IconButton(
                       icon: Icon(Icons.messenger_sharp),
                       onPressed: () {},
                     ),
                     title:
-                        Text("${controller.signalByMelist[index]['Message']}"),
+                        Text("${_item['Message']}"),
                     // subtitle: Text("${controller.passlist[index]['login']}"),
                     onTap: () {},
                   );

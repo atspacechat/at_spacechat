@@ -14,16 +14,16 @@ class ShareByMeSignal extends GetView<HomeController> {
         children: [
           Expanded(child: Obx(() {
             return ListView.builder(
-                itemCount: controller.signallist.length,
+                itemCount: controller.signalByMelist.length,
                 itemBuilder: (context, index) {
-                  var _item = controller.signallist[index];
-                  String key = controller.signallist[index]['Unisignal'];
+                  var _item = controller.signalByMelist[index];
+                  String key = _item['unisignal'];
                   return ListTile(
                     leading: IconButton(
                       icon: Icon(Icons.messenger_sharp),
                       onPressed: () {},
                     ),
-                    title: Text("${controller.signallist[index]['Message']}"),
+                    title: Text("${_item['Message']}"),
                     // subtitle: Text("${controller.passlist[index]['login']}"),
                     onTap: () {},
                   );

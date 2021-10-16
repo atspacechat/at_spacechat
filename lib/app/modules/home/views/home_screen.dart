@@ -2,10 +2,14 @@ import 'package:at_common_flutter/services/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 import 'package:spacesignal/app/modules/home/views/fabbottomappbar.dart';
+import 'package:spacesignal/app/modules/home/views/signal_by_me.dart';
+import 'package:spacesignal/app/modules/home/views/uni_signal.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/utils/initial_image.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   static final String id = 'home';
@@ -83,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                       GestureDetector(
                           onTap: () {
-                            // _profilescreen();
+                            _profilescreen();
                           },
                           child: initialimage(atsign: activeAtSign)),
                       SizedBox(
@@ -132,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             child: FittedBox(
                 child: FloatingActionButton(
               onPressed: () {
-                // _signal();
+                Get.to(UniSignal());
               },
               backgroundColor: Colors.white,
               tooltip: 'Increment',
@@ -163,11 +167,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ));
   }
 
-  // void _profilescreen() {
-  //   Navigator.of(context).pushAndRemoveUntil(
-  //       new MaterialPageRoute(builder: (context) => Profile()),
-  //       (route) => route == null);
-  // }
+  void _profilescreen() {
+    Get.to(ShareByMeSignal());
+  }
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
