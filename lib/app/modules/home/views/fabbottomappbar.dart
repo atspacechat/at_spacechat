@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:at_common_flutter/services/size_config.dart';
+import 'package:spacesignal/app/modules/contacts/views/contacts_screen.dart';
 import 'package:spacesignal/app/modules/home/controllers/home_controller.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:get/get.dart';
@@ -119,7 +120,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
           child: InkWell(
             onTap: () => {
               if (item!.text == "Chats")
-                {_chat()}
+               Get.to(ContactScreen())
               else
                 {
                   Get.defaultDialog(

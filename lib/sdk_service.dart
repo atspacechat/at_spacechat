@@ -57,8 +57,7 @@ class AtService {
     return _getAtClientForAtsign().put(atKey, value);
   }
 
-  Future<bool> delete({String? key}) async {
-    at_commons.AtKey atKey = at_commons.AtKey()..key = key;
+  Future<bool> delete(at_commons.AtKey atKey) async {
     return await  _getAtClientForAtsign().delete(atKey);
   }
 

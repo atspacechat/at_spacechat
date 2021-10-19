@@ -27,7 +27,9 @@ class HomeController extends GetxController {
   Future<void> shareSignal(Map data) async {
     AtKey atKey = AtKey();
     atKey.key = data['unisignal'];
-    var metadata = Metadata()..isPublic = true;
+    var metadata = Metadata()
+      ..isPublic = true
+      ..ttr = -1;
     atKey.metadata = metadata;
 
     String encoded = jsonEncode(data);
@@ -85,7 +87,23 @@ class HomeController extends GetxController {
     }
   }
 
-  // Future<void> recallSignal (String sacredkey){
-  //   return;
-  // }
+  Future<void> recallSignal(String unikey) async {
+    var metaData = Metadata()
+      ..ttr = -1
+      ..ccd = true
+      ..isPublic = true;
+    var key = AtKey()
+      ..key = '$unikey'
+      ..metadata = metaData;
+
+    var result = await clientSdkService.delete(key);
+    if (result == true) {
+      signallist.clear();
+      signalByMelist.clear();
+      readSignal();
+      readSharedByMeSignal();
+    } else {
+      print("Error Deleting");
+    }
+  }
 }
