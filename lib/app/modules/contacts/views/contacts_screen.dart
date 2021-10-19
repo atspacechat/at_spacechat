@@ -3,6 +3,8 @@ import 'package:at_commons/at_commons.dart';
 import 'package:at_contact/at_contact.dart';
 import 'package:at_common_flutter/at_common_flutter.dart';
 import 'package:at_common_flutter/services/size_config.dart';
+import 'package:get/get.dart';
+import 'package:spacesignal/app/modules/home/views/home_screen.dart';
 import 'package:spacesignal/utils/colors.dart';
 import 'package:spacesignal/utils/text_strings.dart';
 import 'package:spacesignal/app/modules/contacts/views/error_screen.dart';
@@ -17,7 +19,7 @@ import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/utils/constants.dart';
 import 'package:spacesignal/app/modules/contacts/controllers/init_contacts_service.dart';
 // import 'package:spacesignal/chatlist/add_contacts.dart' as a;
-import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart' as c;
+import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 // import 'package:spacesignal/utils/init_chat_service.dart';
 import 'package:spacesignal/app/modules/contacts/views/blocked_contact.dart';
 
@@ -55,7 +57,7 @@ class _ContactScreenState extends State<ContactScreen> {
   // String? chatWithAtSign;
 
   String searchText = '';
-  c.ContactService? _contactService;
+  ContactService? _contactService;
   bool deletingContact = false;
   bool blockingContact = false;
   bool errorOcurred = false;
@@ -69,11 +71,13 @@ class _ContactScreenState extends State<ContactScreen> {
     // getAtSignAndInitializeChat();
     // scaffoldKey = GlobalKey<ScaffoldState>();
 
-    _contactService = c.ContactService();
+    _contactService = ContactService();
+    _contactService!.initContactsService('root.atsign.wtf',64);
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      // String? currentAtSign=await ClientSdkService.getInstance().getAtSign();
+      // String? currentAtSign=await AtService.getInstance().getAtSign();
       // initializeContactsService(clientSdkService!.atClientServiceInstance!.atClient!,currentAtSign!,rootDomain: MixedConstants.ROOT_DOMAIN);
+
       var _result = await _contactService!.fetchContacts();
       print('$_result = true');
       // activeAtSign=currentAtSign;
@@ -131,6 +135,7 @@ class _ContactScreenState extends State<ContactScreen> {
                       // color: Colors.white,
                       onPressed: () {
                         // _goback();
+                        Get.to(HomeScreen());
                       },
                     )
                   ],

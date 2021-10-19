@@ -10,6 +10,7 @@ import 'package:spacesignal/app/modules/home/views/uni_signal.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/utils/initial_image.dart';
 import 'package:get/get.dart';
+import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 
 class HomeScreen extends StatefulWidget {
   static final String id = 'home';
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   // SignalService _signalService = SignalService();
   // String message;
   int presstime = 1;
+  ContactService? _contactService;
 
   @override
   void initState() {
@@ -52,6 +54,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // _signalService.initSignalService(clientSdkService.atClientServiceInstance.atClient, activeAtSign,'root.atsign.org',64);
       // initializeContactsService(clientSdkService.atClientServiceInstance.atClient,activeAtSign,rootDomain: 'root.atsign.org');
     });
+
+    _contactService = ContactService();
+    _contactService!.initContactsService('root.atsign.wtf',64);
+
+
     scaffoldKey = GlobalKey<ScaffoldState>();
     super.initState();
   }
