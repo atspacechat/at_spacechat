@@ -88,7 +88,7 @@ class _ContactScreenState extends State<ContactScreen> {
     scaffoldKey = GlobalKey<ScaffoldState>();
     _chatService = ChatService();
     _contactService = ContactService();
-    _contactService!.initContactsService('root.atsign.wtf',64);
+    _contactService!.initContactsService('root.atsign.org',64);
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       String? currentAtSign=await AtService.getInstance().getAtSign();

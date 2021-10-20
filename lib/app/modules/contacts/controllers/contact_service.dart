@@ -261,6 +261,7 @@ class ContactService {
   }
 
   Future<bool> checkAtsign(String? atSign) async {
+    print(atSign);
     if (atSign == null) {
       return false;
     } else if (!atSign.contains('@')) {
@@ -269,6 +270,7 @@ class ContactService {
     var checkPresence =
     await AtLookupImpl.findSecondary(atSign, rootDomain, rootPort);
     // ignore: unnecessary_null_comparison
+    print(checkPresence);
     return checkPresence != null;
   }
 
