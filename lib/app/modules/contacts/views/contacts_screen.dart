@@ -14,7 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spacesignal/app/modules/contacts/views/custom_list_tile.dart';
-// import 'package:spacesignal/service/chat_service.dart';
+import 'package:spacesignal/app/modules/chat/controllers/chat_service.dart';
+import 'package:spacesignal/app/modules/chat/controllers/init_chat_service.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/utils/constants.dart';
 import 'package:spacesignal/app/modules/contacts/controllers/init_contacts_service.dart';
@@ -22,6 +23,19 @@ import 'package:spacesignal/app/modules/contacts/controllers/init_contacts_servi
 import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 // import 'package:spacesignal/utils/init_chat_service.dart';
 import 'package:spacesignal/app/modules/contacts/views/blocked_contact.dart';
+
+
+
+import 'dart:io';
+
+import 'package:at_client_mobile/at_client_mobile.dart';
+import 'package:at_commons/at_commons.dart' as at_commons;
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:spacesignal/utils/constants.dart';
+import 'package:at_commons/at_commons.dart';
+
+
+
 
 class ContactScreen extends StatefulWidget {
   static final String id = 'contactscreen';
@@ -48,20 +62,20 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
 
   // ClientSdkService? clientSdkService = ClientSdkService.getInstance();
-  // String? activeAtSign = '';
-  // GlobalKey<ScaffoldState>? scaffoldKey;
+  String? activeAtSign = '';
+  GlobalKey<ScaffoldState>? scaffoldKey;
   //
   // //String chatWithAtSign;
-  // bool showOptions = false;
-  // bool isEnabled = true;
-  // String? chatWithAtSign;
+  bool showOptions = false;
+  bool isEnabled = true;
+  String? chatWithAtSign;
 
   String searchText = '';
   ContactService? _contactService;
   bool deletingContact = false;
   bool blockingContact = false;
   bool errorOcurred = false;
-
+  late ChatService _chatService;
   final String storageKey = 'atspacesignalchatHistory.';
 
   List<AtContact> selectedList = [];
@@ -69,21 +83,20 @@ class _ContactScreenState extends State<ContactScreen> {
   void initState() {
 
     // getAtSignAndInitializeChat();
-    // scaffoldKey = GlobalKey<ScaffoldState>();
-
+    scaffoldKey = GlobalKey<ScaffoldState>();
+    _chatService = ChatService();
     _contactService = ContactService();
     _contactService!.initContactsService('root.atsign.wtf',64);
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      // String? currentAtSign=await AtService.getInstance().getAtSign();
+      String? currentAtSign=await AtService.getInstance().getAtSign();
       // initializeContactsService(clientSdkService!.atClientServiceInstance!.atClient!,currentAtSign!,rootDomain: MixedConstants.ROOT_DOMAIN);
-
       var _result = await _contactService!.fetchContacts();
       print('$_result = true');
-      // activeAtSign=currentAtSign;
-      // initializeChatService(clientSdkService!.atClientServiceInstance!.atClient!, currentAtSign, rootDomain:MixedConstants.ROOT_DOMAIN);
-
-      // _addreceiver();
+      activeAtSign=currentAtSign;
+      // initializeChatService(AtService.atClientServiceInstance.AtClientManager, currentAtSign!);
+      await _chatService.getChatHistory();
+      _addreceiver();
 
       if (_result == null) {
         print('_result = true');
@@ -134,7 +147,6 @@ class _ContactScreenState extends State<ContactScreen> {
                       ),
                       // color: Colors.white,
                       onPressed: () {
-                        // _goback();
                         Get.to(HomeScreen());
                       },
                     )
@@ -793,115 +805,107 @@ class _ContactScreenState extends State<ContactScreen> {
   //   initializeContactsService(clientSdkService!.atClientInstance!, activeAtSign!,
   //       rootDomain: MixedConstants.ROOT_DOMAIN);
   // }
-  //
-  //
-  // void _goback() {
-  //   Navigator.of(context).pushAndRemoveUntil(
-  //       new MaterialPageRoute(builder: (context) => new HomeScreen()),
-  //           (route) => route == null);
-  // }
-  //
-  //
-  // checkForValidAtsignAndSet() {
-  //   if (chatWithAtSign != null && chatWithAtSign!.trim() != '') {
-  //     // TODO: Call function to set receiver's @sign
-  //     setAtsignToChatWith();
-  //     setState(() {
-  //       showOptions = true;
-  //     });
-  //     return true;
-  //   } else {
-  //     showDialog(
-  //         barrierDismissible: false,
-  //         context: context,
-  //         builder: (BuildContext context) {
-  //           return AlertDialog(
-  //             title: Row(
-  //               children: [Text('@sign Missing!')],
-  //             ),
-  //             content: Text('Please enter an @sign'),
-  //             actions: <Widget>[
-  //               TextButton(
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: Text('Close'),
-  //               )
-  //             ],
-  //           );
-  //         });
-  //   }
-  // }
-  // getAtSignAndInitializeChat() async {
-  //   String? currentAtSign = await clientSdkService!.getAtSign();
-  //   setState(() {
-  //     activeAtSign = currentAtSign;
-  //   });
-  //   // List<String> allAtSigns = at_demo_data.allAtsigns;
-  //   // allAtSigns.remove(activeAtSign);
-  //   // setState(() {
-  //   //   atSigns = allAtSigns;
-  //   // });
-  //   initializeChatService(
-  //       clientSdkService!.atClientServiceInstance!.atClient!, activeAtSign!,
-  //       // rootDomain: 'root.atsign.wtf');
-  //       rootDomain:MixedConstants.ROOT_DOMAIN);
-  //   // 'root.atsign.org'
-  // }
-  //
-  // setAtsignToChatWith() {
-  //   // print(activeAtSign);
-  //   // print(chatWithAtSign);
-  //   setChatWithAtSign(chatWithAtSign!);
-  // }
-  //
-  // _getSharedKeys() async {
-  //   await _contactService!.sync();
-  //   //return await _contactService.getAtKeys(regex: 'cached.*cookbook');
-  //   return await _contactService!.getAtKeys(regex: 'cached.*at_spacesignal');
-  // }
-  //
-  // _addreceiver() async {
-  //   List<AtKey> sharedKeysList = await _getSharedKeys();
-  //   print(sharedKeysList.length);
-  //
-  //   sharedKeysList.forEach((element) async {
-  //     if (element.key=="replier"){
-  //       await _contactService!.addAtSign(context,
-  //           atSign: element.sharedBy);
-  //       print(element.sharedBy);
-  //
-  //       // String chatWithAtSign=element.sharedBy;
-  //       // setChatWithAtSign(chatWithAtSign);
-  //       //
-  //       // Metadata metadata = Metadata()..isCached = true;
-  //       // AtKey atKey = AtKey()
-  //       //     ..key = element.key
-  //       //     ..sharedWith = element.sharedWith
-  //       //     ..sharedBy = element.sharedBy
-  //       //     ..metadata = metadata;
-  //       //
-  //       // String value = await _contactService.get(atKey);
-  //       // print(value);
-  //       // print(value.length);
-  //       // String seperator="aseperatoratspacesignal";
-  //       // int index=value.indexOf(seperator);
-  //       // //print (index.toString());
-  //       // String signal=value.substring(0,index);
-  //       // //print(signal);
-  //       // int senttime=int.parse(value.substring(index+seperator.length,value.length-1));
-  //       //
-  //       // await ChatService().setChatHistory(Message(
-  //       //     message: signal,
-  //       //     sender:activeAtSign,
-  //       //     //time: DateTime.now().millisecondsSinceEpoch,
-  //       //     time:senttime,
-  //       //     type: MessageType.OUTGOING));
-  //
-  //       await _contactService!.delete(element);
-  //     }});
-  // }
-  //
+
+  checkForValidAtsignAndSet() {
+    if (chatWithAtSign != null && chatWithAtSign!.trim() != '') {
+      // TODO: Call function to set receiver's @sign
+      setAtsignToChatWith();
+      setState(() {
+        showOptions = true;
+      });
+      return true;
+    } else {
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Row(
+                children: [Text('@sign Missing!')],
+              ),
+              content: Text('Please enter an @sign'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Close'),
+                )
+              ],
+            );
+          });
+    }
+  }
+  getAtSignAndInitializeChat() async {
+    // String? currentAtSign = await AtService!.getAtSign();
+    // setState(() {
+    //   activeAtSign = activeAtSign;
+    // });
+    // List<String> allAtSigns = at_demo_data.allAtsigns;
+    // allAtSigns.remove(activeAtSign);
+    // setState(() {
+    //   atSigns = allAtSigns;
+    // });
+    initializeChatService(
+        AtClientManager.getInstance(), activeAtSign!,
+        // rootDomain: 'root.atsign.wtf');
+        );
+    // 'root.atsign.org'
+  }
+
+  setAtsignToChatWith() {
+    // print(activeAtSign);
+    // print(chatWithAtSign);
+    setChatWithAtSign(chatWithAtSign!);
+  }
+
+  _getSharedKeys() async {
+    // await _contactService!.sync();
+    //return await _contactService.getAtKeys(regex: 'cached.*cookbook');
+    return await _contactService!.getAtKeys(regex: 'cached.*at_spacesignal');
+  }
+
+  _addreceiver() async {
+    List<AtKey> sharedKeysList = await _getSharedKeys();
+    print(sharedKeysList.length);
+
+    sharedKeysList.forEach((element) async {
+      if (element.key=="replier"){
+        await _contactService!.addAtSign(context,
+            atSign: element.sharedBy);
+        print(element.sharedBy);
+
+        // String chatWithAtSign=element.sharedBy;
+        // setChatWithAtSign(chatWithAtSign);
+        //
+        // Metadata metadata = Metadata()..isCached = true;
+        // AtKey atKey = AtKey()
+        //     ..key = element.key
+        //     ..sharedWith = element.sharedWith
+        //     ..sharedBy = element.sharedBy
+        //     ..metadata = metadata;
+        //
+        // String value = await _contactService.get(atKey);
+        // print(value);
+        // print(value.length);
+        // String seperator="aseperatoratspacesignal";
+        // int index=value.indexOf(seperator);
+        // //print (index.toString());
+        // String signal=value.substring(0,index);
+        // //print(signal);
+        // int senttime=int.parse(value.substring(index+seperator.length,value.length-1));
+        //
+        // await ChatService().setChatHistory(Message(
+        //     message: signal,
+        //     sender:activeAtSign,
+        //     //time: DateTime.now().millisecondsSinceEpoch,
+        //     time:senttime,
+        //     type: MessageType.OUTGOING));
+
+        await _contactService!.delete(element);
+      }});
+  }
+
 
 
 }

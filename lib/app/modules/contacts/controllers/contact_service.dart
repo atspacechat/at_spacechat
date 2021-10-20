@@ -15,6 +15,7 @@ import 'package:spacesignal/app/modules/contacts/controllers/init_contacts_servi
 import 'package:at_lookup/at_lookup.dart';
 import 'package:spacesignal/utils/text_strings.dart';
 import 'package:at_client/src/manager/at_client_manager.dart';
+import 'package:spacesignal/sdk_service.dart';
 
 class ContactService {
   ContactService._();
@@ -321,5 +322,34 @@ class ContactService {
       contactDetails['nickname'] = null;
     }
     return contactDetails;
+  }
+
+
+
+
+
+
+
+
+  // Future<bool> notify(AtKey atKey, String value, OperationEnum operation) async {
+  //   return await AtService.getInstance().notify(atKey, value, operation);
+  // }
+  //
+  // sync() async {
+  //   await atClientInstance.getSyncManager()!.sync();
+  // }
+
+  Future<List<AtKey>> getAtKeys({String? regex, String? sharedBy}) async {
+    //regex ??= conf.namespace;
+    return await AtService.getInstance().getAtKeys(sharedBy: sharedBy);
+  }
+
+  Future<String> get(AtKey atKey) async {
+    var result = await AtService.getInstance().get(atKey);
+    return result;
+  }
+
+  Future<bool> delete(AtKey atKey) async {
+    return await AtService.getInstance().delete(atKey);
   }
 }
