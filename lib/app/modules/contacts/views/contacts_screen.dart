@@ -34,6 +34,8 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:spacesignal/utils/constants.dart';
 import 'package:at_commons/at_commons.dart';
 
+import 'package:spacesignal/app/modules/contacts/views/add_contacts.dart';
+
 
 
 
@@ -148,6 +150,21 @@ class _ContactScreenState extends State<ContactScreen> {
                       // color: Colors.white,
                       onPressed: () {
                         Get.to(HomeScreen());
+                      },
+                    ),
+                    IconButton(
+                        padding: EdgeInsets.only(
+                        left: 12.toWidth,
+                          top: 10.toHeight,
+                        ),
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.grey,
+                        size: 45,
+                      ),
+                      // color: Colors.white,
+                      onPressed: () {
+                        Get.to(AddContactDialog());
                       },
                     )
                   ],
