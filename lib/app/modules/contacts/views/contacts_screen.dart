@@ -4,6 +4,7 @@ import 'package:at_contact/at_contact.dart';
 import 'package:at_common_flutter/at_common_flutter.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:get/get.dart';
+import 'package:spacesignal/app/modules/chat/views/chatwithatsign.dart';
 import 'package:spacesignal/app/modules/home/views/home_screen.dart';
 import 'package:spacesignal/utils/colors.dart';
 import 'package:spacesignal/utils/text_strings.dart';
@@ -67,7 +68,7 @@ class _ContactScreenState extends State<ContactScreen> {
   String? activeAtSign = '';
   GlobalKey<ScaffoldState>? scaffoldKey;
   //
-  // //String chatWithAtSign;
+  // String chatWithAtSign;
   bool showOptions = false;
   bool isEnabled = true;
   String? chatWithAtSign;
@@ -96,8 +97,8 @@ class _ContactScreenState extends State<ContactScreen> {
       var _result = await _contactService!.fetchContacts();
       print('$_result = true');
       activeAtSign=currentAtSign;
-      // initializeChatService(AtService.atClientServiceInstance.AtClientManager, currentAtSign!);
-      await _chatService.getChatHistory();
+      initializeChatService(AtClientManager.getInstance(), currentAtSign!);
+      // await _chatService.getChatHistory();
       _addreceiver();
 
       if (_result == null) {
@@ -775,22 +776,22 @@ class _ContactScreenState extends State<ContactScreen> {
                                             child: CustomListTile(
                                               contactService: _contactService,
                                               onTap: () {
-                                                // chatWithAtSign=_filteredList[index].atSign.toString();
-                                                // setAtsignToChatWith();
-                                                // Navigator.push(
-                                                //     context,
-                                                //     MaterialPageRoute(
-                                                //       builder: (context) => chatwithatsign(),
-                                                //       settings: RouteSettings(
-                                                //         arguments: chatWithAtSign.toString().substring(1),
-                                                //       ),
-                                                //     ));
+                                                chatWithAtSign=_filteredList[index].atSign.toString();
+                                                setAtsignToChatWith();
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => chatwithatsign(),
+                                                      settings: RouteSettings(
+                                                        arguments: chatWithAtSign.toString().substring(1),
+                                                      ),
+                                                    ));
                                               },
                                               asSelectionTile: widget.asSelectionScreen,
                                               asSingleSelectionTile: widget.asSingleSelectionScreen,
                                               contact: _filteredList[index],
                                               selectedList: (s) {
-                                                selectedList = (s!= null) as List<AtContact>;
+                                                selectedList = (s != null) as List<AtContact>;
                                                 widget.selectedList!(selectedList);
                                               },
                                               onTrailingPressed:

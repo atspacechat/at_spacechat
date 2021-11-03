@@ -61,7 +61,11 @@ class ChatService {
     rootPort = rootPortFromApp;
     await startMonitor();
   }
-
+  // void set_currentatsign(
+  //     String currentAtSignFromApp,
+  //     ) async{
+  //   currentAtSign = currentAtSignFromApp;
+  // }
   /// startMonitor needs to be called at the beginning of session
   /// called again if outbound connection is dropped
   Future<bool> startMonitor() async {
@@ -146,6 +150,7 @@ class ChatService {
   }
 
   Future<void> getChatHistory({String? atsign}) async {
+    print(currentAtSign);
     try {
       chatHistory = [];
       var key = AtKey()
@@ -170,6 +175,7 @@ class ChatService {
           (isGroupChat ? groupChatId! : '') +
           (chatWithAtSign != null ? currentAtSign! : ' ').substring(1);
       key.sharedBy = chatWithAtSign;
+
       key.sharedWith = currentAtSign!;
       keyValue = await atClientManager.atClient.get(key).catchError((e) {
         print(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spacesignal/app/modules/contacts/views/contacts_screen.dart';
 import 'package:spacesignal/app/modules/chat/views/chat_screen.dart';
-
+import 'package:get/get.dart';
 
 class chatwithatsign extends StatefulWidget {
 
@@ -52,7 +52,7 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
                             ),
                             // color: Colors.white,
                             onPressed: () {
-                              _chat();
+                              _contact();
                             },
                           )
                         ],
@@ -108,7 +108,9 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
     // ]));
   }
 
-  void _chat() {
+  void _contact() {
+    // Get.to(ContactScreen());
+    Get.to(() => ContactScreen());
     // Navigator.of(context).pushAndRemoveUntil(
     //     new MaterialPageRoute(builder: (context) => ContactScreen()),
     //         (route) => route == null);
