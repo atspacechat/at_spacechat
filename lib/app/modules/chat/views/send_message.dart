@@ -7,14 +7,19 @@ class SendMessage extends StatefulWidget {
   final Function? onSend;
   final ValueChanged<String>? messageCallback;
   final Color? sendButtonColor;
+  final Color? mediaButtonColor;
   final String? hintText;
-  const SendMessage(
-      {Key? key,
-        this.onSend,
-        this.messageCallback,
-        this.sendButtonColor,
-        this.hintText})
-      : super(key: key);
+  final VoidCallback? onMediaPressed;
+
+  const SendMessage({
+    Key? key,
+    this.onSend,
+    this.messageCallback,
+    this.mediaButtonColor,
+    this.sendButtonColor,
+    this.hintText,
+    this.onMediaPressed,
+  }) : super(key: key);
   @override
   _SendMessageState createState() => _SendMessageState();
 }
