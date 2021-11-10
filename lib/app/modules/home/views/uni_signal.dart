@@ -17,7 +17,6 @@ class UniSignal extends GetView<HomeController> {
                 itemCount: controller.signallist.length,
                 itemBuilder: (context, index) {
                   var _item = controller.signallist[index];
-                  String key =_item['unisignal'];
                   return ListTile(
                     leading: IconButton(
                       icon: Icon(Icons.messenger_sharp),
@@ -25,7 +24,6 @@ class UniSignal extends GetView<HomeController> {
                     ),
                     title:
                         Text("${_item['Message']}"),
-                    // subtitle: Text("${controller.passlist[index]['login']}"),
                     onTap: () {},
                   );
                 });

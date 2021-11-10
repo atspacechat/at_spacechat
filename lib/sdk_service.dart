@@ -8,6 +8,8 @@ import 'package:at_commons/at_commons.dart';
 
 class AtService {
   static final KeyChainManager _keyChainManager = KeyChainManager.getInstance();
+  AtClientManager atClientManager = AtClientManager.getInstance();
+
   static final AtService _singleton = AtService._internal();
   AtService._internal();
   factory AtService.getInstance() {
@@ -31,12 +33,13 @@ class AtService {
   Map<String?, AtClientService> atClientServiceMap =
       <String, AtClientService>{};
 
-  AtClient _getAtClientForAtsign() {
-    return AtClientManager.getInstance().atClient;
+  AtClient getAtClientForAtsign() {
+    return atClientManager.atClient;
   }
 
   Future<bool> makeAtSignPrimary(String atsign) async {
-    AtClientManager.getInstance().setCurrentAtSign(atsign, MixedConstants.appNamespace, AtClientPreference());
+    atClientManager.setCurrentAtSign(
+        atsign, MixedConstants.appNamespace, AtClientPreference());
     currentAtsign = atsign;
     return await _keyChainManager.makeAtSignPrimary(atsign);
   }
@@ -54,20 +57,20 @@ class AtService {
   }
 
   Future<bool> put(AtKey atKey, String value) async {
-    return _getAtClientForAtsign().put(atKey, value);
+    return getAtClientForAtsign().put(atKey, value);
   }
 
   Future<bool> delete(at_commons.AtKey atKey) async {
-    return await  _getAtClientForAtsign().delete(atKey);
+    return await getAtClientForAtsign().delete(atKey);
   }
 
   Future<String> get(AtKey atKey) async {
-    var result = await _getAtClientForAtsign().get(atKey);
+    var result = await getAtClientForAtsign().get(atKey);
     return result.value;
   }
 
-  Future<List<AtKey>> getAtKeys({String? sharedBy}) async {
-    return await _getAtClientForAtsign().getAtKeys(regex: MixedConstants.regex);
+  Future<List<AtKey>> getAtKeys({String? sharedWith, String? sharedBy}) async {
+    return await getAtClientForAtsign().getAtKeys(regex: MixedConstants.regex);
   }
 
   Future<bool> makeAtsignPrimary(String atsign) async {

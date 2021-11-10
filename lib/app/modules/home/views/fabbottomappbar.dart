@@ -228,10 +228,6 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     );
   }
 
-  void _chat() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //     // builder: (BuildContext context) => ContactScreen(),));
-  }
 
   TextEditingController controller = TextEditingController();
 

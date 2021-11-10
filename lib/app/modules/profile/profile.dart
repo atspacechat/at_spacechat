@@ -1,18 +1,14 @@
 import 'package:at_client_mobile/at_client_mobile.dart';
-// import 'package:at_contacts_flutter/screens/blocked_screen.dart';
-import 'package:spacesignal/app/modules/contacts/views/blocked_contact.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+// import 'package:at_contacts_flutter/screens/blocked_screen.dart';
+import 'package:spacesignal/app/modules/contacts/views/blocked_contact.dart';
 import 'package:spacesignal/app/modules/home/views/onboarding.dart';
-// import 'package:spacesignal/login/login.dart';
-// import 'package:spacesignal/login/onboarding_screen.dart';
 import 'package:spacesignal/utils/initial_image.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/app/modules/home/views/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:progress_dialog/progress_dialog.dart';
-// import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:get/get.dart';
 
