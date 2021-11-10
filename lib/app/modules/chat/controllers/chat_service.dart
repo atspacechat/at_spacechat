@@ -1,4 +1,3 @@
-/// A service to handle save and retrieve operation on chat
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -61,11 +60,7 @@ class ChatService {
     rootPort = rootPortFromApp;
     await startMonitor();
   }
-  // void set_currentatsign(
-  //     String currentAtSignFromApp,
-  //     ) async{
-  //   currentAtSign = currentAtSignFromApp;
-  // }
+
   /// startMonitor needs to be called at the beginning of session
   /// called again if outbound connection is dropped
   Future<bool> startMonitor() async {
@@ -150,7 +145,6 @@ class ChatService {
   }
 
   Future<void> getChatHistory({String? atsign}) async {
-    print(currentAtSign);
     try {
       chatHistory = [];
       var key = AtKey()
@@ -175,7 +169,6 @@ class ChatService {
           (isGroupChat ? groupChatId! : '') +
           (chatWithAtSign != null ? currentAtSign! : ' ').substring(1);
       key.sharedBy = chatWithAtSign;
-
       key.sharedWith = currentAtSign!;
       keyValue = await atClientManager.atClient.get(key).catchError((e) {
         print(
@@ -294,7 +287,7 @@ class ChatService {
     var key = AtKey()
       ..key = storageKey +
           (isGroupChat ? groupChatId! : '') +
-          (chatWithAtSign).substring(1)
+          (chatWithAtSign ?? ' ').substring(1)
       ..sharedBy = currentAtSign!
       ..sharedWith = chatWithAtSign
       ..metadata = Metadata();

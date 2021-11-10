@@ -3,6 +3,7 @@ import 'package:at_client_mobile/at_client_mobile.dart';
 import 'package:spacesignal/app/modules/contacts/views/blocked_contact.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:spacesignal/app/modules/home/views/onboarding.dart';
 // import 'package:spacesignal/login/login.dart';
 // import 'package:spacesignal/login/onboarding_screen.dart';
 import 'package:spacesignal/utils/initial_image.dart';
@@ -115,7 +116,12 @@ class _ProfileState extends State<Profile> {
                                         _launchURL2();
                                       }else if(index==4){
                                         // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginPage()),(route) => route == null);
-                                        Get.to(HomeScreen());
+                                        Get.to(OnbordingScreen());
+                                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        //     content: Text(
+                                        //       'You have been logged out',
+                                        //       textAlign: TextAlign.center,
+                                        //     )));
                                         KeyChainManager _keyChainManager =
                                         KeyChainManager.getInstance();
                                         var _atSignsList =
@@ -123,11 +129,7 @@ class _ProfileState extends State<Profile> {
                                         _atSignsList?.forEach((element) {
                                           _keyChainManager.deleteAtSignFromKeychain(element);
                                         });
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                            content: Text(
-                                              'You have been logged out',
-                                              textAlign: TextAlign.center,
-                                            )));
+
                                       }
                                     },
                                     child:Row(
