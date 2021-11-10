@@ -280,6 +280,7 @@ class ChatService {
         sender: currentAtSign,
         time: DateTime.now().millisecondsSinceEpoch,
         type: MessageType.OUTGOING));
+    print(message);
   }
 
   /// deletes self owned messages only

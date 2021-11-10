@@ -173,7 +173,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   await _chatService.sendMessage(message);
                 }
               },
-              onMediaPressed: showImagePicker,
+              // onMediaPressed: showImagePicker,
             ),
           ],
         ),
