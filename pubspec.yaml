@@ -17,9 +17,12 @@ dependencies:
   flutter: 
     sdk: flutter
   at_contact: ^3.0.1
-  progress_dialog: ^1.2.4
+#  progress_dialog: ^1.2.4
+  future_progress_dialog: ^0.2.0
   flutter_slidable: ^0.6.0
   material_design_icons_flutter: ^5.0.5955-rc.1
+  flutter_web_browser: ^0.15.0
+  sliding_up_panel: ^2.0.0+1
 
 dev_dependencies: 
   flutter_lints: ^1.0.0

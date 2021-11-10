@@ -83,6 +83,8 @@ class _BlockedUserCardState extends State<BlockedUserCard> {
           //   ),
           // );
           await _contactService!.blockUnblockContact(contact: widget.blockeduser!, blockAction: false);
+          await _contactService!.deleteAtSign(atSign: widget.blockeduser!.atSign.toString());
+
           // setState(() {
           //   unblockUser = false;
           //   Navigator.pop(context);

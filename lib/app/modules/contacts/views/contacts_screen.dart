@@ -362,7 +362,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                       width: 400.toWidth,
                                                                                       child: Row(children: <Widget>[
                                                                                         Container(
-                                                                                            width: 130.toWidth,
+                                                                                            width: 127.toWidth,
                                                                                             height: 80.toHeight,
                                                                                             decoration: BoxDecoration(
                                                                                               borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -391,7 +391,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                           height: 80.toHeight,
                                                                                         ),
                                                                                         Container(
-                                                                                            width: 130.toWidth,
+                                                                                            width: 127.toWidth,
                                                                                             height: 80.toHeight,
                                                                                             decoration: BoxDecoration(
                                                                                               borderRadius: BorderRadius.all(
@@ -416,9 +416,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                 elevation: 5.0,
                                                                                                 color: Colors.red, //Color(0xFF584797)
                                                                                                 onPressed: () async {
-
-                                                                                                  // await ChatService().deleteMessages(_filteredList[index].atSign.toString());
-
+                                                                                                  await ChatService().deleteMessages(_filteredList[index].atSign.toString());
                                                                                                   Navigator.pop(context);
                                                                                                 },
                                                                                                 child: Text(
@@ -511,7 +509,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                     height: 170.toHeight,
                                                                                     width: 400.toWidth,
                                                                                     child: Text(
-                                                                                      "This contact will be deleted and you will never receive any signal from this contact. Do you really want to block this contact?",
+                                                                                      "This contact will be deleted, chat history will be recalled and you will never receive any signal from this contact. Do you really want to block this contact?",
                                                                                       style: TextStyle(
                                                                                           fontSize: 15.toFont,
                                                                                           fontWeight: FontWeight.w500,
@@ -528,7 +526,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                       width: 400.toWidth,
                                                                                       child: Row(children: <Widget>[
                                                                                         Container(
-                                                                                            width: 130.toWidth,
+                                                                                            width: 127.toWidth,
                                                                                             height: 80.toHeight,
                                                                                             decoration: BoxDecoration(
                                                                                               borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -557,7 +555,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                           height: 80.toHeight,
                                                                                         ),
                                                                                         Container(
-                                                                                            width: 130.toWidth,
+                                                                                            width: 127.toWidth,
                                                                                             height: 80.toHeight,
                                                                                             decoration: BoxDecoration(
                                                                                               borderRadius: BorderRadius.all(
@@ -583,6 +581,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                 color: Colors.red, //Color(0xFF584797)
                                                                                                 onPressed: () async {
                                                                                                   // _deletechathistory();
+                                                                                                  await ChatService().deleteMessages(_filteredList[index].atSign.toString());
+                                                                                                  // await _contactService!.deleteAtSign(atSign: _filteredList[index].atSign);
                                                                                                   await _contactService!.blockUnblockContact(contact: _filteredList[index], blockAction: true);
                                                                                                   Navigator.pop(context);
                                                                                                 },
@@ -679,7 +679,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                     height: 170.toHeight,
                                                                                     width: 400.toWidth,
                                                                                     child: Text(
-                                                                                      "This contact will be deleted. Do you really want to delete?",
+                                                                                      "This contact will be deleted and chat history will be recalled. Do you really want to delete?",
                                                                                       style: TextStyle(
                                                                                           fontSize: 15.toFont,
                                                                                           fontWeight: FontWeight.w500,
@@ -697,7 +697,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                       width: 400.toWidth,
                                                                                       child: Row(children: <Widget>[
                                                                                         Container(
-                                                                                            width: 130.toWidth,
+                                                                                            width: 127.toWidth,
                                                                                             height: 80.toHeight,
                                                                                             decoration: BoxDecoration(
                                                                                               borderRadius: BorderRadius.all(
@@ -726,7 +726,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                           height: 80.toHeight,
                                                                                         ),
                                                                                         Container(
-                                                                                            width: 130.toWidth,
+                                                                                            width: 127.toWidth,
                                                                                             height: 80.toHeight,
                                                                                             decoration: BoxDecoration(
                                                                                               borderRadius: BorderRadius.all(
@@ -753,7 +753,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                 //padding: EdgeInsets.symmetric(vertical: 15.0),
                                                                                                 onPressed: () async {
                                                                                                   Navigator.pop(context);
-                                                                                                  // await _contactService!.deleteAtSign(atSign: _filteredList[index].atSign);
+                                                                                                  await ChatService().deleteMessages(_filteredList[index].atSign.toString());
+                                                                                                  await _contactService!.deleteAtSign(atSign: _filteredList[index].atSign);
                                                                                                 },
                                                                                                 child: Text(
                                                                                                   "Yes, delete",

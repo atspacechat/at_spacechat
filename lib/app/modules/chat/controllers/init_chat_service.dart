@@ -20,6 +20,6 @@ void disposeContactsControllers() {
 }
 
 /// function to delete all messages from the calling app.
-Future<bool> deleteMessages() async {
-  return await ChatService().deleteMessages();
-}
+// Future<bool> deleteMessages() async {
+//   return await ChatService().deleteMessages(chatWithAtSign);
+// }

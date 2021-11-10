@@ -10,7 +10,7 @@ import 'package:at_commons/at_commons.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:at_contact/at_contact.dart';
 import 'package:spacesignal/app/modules/contacts/controllers/init_contacts_service.dart';
-
+// import 'package:spacesignal/at_contacts_impl.dartas a
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:at_lookup/at_lookup.dart';
 import 'package:spacesignal/utils/text_strings.dart';
@@ -146,9 +146,9 @@ class ContactService {
   }
 
   // ignore: always_declare_return_types
-  deleteAtSign({required String atSign}) async {
+  deleteAtSign({String? atSign}) async {
     try {
-      var result = await atContactImpl.delete(atSign);
+      var result = await atContactImpl.delete(atSign!);
       print('delete result => $result');
       fetchContacts();
     } catch (error) {

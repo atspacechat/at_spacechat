@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:spacesignal/app/modules/home/views/fabbottomappbar.dart';
 import 'package:spacesignal/app/modules/home/views/signal_by_me.dart';
 import 'package:spacesignal/app/modules/home/views/uni_signal.dart';
+import 'package:spacesignal/app/modules/profile/profile.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/utils/initial_image.dart';
 import 'package:get/get.dart';
@@ -175,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _profilescreen() {
-    Get.to(ShareByMeSignal());
+    Get.to(Profile());
   }
 
   showLoaderDialog(BuildContext context) {

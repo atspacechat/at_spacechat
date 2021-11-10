@@ -290,11 +290,11 @@ class ChatService {
   }
 
   /// deletes self owned messages only
-  Future<bool> deleteMessages() async {
+  Future<bool> deleteMessages(chatWithAtSign) async {
     var key = AtKey()
       ..key = storageKey +
           (isGroupChat ? groupChatId! : '') +
-          (chatWithAtSign ?? ' ').substring(1)
+          (chatWithAtSign).substring(1)
       ..sharedBy = currentAtSign!
       ..sharedWith = chatWithAtSign
       ..metadata = Metadata();
