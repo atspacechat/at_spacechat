@@ -70,7 +70,7 @@ class AtService {
   }
 
   Future<List<AtKey>> getAtKeys({String? sharedWith, String? sharedBy}) async {
-    return await getAtClientForAtsign().getAtKeys(regex: MixedConstants.regex);
+    return await getAtClientForAtsign().getAtKeys(regex: MixedConstants.regex,sharedBy: sharedBy);
   }
 
   Future<bool> makeAtsignPrimary(String atsign) async {
