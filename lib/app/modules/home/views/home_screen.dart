@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             child: FittedBox(
                 child: FloatingActionButton(
               onPressed: () {
-                Get.to(UniSignal());
+                Get.to(()=>UniSignal());
               },
               backgroundColor: Colors.white,
               tooltip: 'Increment',
@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _profilescreen() {
-    Get.to(Profile());
+    Get.to(()=>Profile());
   }
 
   showLoaderDialog(BuildContext context) {

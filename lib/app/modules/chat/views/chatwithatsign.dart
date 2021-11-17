@@ -109,7 +109,6 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
   }
 
   void _contact() {
-    // Get.to(ContactScreen());
     Get.to(() => ContactScreen());
     // Navigator.of(context).pushAndRemoveUntil(
     //     new MaterialPageRoute(builder: (context) => ContactScreen()),

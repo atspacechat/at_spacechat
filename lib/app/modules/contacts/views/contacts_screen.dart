@@ -150,7 +150,7 @@ class _ContactScreenState extends State<ContactScreen> {
                       ),
                       // color: Colors.white,
                       onPressed: () {
-                        Get.to(HomeScreen());
+                        Get.to(()=>HomeScreen());
                       },
                     ),
                     IconButton(
@@ -165,7 +165,7 @@ class _ContactScreenState extends State<ContactScreen> {
                       ),
                       // color: Colors.white,
                       onPressed: () {
-                        Get.to(AddContactDialog());
+                        Get.to(()=>AddContactDialog());
                       },
                     )
                   ],

@@ -120,7 +120,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
           child: InkWell(
             onTap: () => {
               if (item!.text == "Chats")
-               Get.to(ContactScreen())
+               Get.to(()=>ContactScreen())
               else
                 {
                   Get.defaultDialog(

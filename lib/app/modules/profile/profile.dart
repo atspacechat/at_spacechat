@@ -112,7 +112,7 @@ class _ProfileState extends State<Profile> {
                                         _launchURL2();
                                       }else if(index==4){
                                         // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginPage()),(route) => route == null);
-                                        Get.to(OnbordingScreen());
+                                        Get.to(()=>OnbordingScreen());
                                         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                         //     content: Text(
                                         //       'You have been logged out',
