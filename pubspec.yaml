@@ -32,7 +32,7 @@ dev_dependencies:
   at_common_flutter: ^2.0.2
   at_onboarding_flutter: ^3.0.2
   at_client_mobile: ^3.0.1
-  at_client: ^3.0.0
+  at_client: ^3.0.5
 
 
 flutter: 
