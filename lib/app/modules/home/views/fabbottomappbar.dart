@@ -106,7 +106,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     void sharesignal(String msg) {
       var uuid = const Uuid();
 
-      String unikey = MixedConstants.regex + uuid.v1().replaceAll('-', '_');
+      String unikey = MixedConstants.regex + uuid.v1();
 
       _controller.shareSignal({'Message': msg, 'unisignal': unikey});
       Get.back();
@@ -120,7 +120,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
           child: InkWell(
             onTap: () => {
               if (item!.text == "Chats")
-               Get.to(()=>ContactScreen())
+                Get.to(() => ContactScreen())
               else
                 {
                   Get.defaultDialog(
@@ -227,7 +227,6 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
       ),
     );
   }
-
 
   TextEditingController controller = TextEditingController();
 
