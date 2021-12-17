@@ -3,10 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:spacesignal/app/modules/home/controllers/home_controller.dart';
 
 import 'package:spacesignal/app/modules/home/views/fabbottomappbar.dart';
 import 'package:spacesignal/app/modules/home/views/signal_by_me.dart';
-import 'package:spacesignal/app/modules/home/views/uni_signal.dart';
 import 'package:spacesignal/app/modules/profile/profile.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/utils/initial_image.dart';
@@ -35,7 +36,7 @@ class HexColor extends Color {
 // main page, popups, menu
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   AtService clientSdkService = AtService.getInstance();
-
+  final HomeController control = Get.put<HomeController>(HomeController());
   // var _contactService = ContactService();
   // ClientSdkService clientSdkService = ClientSdkService.getInstance();
   String activeAtSign = "";
@@ -44,6 +45,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   // String message;
   int presstime = 1;
   ContactService? _contactService;
+
+  void reqAsignal() {
+    control.wantsSignal();
+  }
 
   @override
   void initState() {
@@ -57,8 +62,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     });
 
     _contactService = ContactService();
-    _contactService!.initContactsService('root.atsign.wtf',64);
-
+    _contactService!.initContactsService('root.atsign.wtf', 64);
 
     scaffoldKey = GlobalKey<ScaffoldState>();
     super.initState();
@@ -68,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         extendBody: true,
@@ -144,7 +149,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             child: FittedBox(
                 child: FloatingActionButton(
               onPressed: () {
-                Get.to(()=>UniSignal());
+                controllerx.isLoading(true);
+                reqAsignal();
+
+                showLoaderDialog(context);
+
+                // if (controllerx.isLoading.value) {
+                //   CircularProgressIndicator();
+                // } else {
+                //   Get.defaultDialog(
+                //       middleText: controllerx.searchedMessage!.value);
+                // }
               },
               backgroundColor: Colors.white,
               tooltip: 'Increment',
@@ -176,20 +191,244 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _profilescreen() {
-    Get.to(()=>Profile());
+    Get.to(() => Profile());
   }
+
+  final HomeController controllerx = Get.put<HomeController>(HomeController());
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7.toWidth),
-              child: Text("Searching...")),
-        ],
-      ),
-    );
+        content: Row(children: [
+      Obx(() => Container(
+          child: controllerx.isLoading.value
+              ? CircularProgressIndicator()
+              : Flexible(
+                  child: Container(
+                      height: 340.toHeight,
+                      width: 300.toWidth,
+                      child: Column(
+                          //overflow: Overflow.visible,
+                          // alignment: Alignment.center,
+                          children: <Widget>[
+                            // Positioned(
+                            //   right: 0.0,
+                            // child:
+                            Container(
+                              alignment: Alignment.topRight,
+                              height: 30.toHeight,
+                              width: 300.toWidth,
+                              child: FloatingActionButton(
+                                //FloatingActionButton(
+                                child: Icon(
+                                  Icons.close,
+                                  size: 30.toFont,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                backgroundColor: Colors.white,
+
+                                mini: true,
+                                elevation: 0.0,
+                              ),
+                            ),
+                            // ),
+                            Container(
+                              height: 40.toHeight,
+                              child: Text(
+                                "You got a signal!",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.patuaOne(
+                                  //quicksand  patuaOne
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF45377D),
+                                  fontSize: 25.toFont,
+                                ),
+                              ),
+                            ),
+
+                            Container(
+                                padding: EdgeInsets.only(
+                                  left: 15.0.toWidth,
+                                  top: 10.toHeight,
+                                  right: 15.toWidth,
+                                  bottom: 0,
+                                ),
+                                height: 260.toHeight,
+                                child: Column(
+                                    //新建一个Column来放文字信息，发件人名字和最近信息
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center, //左对齐
+                                    children: [
+                                      Container(
+                                        height: 3.toHeight,
+                                        width: 50.toWidth,
+                                        color: Colors.grey[300],
+                                      ),
+                                      Flexible(
+                                        child: Container(
+                                            padding: EdgeInsets.only(
+                                              left: 10.0.toWidth,
+                                              top: 0,
+                                              right: 10.toWidth,
+                                              bottom: 0,
+                                            ),
+                                            alignment: Alignment.topLeft,
+                                            child: Icon(Icons.format_quote,
+                                                color: Colors.grey)),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                          left: 30.0.toWidth,
+                                          top: 0,
+                                          right: 30.toWidth,
+                                          bottom: 0,
+                                        ),
+                                        height: 120.toHeight,
+                                        width: 400.toWidth,
+                                        child: Text(
+                                          '${controllerx.searchedMessage}',
+                                          // message,
+                                          style: TextStyle(
+                                              fontSize: 15.toFont,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF584797)),
+                                          maxLines: null,
+                                        ),
+                                      ),
+                                      // controller: controller,
+                                      //  onChanged: (String value)async{if(value!=''){return _hascontent=true; }},
+                                      Flexible(
+                                        child: Container(
+                                            padding: EdgeInsets.only(
+                                              left: 10.0.toWidth,
+                                              top: 0,
+                                              right: 10.toWidth,
+                                              bottom: 0,
+                                            ),
+                                            alignment: Alignment.bottomRight,
+                                            child: Icon(Icons.format_quote,
+                                                color: Colors.grey)),
+                                      ),
+                                      Container(
+                                        height: 20.toHeight,
+                                        width: 320.toWidth,
+                                      ),
+                                      Flexible(
+                                        child: Container(
+                                            height: 50.toHeight,
+                                            width: 320.toWidth,
+                                            child: Row(children: <Widget>[
+                                              Container(
+                                                  width: 130.toWidth,
+                                                  height: 80.toHeight,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20)),
+                                                    // boxShadow: <BoxShadow>[
+                                                    // BoxShadow(
+                                                    // color: Colors.grey.withOpacity(0.1),
+                                                    // blurRadius: 0.5,
+                                                    // offset: Offset(0.0, 1)),
+                                                    //],
+                                                  ),
+                                                  child: RaisedButton(
+                                                      //MaterialButton(
+                                                      elevation: 0.0,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                        // side: BorderSide(color: Colors.white)
+                                                      ),
+                                                      //elevation: 5.0,
+                                                      //minWidth: 320,
+                                                      // height: 50,
+                                                      color: Colors.white,
+                                                      //:Colors.grey,
+                                                      //padding: EdgeInsets.symmetric(vertical: 15.0),
+                                                      onPressed: () {
+                                                        // Navigator.of(context).pop(controller.text.toString());
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        "Discard",
+                                                        style: GoogleFonts
+                                                            .quicksand(
+                                                          fontWeight:
+                                                              FontWeight.w900,
+                                                          color:
+                                                              Color(0xFF8F8E94),
+                                                          fontSize: 15.toFont,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ))),
+                                              Container(
+                                                width: 8.toWidth,
+                                                height: 80.toHeight,
+                                              ),
+                                              Flexible(
+                                                child: Container(
+                                                    width: 130.toWidth,
+                                                    height: 80.toHeight,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20)),
+                                                      boxShadow: <BoxShadow>[
+                                                        BoxShadow(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.1),
+                                                            blurRadius: 0.5,
+                                                            offset:
+                                                                Offset(0.0, 1)),
+                                                      ],
+                                                    ),
+                                                    child: RaisedButton(
+                                                        //MaterialButton(
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20.0),
+                                                            side: BorderSide(
+                                                                color: Color(
+                                                                    0xFF584797))),
+                                                        elevation: 5.0,
+                                                        //minWidth: 320,
+                                                        // height: 50,
+                                                        color:
+                                                            Color(0xFF584797),
+                                                        //:Colors.grey,
+                                                        //padding: EdgeInsets.symmetric(vertical: 15.0),
+                                                        onPressed: () async {},
+                                                        child: Text(
+                                                          "Reply",
+                                                          style: GoogleFonts
+                                                              .quicksand(
+                                                            fontWeight:
+                                                                FontWeight.w900,
+                                                            color: Colors.white,
+                                                            fontSize: 15.toFont,
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ))),
+                                              ),
+                                            ])),
+                                      )
+                                    ]))
+                          ])),
+                ))),
+    ]));
     showDialog(
       barrierDismissible: false,
       context: context,
