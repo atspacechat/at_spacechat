@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:spacesignal/app/modules/home/controllers/home_controller.dart';
 
 import 'package:spacesignal/app/modules/home/views/fabbottomappbar.dart';
-import 'package:spacesignal/app/modules/home/views/signal_by_me.dart';
 import 'package:spacesignal/app/modules/profile/profile.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/utils/initial_image.dart';

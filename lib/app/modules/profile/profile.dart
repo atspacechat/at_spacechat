@@ -110,11 +110,7 @@ class _ProfileState extends State<Profile> {
                               } else if (index == 4) {
                                 // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginPage()),(route) => route == null);
                                 Get.to(() => OnbordingScreen());
-                                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                //     content: Text(
-                                //       'You have been logged out',
-                                //       textAlign: TextAlign.center,
-                                //     )));
+
                                 KeyChainManager _keyChainManager =
                                     KeyChainManager.getInstance();
                                 var _atSignsList = await _keyChainManager
@@ -145,31 +141,6 @@ class _ProfileState extends State<Profile> {
                             ]));
                       })),
             ])),
-            // height: 35.toHeight,
-            //   child:Row(
-            //       children: <Widget>[
-            //         Icon(
-            //           Icons.book,
-            //           color: Colors.black,
-            //           size: 27.toFont,
-            //         ),
-            //         Container(width: 20.toWidth),
-            //         Text("User Guide",
-            //           style: TextStyle(
-            //           color: Colors.black,
-            //           fontSize: 17.toFont,
-            //           // fontWeight: FontWeight.w900,
-            //         ),),
-            //
-            //       ]
-            //   )
-            // ),
-            // Container(height: 20.toHeight,),
-            // Container(
-            //   height: 0.2.toHeight,
-            //   color: Colors.grey,
-            // ),
-
             body: Scaffold(
               resizeToAvoidBottomInset: false,
               extendBody: true,
@@ -277,56 +248,9 @@ class _ProfileState extends State<Profile> {
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
                                               )),
-                                          // SizedBox(
-                                          //   height: 3.0,
-                                          // ),
-                                          // Container(
-                                          //     width: 60,
-                                          //     height: 25,
-                                          //     decoration: BoxDecoration(
-                                          //       color: Colors.transparent,
-                                          //       borderRadius: BorderRadius.all(
-                                          //           Radius.circular(20)),
-                                          //       /* boxShadow: <BoxShadow>[
-                                          //               BoxShadow(
-                                          //                   color: Colors.grey.withOpacity(0.1),
-                                          //                 //  color: Colors.transparent,
-                                          //                   blurRadius: 0.5,
-                                          //                   offset: Offset(0.0, 1)),
-                                          //             ],*/
-                                          //     ),
-                                          //     child: FlatButton(
-                                          //         //RaisedButton(//MaterialButton(
-                                          //         shape: RoundedRectangleBorder(
-                                          //             borderRadius:
-                                          //                 BorderRadius.circular(
-                                          //                     20.0),
-                                          //             side: BorderSide(
-                                          //                 color:
-                                          //                     Colors.grey[400])),
-                                          //         //elevation: 5.0,
-                                          //         //minWidth: 320,
-                                          //         // height: 50,
-                                          //         color: Colors
-                                          //             .transparent, //:Colors.grey,
-                                          //         //padding: EdgeInsets.symmetric(vertical: 15.0),
-                                          //         onPressed: () {},
-                                          //         child: Text(
-                                          //           "Edit",
-                                          //           style: GoogleFonts.quicksand(
-                                          //             // fontWeight: FontWeight.w900,
-                                          //             color: Colors.grey[400],
-                                          //             fontSize: 15,
-                                          //           ),
-                                          //           textAlign: TextAlign.center,
-                                          //         ))
-                                          // ),
                                         ],
                                       ),
-                                      // Column(
-                                      //     mainAxisAlignment:
-                                      //         MainAxisAlignment.end,
-                                      //     children: <Widget>[
+
                                       Container(
                                           width: MediaQuery.of(context)
                                                   .size
@@ -425,17 +349,22 @@ class _ProfileState extends State<Profile> {
                                         icon:
                                             Icon(Icons.delete_forever_outlined),
                                         onPressed: () {
-                                          controller.recallSignal(key);
-
-                                          // Get.defaultDialog(
-                                          //   middleText:
-                                          //       'Are you sure you want to delete the signal?',
-                                          //   onConfirm: () =>
-                                          //       controller.recallSignal(key),
-                                          //   onCancel: () => _goback,
-                                          //   textConfirm: 'Delete',
-                                          //   textCancel: 'Cancel',
-                                          // );
+                                          Get.defaultDialog(
+                                            title: 'Delete Signal !',
+                                            titleStyle: GoogleFonts.patuaOne(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.deepPurple,
+                                              fontSize: 25,
+                                            ),
+                                            middleText:
+                                                'Are you sure you want to delete this signal?',
+                                            onConfirm: () {
+                                              controller.recallSignal(key);
+                                              Navigator.pop(context);
+                                            },
+                                            textConfirm: 'Delete',
+                                            textCancel: 'Cancel',
+                                          );
                                         },
                                       ),
                                       title: Padding(
@@ -485,31 +414,6 @@ class _ProfileState extends State<Profile> {
       text: "Log Out",
     ),
   ];
-  void _goback() {
-    Navigator.of(context).pushAndRemoveUntil(
-        new MaterialPageRoute(builder: (context) => HomeScreen()),
-        (route) => route == null);
-  }
-
-  showLoaderDialog(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7.toWidth),
-              child: Text("Recalling...")),
-        ],
-      ),
-    );
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
 }
 
 class settingitem {

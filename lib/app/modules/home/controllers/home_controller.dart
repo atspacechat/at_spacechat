@@ -3,10 +3,8 @@ import 'package:at_commons/at_commons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:spacesignal/app/modules/chat/views/send_message.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:at_client/src/service/notification_service.dart';
-import 'package:at_client/src/service/notification_service_impl.dart';
 import 'package:uuid/uuid.dart';
 
 class HomeController extends GetxController {
@@ -24,7 +22,7 @@ class HomeController extends GetxController {
   var signalByMelist = List<Map<String, dynamic>>.empty(growable: true).obs;
   var atClientPreference;
   String? currentAtsign;
-  String middlemanAtsign = "verticalworldbuilding";
+  String middlemanAtsign = "tallcaterpillar";
   @override
   void onInit() {
     super.onInit();
@@ -56,23 +54,6 @@ class HomeController extends GetxController {
     return '';
   }
 
-  // Future<void> readSignal() async {
-  //   List<AtKey> pSignal;
-  //   //because we want the signal that are public from the middlemannAtsign
-
-  //   pSignal =
-  //       await clientSdkService.getAtKeys(sharedBy: "verticalworldbuilding");
-  //   print(pSignal);
-  //   for (AtKey atKey in pSignal) {
-  //     var value = await readSignalValue(atKey);
-  //     Map<String, dynamic> _decoded = jsonDecode(value);
-  //     signallist.add(_decoded);
-  //     logger.d('Public Signals       :::' + _decoded['Message']);
-  //   }
-
-  //   // response.retainWhere((element) => !element.metadata!.isCached);
-  // }
-
   Future<void> shareSignal(Map data) async {
     String unikey = await data['unisignal'];
     var metadata = Metadata()
@@ -101,7 +82,7 @@ class HomeController extends GetxController {
   Future<void> notifysharesignal(AtKey key, String? value) async {
     print("Notification value" + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
-    key.sharedWith = "@verticalworldbuilding";
+    key.sharedWith = "@tallcaterpillar";
     Metadata _metadata = Metadata()..ttr = -1;
 
     key.metadata = _metadata;
@@ -136,9 +117,7 @@ class HomeController extends GetxController {
     for (AtKey atKey in response) {
       var value = await readSignalValue2(atKey);
       Map<String, dynamic> _decoded = jsonDecode(value);
-
       signalByMelist.add(_decoded);
-
       logger
           .d('Reading Shared by me Signanl          :::' + _decoded['Message']);
     }
@@ -152,6 +131,7 @@ class HomeController extends GetxController {
 
     var result = await clientSdkService.delete(key);
     if (result == true) {
+      print(result);
       signalByMelist.clear();
       readSharedByMeSignal();
       notifydeletesignal(unikey);
@@ -175,7 +155,7 @@ class HomeController extends GetxController {
         String atSigns = keyCut.split('*').last;
         sCut = sCut.replaceAll('headless', '');
         String notification_atsign =
-            atSigns.replaceAll('.spacesignal@verticalworldbuilding', "");
+            atSigns.replaceAll('.spacesignal@tallcaterpillar', "");
         print('FROM atSIGN ------------- $notification_atsign');
         print(sCut);
         //TODO: retrive notification_atsign from the received notification string
@@ -211,7 +191,7 @@ class HomeController extends GetxController {
     Metadata _metadata = Metadata()..ttr = -1;
     AtKey atKey = AtKey()
       ..key = key
-      ..sharedWith = "@verticalworldbuilding"
+      ..sharedWith = "@tallcaterpillar"
       ..metadata = _metadata;
     notificationService.notify(
       NotificationParams.forDelete(atKey),
