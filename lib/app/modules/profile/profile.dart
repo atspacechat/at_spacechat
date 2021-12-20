@@ -38,17 +38,10 @@ class _ProfileState extends State<Profile> {
   }
 
   @override
-  String _test = "hello";
   final HomeController controller = Get.put<HomeController>(HomeController());
 
   Widget build(BuildContext context) {
-    List<SignalSent> signals = [
-      SignalSent(time: 'now', text: _test),
-      SignalSent(
-        time: '8:30 AM',
-        text: '',
-      ),
-    ];
+
 
     SizeConfig().init(context);
 

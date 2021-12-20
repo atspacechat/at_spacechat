@@ -1,9 +1,13 @@
+import 'package:at_chat_flutter/models/message_model.dart';
+import 'package:at_chat_flutter/services/chat_service.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spacesignal/app/modules/chat/controllers/init_chat_service.dart';
+import 'package:spacesignal/app/modules/chat/views/chatwithatsign.dart';
 import 'package:spacesignal/app/modules/home/controllers/home_controller.dart';
 
 import 'package:spacesignal/app/modules/home/views/fabbottomappbar.dart';
@@ -373,55 +377,106 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                 height: 80.toHeight,
                                               ),
                                               Flexible(
-                                                child: Container(
-                                                    width: 130.toWidth,
-                                                    height: 80.toHeight,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  20)),
-                                                      boxShadow: <BoxShadow>[
-                                                        BoxShadow(
-                                                            color: Colors.grey
-                                                                .withOpacity(
-                                                                    0.1),
-                                                            blurRadius: 0.5,
-                                                            offset:
-                                                                Offset(0.0, 1)),
-                                                      ],
-                                                    ),
-                                                    child: RaisedButton(
-                                                        //MaterialButton(
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20.0),
-                                                            side: BorderSide(
-                                                                color: Color(
-                                                                    0xFF584797))),
-                                                        elevation: 5.0,
-                                                        //minWidth: 320,
-                                                        // height: 50,
-                                                        color:
-                                                            Color(0xFF584797),
-                                                        //:Colors.grey,
-                                                        //padding: EdgeInsets.symmetric(vertical: 15.0),
-                                                        onPressed: () async {},
-                                                        child: Text(
-                                                          "Reply",
-                                                          style: GoogleFonts
-                                                              .quicksand(
-                                                            fontWeight:
-                                                                FontWeight.w900,
-                                                            color: Colors.white,
-                                                            fontSize: 15.toFont,
-                                                          ),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ))),
-                                              ),
+                                                  child: Container(
+                                                      width: 130.toWidth,
+                                                      height: 80.toHeight,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    20)),
+                                                        boxShadow: <BoxShadow>[
+                                                          BoxShadow(
+                                                              color: Colors.grey
+                                                                  .withOpacity(
+                                                                      0.1),
+                                                              blurRadius: 0.5,
+                                                              offset: Offset(
+                                                                  0.0, 1)),
+                                                        ],
+                                                      ),
+                                                      child: RaisedButton(
+                                                          //MaterialButton(
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.0),
+                                                              side: BorderSide(
+                                                                  color: Color(
+                                                                      0xFF584797))),
+                                                          elevation: 5.0,
+                                                          //minWidth: 320,
+                                                          // height: 50,
+                                                          color:
+                                                              Color(0xFF584797),
+                                                          //:Colors.grey,
+                                                          //padding: EdgeInsets.symmetric(vertical: 15.0),
+                                                          onPressed: () async {
+                                                            print(
+                                                                'on pressed ${controllerx.searchedMessageAtsign.value}');
+                                                            await _contactService!
+                                                                .addAtSign(
+                                                                    context,
+                                                                    atSign: controllerx
+                                                                        .searchedMessageAtsign
+                                                                        .value);
+
+                                                            if (_contactService!
+                                                                        .checkAtSign !=
+                                                                    null &&
+                                                                _contactService!
+                                                                    .checkAtSign!) {
+                                                              String
+                                                                  chatWithAtSign =
+                                                                  controllerx
+                                                                      .searchedMessageAtsign
+                                                                      .value;
+                                                              setChatWithAtSign(
+                                                                  chatWithAtSign);
+                                                              // await _addsignaltochat();
+                                                              await ChatService().setChatHistory(Message(
+                                                                  message: controllerx
+                                                                      .searchedMessage
+                                                                      .value,
+                                                                  sender:
+                                                                      chatWithAtSign,
+                                                                  time: DateTime
+                                                                          .now()
+                                                                      .millisecondsSinceEpoch,
+                                                                  type: MessageType
+                                                                      .INCOMING));
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            chatwithatsign(),
+                                                                    settings:
+                                                                        RouteSettings(
+                                                                      arguments: chatWithAtSign
+                                                                          .toString()
+                                                                          .substring(
+                                                                              1),
+                                                                    ),
+                                                                  ));
+                                                            }
+                                                          },
+                                                          child: Text(
+                                                            "Reply",
+                                                            style: GoogleFonts
+                                                                .quicksand(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w900,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize:
+                                                                  15.toFont,
+                                                            ),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          )))),
                                             ])),
                                       )
                                     ]))

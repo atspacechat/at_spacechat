@@ -17,6 +17,8 @@ class HomeController extends GetxController {
     printer: PrettyPrinter(),
   );
   var searchedMessage = "".obs;
+  var searchedMessageAtsign = "".obs;
+
   var isLoading = true.obs;
   var atClient = AtService.getInstance().getAtClientForAtsign();
   var signalByMelist = List<Map<String, dynamic>>.empty(growable: true).obs;
@@ -97,6 +99,7 @@ class HomeController extends GetxController {
 
   void wantsSignal() {
     searchedMessage.value = '';
+    searchedMessageAtsign.value = '';
     // A get variable initialized to null everytime this fuction calls
     // searchedMessage?.value = '';
     var uuid = const Uuid();
@@ -172,6 +175,7 @@ class HomeController extends GetxController {
           print('$_decoded');
           String v = _decoded['Message'];
           searchedMessage.value = v;
+          searchedMessageAtsign.value = notification_atsign;
           //assign chatwith atsign also
           if (searchedMessage.value.isNotEmpty) {
             isLoading(false);
