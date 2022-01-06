@@ -4,7 +4,7 @@ import 'package:at_contact/at_contact.dart';
 import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 
 void initializeContactsService(
-    {rootDomain = 'root.atsign.wtf', rootPort = 64}) {
+    {rootDomain = 'root.atsign.org', rootPort = 64}) {
   ContactService().initContactsService(rootDomain, rootPort);
 }
 

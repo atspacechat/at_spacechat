@@ -51,14 +51,12 @@ packages:
     source: hosted
     version: "3.0.2"
   at_client:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
-      path: at_client
-      ref: fix_format_exception
-      resolved-ref: "8028708335493d34b484b5385fc43da91879a32b"
-      url: "https://github.com/atsign-foundation/at_client_sdk.git"
-    source: git
-    version: "3.0.6"
+      name: at_client
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.8"
   at_client_mobile:
     dependency: "direct main"
     description:
@@ -107,7 +105,7 @@ packages:
       name: at_persistence_secondary_server
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.10"
+    version: "3.0.11"
   at_persistence_spec:
     dependency: transitive
     description:
@@ -350,7 +348,7 @@ packages:
       name: flutter_slidable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "0.6.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -500,7 +498,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.7"
+    version: "2.0.8"
   path_provider_android:
     dependency: transitive
     description:

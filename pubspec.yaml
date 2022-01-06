@@ -19,7 +19,7 @@ dependencies:
   at_contact: ^3.0.1
 #  progress_dialog: ^1.2.4
   future_progress_dialog: ^0.2.0
-  flutter_slidable: ^1.1.0
+  flutter_slidable: ^0.6.0
   material_design_icons_flutter: ^5.0.5955-rc.1
   flutter_web_browser: ^0.15.0
   sliding_up_panel: ^2.0.0+1
@@ -27,13 +27,14 @@ dependencies:
   at_commons: ^3.0.1
   at_onboarding_flutter: ^3.1.1
   at_client_mobile: ^3.1.2
+  at_client: ^3.0.8
 
-dependency_overrides:
-  at_client:
-    git:
-      url: https://github.com/atsign-foundation/at_client_sdk.git
-      path: at_client
-      ref: fix_format_exception
+#dependency_overrides:
+#  at_client:
+#    git:
+#      url: https://github.com/atsign-foundation/at_client_sdk.git
+#      path: at_client
+#      ref: fix_format_exception
 
 dev_dependencies: 
   flutter_lints: ^1.0.0

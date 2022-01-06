@@ -156,7 +156,8 @@ class ChatService {
         ..metadata = Metadata();
       key.metadata?.ccd = true;
       var keyValue = await atClientManager.atClient.get(key).catchError((e) {
-        print('error in get ${e.errorCode} ${e.errorMessage}');
+        // print('error in get ${e.errorCode} ${e.errorMessage}');
+        print('error in get');
       });
       // ignore: unnecessary_null_comparison
       if (keyValue != null && keyValue.value != null) {
@@ -172,7 +173,8 @@ class ChatService {
       key.sharedWith = currentAtSign!;
       keyValue = await atClientManager.atClient.get(key).catchError((e) {
         print(
-            'error in getting other history ${e.errorCode} ${e.errorMessage}');
+            'error in getting other history');
+        //  'error in getting other history ${e.errorCode} ${e.errorMessage}');
       });
       if (keyValue != null && keyValue.value != null) {
         chatHistoryMessagesOther =

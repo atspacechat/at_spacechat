@@ -1,5 +1,6 @@
-import 'package:at_chat_flutter/models/message_model.dart';
-import 'package:at_chat_flutter/services/chat_service.dart';
+// import 'package:at_chat_flutter/models/message_model.dart';
+// import 'package:at_chat_flutter/services/chat_service.dart';
+import 'package:at_client_mobile/at_client_mobile.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +10,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:spacesignal/app/modules/chat/controllers/init_chat_service.dart';
 import 'package:spacesignal/app/modules/chat/views/chatwithatsign.dart';
 import 'package:spacesignal/app/modules/home/controllers/home_controller.dart';
-
 import 'package:spacesignal/app/modules/home/views/fabbottomappbar.dart';
 import 'package:spacesignal/app/modules/profile/profile.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/utils/initial_image.dart';
 import 'package:get/get.dart';
 import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
+import 'package:spacesignal/app/modules/chat/controllers/chat_service.dart';
+import 'package:spacesignal/app/modules/chat/utils/message_model.dart';
 
 class HomeScreen extends StatefulWidget {
   static final String id = 'home';
@@ -48,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   // String message;
   int presstime = 1;
   ContactService? _contactService;
+  // bool _loading = false;
 
   void reqAsignal() {
     control.wantsSignal();
@@ -65,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     });
 
     _contactService = ContactService();
-    _contactService!.initContactsService('root.atsign.wtf', 64);
+    _contactService!.initContactsService('root.atsign.org', 64);
 
     scaffoldKey = GlobalKey<ScaffoldState>();
     super.initState();
@@ -140,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           )
                         ],
                       ),
+                      // if (_loading) Center(child: CircularProgressIndicator())
                     ],
                   ),
                 ]),
@@ -180,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             topLeft: Radius.circular(20),
           ),
           child: FABBottomAppBar(
-            centerItemText: 'Search',
+            centerItemText: 'Explore',
             color: Colors.deepPurple,
             selectedColor: Colors.blue,
             notchedShape: CircularNotchedRectangle(),
@@ -202,8 +206,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
         content: Row(children: [
-      Obx(() => Container(
-          child: controllerx.isLoading.value
+          Obx(() => Container(
+            child: controllerx.isLoading.value
               ? CircularProgressIndicator()
               : Flexible(
                   child: Container(
@@ -413,54 +417,39 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                           //:Colors.grey,
                                                           //padding: EdgeInsets.symmetric(vertical: 15.0),
                                                           onPressed: () async {
-                                                            print(
-                                                                'on pressed ${controllerx.searchedMessageAtsign.value}');
-                                                            await _contactService!
-                                                                .addAtSign(
-                                                                    context,
-                                                                    atSign: controllerx
-                                                                        .searchedMessageAtsign
-                                                                        .value);
-
-                                                            if (_contactService!
-                                                                        .checkAtSign !=
-                                                                    null &&
-                                                                _contactService!
-                                                                    .checkAtSign!) {
-                                                              String
-                                                                  chatWithAtSign =
-                                                                  controllerx
-                                                                      .searchedMessageAtsign
-                                                                      .value;
-                                                              setChatWithAtSign(
-                                                                  chatWithAtSign);
+                                                            // setState(() {
+                                                            //   _loading = true;
+                                                            // });
+                                                            print('on pressed ${controllerx.searchedMessageAtsign.value}');
+                                                            String sender = controllerx.searchedMessageAtsign.value;
+                                                            print(sender);
+                                                            var response = await _contactService!.addAtSign(context, atSign: sender);
+                                                            print(response);
+                                                            print("check"+_contactService!.getAtSignError);
+                                                            // if (_contactService!.checkAtSign != null && _contactService!.checkAtSign!) {
+                                                              String chatWithAtSign = sender;
+                                                              var atClientManager = await AtClientManager.getInstance();
+                                                              initializeChatService(atClientManager,activeAtSign);
+                                                              ChatService().setAtsignToChatWith(chatWithAtSign,false,"",[]);
                                                               // await _addsignaltochat();
                                                               await ChatService().setChatHistory(Message(
-                                                                  message: controllerx
-                                                                      .searchedMessage
-                                                                      .value,
-                                                                  sender:
-                                                                      chatWithAtSign,
-                                                                  time: DateTime
-                                                                          .now()
-                                                                      .millisecondsSinceEpoch,
-                                                                  type: MessageType
-                                                                      .INCOMING));
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
+                                                                  message: controllerx.searchedMessage.value,
+                                                                  sender: chatWithAtSign,
+                                                                  time: DateTime.now().millisecondsSinceEpoch,
+                                                                  type: MessageType.INCOMING));
+                                                            // setState(() {
+                                                            //   _loading = false;
+                                                            // });
+                                                              Navigator.push(context, MaterialPageRoute(
+                                                                    builder: (context) =>
                                                                             chatwithatsign(),
-                                                                    settings:
-                                                                        RouteSettings(
-                                                                      arguments: chatWithAtSign
-                                                                          .toString()
-                                                                          .substring(
-                                                                              1),
+                                                                    settings: RouteSettings(
+                                                                      arguments: chatWithAtSign.toString().substring(1),
                                                                     ),
                                                                   ));
-                                                            }
+                                                              print(ChatService().currentAtSign);
+                                                              print(ChatService().chatWithAtSign);
+                                                            // }
                                                           },
                                                           child: Text(
                                                             "Reply",

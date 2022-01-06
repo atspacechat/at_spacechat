@@ -5,6 +5,7 @@ import 'package:at_common_flutter/at_common_flutter.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:get/get.dart';
 import 'package:spacesignal/app/modules/chat/views/chatwithatsign.dart';
+import 'package:spacesignal/app/modules/contacts/utils/contact_base_model.dart';
 import 'package:spacesignal/app/modules/home/views/home_screen.dart';
 import 'package:spacesignal/utils/colors.dart';
 import 'package:spacesignal/utils/text_strings.dart';
@@ -217,9 +218,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                 topRight: Radius.circular(30.toHeight),
                               ),
                             ),
-                            child: StreamBuilder<List<AtContact?>>(
+                            child: StreamBuilder<List<BaseContact?>>(
                               stream: _contactService!.contactStream,
-                              initialData: _contactService!.contactList,
+                              initialData: _contactService!.baseContactList,
                               builder: (context, snapshot) {
                                 if ((snapshot.connectionState ==
                                     ConnectionState.waiting)) {
@@ -234,7 +235,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                           Text("You don't have any chat yet"),
                                     );
                                   } else {
-                                    List<AtContact> _filteredList = [];
+                                    List<BaseContact?> _filteredList = [];
                                     snapshot.data!.forEach((c) {
                                       _filteredList.add(c!);
                                     });
@@ -244,554 +245,556 @@ class _ContactScreenState extends State<ContactScreen> {
                                             Text("You don't have any chat yet"),
                                       );
                                     }
-                                    return Container();
-                                    //   return Container(
-                                    //       child: ListView.separated(
-                                    //           itemCount: _filteredList.length,
-                                    //           physics:
-                                    //               NeverScrollableScrollPhysics(),
-                                    //           shrinkWrap: true,
-                                    //           separatorBuilder: (context, _) =>
-                                    //               Divider(
-                                    //                 color: Colors.grey[300],
-                                    //                 height: 1.toHeight,
-                                    //               ),
-                                    //           itemBuilder: (context, index) {
-                                    //             return Padding(
-                                    //               padding: EdgeInsets.symmetric(
-                                    //                   horizontal: 8.0.toWidth,
-                                    //                   vertical: 0),
-                                    //               //const EdgeInsets.all(8.0),
-                                    //               child: Slidable(
-                                    //                 actionPane:
-                                    //                     SlidableDrawerActionPane(),
-                                    //                 actionExtentRatio: 0.25,
-                                    //                 secondaryActions: <Widget>[
-                                    //                   IconSlideAction(
-                                    //                     caption: "Recall",
-                                    //                     color: Colors.blue,
-                                    //                     icon:
-                                    //                         Icons.keyboard_return,
-                                    //                     onTap: () {
-                                    //                       showDialog(
-                                    //                           context: context,
-                                    //                           builder: (context) =>
-                                    //                               AlertDialog(
-                                    //                                   contentPadding:
-                                    //                                       EdgeInsets
-                                    //                                           .only(
-                                    //                                     left: 0,
-                                    //                                     top: 10
-                                    //                                         .toHeight,
-                                    //                                     right: 0,
-                                    //                                     bottom: 0,
-                                    //                                   ),
-                                    //                                   shape:
-                                    //                                       RoundedRectangleBorder(
-                                    //                                     borderRadius:
-                                    //                                         BorderRadius.all(
-                                    //                                             Radius.circular(20.0)),
-                                    //                                   ),
-                                    //                                   content: Container(
-                                    //                                       height: 350.toHeight,
-                                    //                                       width: 300.toWidth,
-                                    //                                       child: Column(children: <Widget>[
-                                    //                                         Container(
-                                    //                                           alignment:
-                                    //                                               Alignment.topRight,
-                                    //                                           height:
-                                    //                                               30.toHeight,
-                                    //                                           width:
-                                    //                                               300.toWidth,
-                                    //                                           child:
-                                    //                                               FloatingActionButton(
-                                    //                                             child: Icon(
-                                    //                                               Icons.close,
-                                    //                                               size: 30.toFont,
-                                    //                                               color: Colors.grey,
-                                    //                                             ),
-                                    //                                             onPressed: () {
-                                    //                                               Navigator.pop(context);
-                                    //                                             },
-                                    //                                             backgroundColor: Colors.white,
-                                    //                                             mini: true,
-                                    //                                             elevation: 0.0,
-                                    //                                           ),
-                                    //                                         ),
-                                    //                                         Container(
-                                    //                                             height: 40.toHeight,
-                                    //                                             child: Icon(
-                                    //                                               Icons.warning,
-                                    //                                               size: 60.toFont,
-                                    //                                               color: Colors.red,
-                                    //                                             )),
-                                    //                                         Container(
-                                    //                                             padding: EdgeInsets.only(
-                                    //                                               left: 15.0.toWidth,
-                                    //                                               top: 10.toHeight,
-                                    //                                               right: 15.toWidth,
-                                    //                                               bottom: 0,
-                                    //                                             ),
-                                    //                                             height: 260.toHeight,
-                                    //                                             child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                    //                                               Container(
-                                    //                                                 height: 20.toHeight,
-                                    //                                                 width: 50.toWidth,
-                                    //                                               ),
-                                    //                                               Container(
-                                    //                                                 alignment: Alignment.center,
-                                    //                                                 padding: EdgeInsets.only(
-                                    //                                                   left: 30.0.toWidth,
-                                    //                                                   top: 0,
-                                    //                                                   right: 30.toWidth,
-                                    //                                                   bottom: 0,
-                                    //                                                 ),
-                                    //                                                 height: 170.toHeight,
-                                    //                                                 width: 400.toWidth,
-                                    //                                                 child: Text(
-                                    //                                                   "All your previous messages will be recalled. Do you really want to recall your messages?",
-                                    //                                                   style: TextStyle(fontSize: 15.toFont, fontWeight: FontWeight.w500, color: Colors.black),
-                                    //                                                   maxLines: null,
-                                    //                                                 ),
-                                    //                                               ),
-                                    //                                               Container(
-                                    //                                                 height: 10.toHeight,
-                                    //                                                 width: 320.toWidth,
-                                    //                                               ),
-                                    //                                               Container(
-                                    //                                                   height: 50.toHeight,
-                                    //                                                   width: 400.toWidth,
-                                    //                                                   child: Row(children: <Widget>[
-                                    //                                                     Container(
-                                    //                                                         width: 127.toWidth,
-                                    //                                                         height: 80.toHeight,
-                                    //                                                         decoration: BoxDecoration(
-                                    //                                                           borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    //                                                         ),
-                                    //                                                         child: RaisedButton(
-                                    //                                                             elevation: 0.0,
-                                    //                                                             shape: RoundedRectangleBorder(
-                                    //                                                               borderRadius: BorderRadius.circular(20.0),
-                                    //                                                             ),
-                                    //                                                             color: Colors.white,
-                                    //                                                             onPressed: () {
-                                    //                                                               Navigator.pop(context);
-                                    //                                                             },
-                                    //                                                             child: Text(
-                                    //                                                               "No",
-                                    //                                                               style: GoogleFonts.quicksand(
-                                    //                                                                 fontWeight: FontWeight.w900,
-                                    //                                                                 color: Color(0xFF8F8E94),
-                                    //                                                                 fontSize: 15.toFont,
-                                    //                                                               ),
-                                    //                                                               textAlign: TextAlign.center,
-                                    //                                                             ))),
-                                    //                                                     Container(
-                                    //                                                       width: 5.toWidth,
-                                    //                                                       height: 80.toHeight,
-                                    //                                                     ),
-                                    //                                                     Container(
-                                    //                                                         width: 127.toWidth,
-                                    //                                                         height: 80.toHeight,
-                                    //                                                         decoration: BoxDecoration(
-                                    //                                                           borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    //                                                           boxShadow: <BoxShadow>[
-                                    //                                                             BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 0.5, offset: Offset(0.0, 1)),
-                                    //                                                           ],
-                                    //                                                         ),
-                                    //                                                         child: RaisedButton(
-                                    //                                                             //MaterialButton(
-                                    //                                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: BorderSide(color: Colors.red)),
-                                    //                                                             elevation: 5.0,
-                                    //                                                             color: Colors.red, //Color(0xFF584797)
-                                    //                                                             onPressed: () async {
-                                    //                                                               await ChatService().deleteMessages(_filteredList[index].atSign.toString());
-                                    //                                                               Navigator.pop(context);
-                                    //                                                             },
-                                    //                                                             child: Text(
-                                    //                                                               "Yes, recall",
-                                    //                                                               style: GoogleFonts.quicksand(
-                                    //                                                                 fontWeight: FontWeight.w900,
-                                    //                                                                 color: Colors.white,
-                                    //                                                                 fontSize: 15.toFont,
-                                    //                                                               ),
-                                    //                                                               textAlign: TextAlign.center,
-                                    //                                                             ))),
-                                    //                                                   ]))
-                                    //                                             ]))
-                                    //                                       ]))));
-                                    //                     },
-                                    //                   ),
-                                    //                   IconSlideAction(
-                                    //                     caption:
-                                    //                         TextStrings().block,
-                                    //                     // color: ColorConstants.inputFieldColor,
-                                    //                     color: Colors.grey[300],
-                                    //                     icon: Icons.block,
-                                    //                     onTap: () {
-                                    //                       showDialog(
-                                    //                           context: context,
-                                    //                           builder: (context) =>
-                                    //                               AlertDialog(
-                                    //                                   contentPadding:
-                                    //                                       EdgeInsets
-                                    //                                           .only(
-                                    //                                     left: 0,
-                                    //                                     top: 10
-                                    //                                         .toHeight,
-                                    //                                     right: 0,
-                                    //                                     bottom: 0,
-                                    //                                   ),
-                                    //                                   shape:
-                                    //                                       RoundedRectangleBorder(
-                                    //                                     borderRadius:
-                                    //                                         BorderRadius.all(
-                                    //                                             Radius.circular(20.0)),
-                                    //                                   ),
-                                    //                                   content: Container(
-                                    //                                       height: 350.toHeight,
-                                    //                                       width: 300.toWidth,
-                                    //                                       child: Column(children: <Widget>[
-                                    //                                         Container(
-                                    //                                           alignment:
-                                    //                                               Alignment.topRight,
-                                    //                                           height:
-                                    //                                               30.toHeight,
-                                    //                                           width:
-                                    //                                               300.toWidth,
-                                    //                                           child:
-                                    //                                               FloatingActionButton(
-                                    //                                             child: Icon(
-                                    //                                               Icons.close,
-                                    //                                               size: 30.toFont,
-                                    //                                               color: Colors.grey,
-                                    //                                             ),
-                                    //                                             onPressed: () {
-                                    //                                               Navigator.pop(context);
-                                    //                                             },
-                                    //                                             backgroundColor: Colors.white,
-                                    //                                             mini: true,
-                                    //                                             elevation: 0.0,
-                                    //                                           ),
-                                    //                                         ),
-                                    //                                         Container(
-                                    //                                             height: 40.toHeight,
-                                    //                                             child: Icon(
-                                    //                                               Icons.warning,
-                                    //                                               size: 60.toFont,
-                                    //                                               color: Colors.red,
-                                    //                                             )),
-                                    //                                         Container(
-                                    //                                             padding: EdgeInsets.only(
-                                    //                                               left: 15.0.toWidth,
-                                    //                                               top: 10.toHeight,
-                                    //                                               right: 15.toWidth,
-                                    //                                               bottom: 0,
-                                    //                                             ),
-                                    //                                             height: 260.toHeight,
-                                    //                                             child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                    //                                               Container(
-                                    //                                                 height: 20.toHeight,
-                                    //                                                 width: 50.toWidth,
-                                    //                                               ),
-                                    //                                               Container(
-                                    //                                                 alignment: Alignment.center,
-                                    //                                                 padding: EdgeInsets.only(
-                                    //                                                   left: 30.0.toWidth,
-                                    //                                                   top: 0,
-                                    //                                                   right: 30.toWidth,
-                                    //                                                   bottom: 0,
-                                    //                                                 ),
-                                    //                                                 height: 170.toHeight,
-                                    //                                                 width: 400.toWidth,
-                                    //                                                 child: Text(
-                                    //                                                   "This contact will be deleted, chat history will be recalled and you will never receive any signal from this contact. Do you really want to block this contact?",
-                                    //                                                   style: TextStyle(fontSize: 15.toFont, fontWeight: FontWeight.w500, color: Colors.black),
-                                    //                                                   maxLines: null,
-                                    //                                                 ),
-                                    //                                               ),
-                                    //                                               Container(
-                                    //                                                 height: 10.toHeight,
-                                    //                                                 width: 320.toWidth,
-                                    //                                               ),
-                                    //                                               Container(
-                                    //                                                   height: 50.toHeight,
-                                    //                                                   width: 400.toWidth,
-                                    //                                                   child: Row(children: <Widget>[
-                                    //                                                     Container(
-                                    //                                                         width: 127.toWidth,
-                                    //                                                         height: 80.toHeight,
-                                    //                                                         decoration: BoxDecoration(
-                                    //                                                           borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    //                                                         ),
-                                    //                                                         child: RaisedButton(
-                                    //                                                             elevation: 0.0,
-                                    //                                                             shape: RoundedRectangleBorder(
-                                    //                                                               borderRadius: BorderRadius.circular(20.0),
-                                    //                                                             ),
-                                    //                                                             color: Colors.white,
-                                    //                                                             onPressed: () {
-                                    //                                                               Navigator.pop(context);
-                                    //                                                             },
-                                    //                                                             child: Text(
-                                    //                                                               "No",
-                                    //                                                               style: GoogleFonts.quicksand(
-                                    //                                                                 fontWeight: FontWeight.w900,
-                                    //                                                                 color: Color(0xFF8F8E94),
-                                    //                                                                 fontSize: 15.toFont,
-                                    //                                                               ),
-                                    //                                                               textAlign: TextAlign.center,
-                                    //                                                             ))),
-                                    //                                                     Container(
-                                    //                                                       width: 5.toWidth,
-                                    //                                                       height: 80.toHeight,
-                                    //                                                     ),
-                                    //                                                     Container(
-                                    //                                                         width: 127.toWidth,
-                                    //                                                         height: 80.toHeight,
-                                    //                                                         decoration: BoxDecoration(
-                                    //                                                           borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    //                                                           boxShadow: <BoxShadow>[
-                                    //                                                             BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 0.5, offset: Offset(0.0, 1)),
-                                    //                                                           ],
-                                    //                                                         ),
-                                    //                                                         child: RaisedButton(
-                                    //                                                             //MaterialButton(
-                                    //                                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: BorderSide(color: Colors.red)),
-                                    //                                                             elevation: 5.0,
-                                    //                                                             color: Colors.red, //Color(0xFF584797)
-                                    //                                                             onPressed: () async {
-                                    //                                                               // _deletechathistory();
-                                    //                                                               await ChatService().deleteMessages(_filteredList[index].atSign.toString());
-                                    //                                                               // await _contactService!.deleteAtSign(atSign: _filteredList[index].atSign);
-                                    //                                                               await _contactService!.blockUnblockContact(contact: _filteredList[index], blockAction: true);
-                                    //                                                               Navigator.pop(context);
-                                    //                                                             },
-                                    //                                                             child: Text(
-                                    //                                                               "Yes, block",
-                                    //                                                               style: GoogleFonts.quicksand(
-                                    //                                                                 fontWeight: FontWeight.w900,
-                                    //                                                                 color: Colors.white,
-                                    //                                                                 fontSize: 15.toFont,
-                                    //                                                               ),
-                                    //                                                               textAlign: TextAlign.center,
-                                    //                                                             ))),
-                                    //                                                   ]))
-                                    //                                             ]))
-                                    //                                       ]))));
-                                    //                     },
-                                    //                   ),
-                                    //                   IconSlideAction(
-                                    //                     caption:
-                                    //                         TextStrings().delete,
-                                    //                     color: Colors.red,
-                                    //                     icon: Icons.delete,
-                                    //                     onTap: () {
-                                    //                       showDialog(
-                                    //                           context: context,
-                                    //                           builder: (context) =>
-                                    //                               AlertDialog(
-                                    //                                   contentPadding:
-                                    //                                       EdgeInsets
-                                    //                                           .only(
-                                    //                                     left: 0,
-                                    //                                     top: 10
-                                    //                                         .toHeight,
-                                    //                                     right: 0,
-                                    //                                     bottom: 0,
-                                    //                                   ),
-                                    //                                   shape:
-                                    //                                       RoundedRectangleBorder(
-                                    //                                     borderRadius:
-                                    //                                         BorderRadius.all(
-                                    //                                             Radius.circular(20.0)),
-                                    //                                   ),
-                                    //                                   content: Container(
-                                    //                                       height: 350.toHeight,
-                                    //                                       width: 300.toWidth,
-                                    //                                       child: Column(children: <Widget>[
-                                    //                                         Container(
-                                    //                                           alignment:
-                                    //                                               Alignment.topRight,
-                                    //                                           height:
-                                    //                                               30.toHeight,
-                                    //                                           width:
-                                    //                                               300.toWidth,
-                                    //                                           child:
-                                    //                                               FloatingActionButton(
-                                    //                                             child: Icon(
-                                    //                                               Icons.close,
-                                    //                                               size: 30.toFont,
-                                    //                                               color: Colors.grey,
-                                    //                                             ),
-                                    //                                             onPressed: () {
-                                    //                                               Navigator.pop(context);
-                                    //                                             },
-                                    //                                             backgroundColor: Colors.white,
-                                    //                                             mini: true,
-                                    //                                             elevation: 0.0,
-                                    //                                           ),
-                                    //                                         ),
-                                    //                                         // ),
-                                    //                                         Container(
-                                    //                                             height: 40.toHeight,
-                                    //                                             child: Icon(
-                                    //                                               Icons.warning,
-                                    //                                               size: 60.toFont,
-                                    //                                               color: Colors.red,
-                                    //                                             )),
+                                    // return Container();
+                                      return Container(
+                                          child: ListView.separated(
+                                              itemCount: _filteredList.length,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              separatorBuilder: (context, _) =>
+                                                  Divider(
+                                                    color: Colors.grey[300],
+                                                    height: 1.toHeight,
+                                                  ),
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 8.0.toWidth,
+                                                      vertical: 0),
+                                                  //const EdgeInsets.all(8.0),
+                                                  child: Slidable(
+                                                    actionPane:
+                                                        SlidableDrawerActionPane(),
+                                                    actionExtentRatio: 0.25,
+                                                    secondaryActions: <Widget>[
+                                                      IconSlideAction(
+                                                        caption: "Recall",
+                                                        color: Colors.blue,
+                                                        icon:
+                                                            Icons.keyboard_return,
+                                                        onTap: () {
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) =>
+                                                                  AlertDialog(
+                                                                      contentPadding:
+                                                                          EdgeInsets
+                                                                              .only(
+                                                                        left: 0,
+                                                                        top: 10
+                                                                            .toHeight,
+                                                                        right: 0,
+                                                                        bottom: 0,
+                                                                      ),
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(
+                                                                                Radius.circular(20.0)),
+                                                                      ),
+                                                                      content: Container(
+                                                                          height: 350.toHeight,
+                                                                          width: 300.toWidth,
+                                                                          child: Column(children: <Widget>[
+                                                                            Container(
+                                                                              alignment:
+                                                                                  Alignment.topRight,
+                                                                              height:
+                                                                                  30.toHeight,
+                                                                              width:
+                                                                                  300.toWidth,
+                                                                              child:
+                                                                                  FloatingActionButton(
+                                                                                child: Icon(
+                                                                                  Icons.close,
+                                                                                  size: 30.toFont,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                                onPressed: () {
+                                                                                  Navigator.pop(context);
+                                                                                },
+                                                                                backgroundColor: Colors.white,
+                                                                                mini: true,
+                                                                                elevation: 0.0,
+                                                                              ),
+                                                                            ),
+                                                                            Container(
+                                                                                height: 40.toHeight,
+                                                                                child: Icon(
+                                                                                  Icons.warning,
+                                                                                  size: 60.toFont,
+                                                                                  color: Colors.red,
+                                                                                )),
+                                                                            Container(
+                                                                                padding: EdgeInsets.only(
+                                                                                  left: 15.0.toWidth,
+                                                                                  top: 10.toHeight,
+                                                                                  right: 15.toWidth,
+                                                                                  bottom: 0,
+                                                                                ),
+                                                                                height: 260.toHeight,
+                                                                                child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                                                                  Container(
+                                                                                    height: 20.toHeight,
+                                                                                    width: 50.toWidth,
+                                                                                  ),
+                                                                                  Container(
+                                                                                    alignment: Alignment.center,
+                                                                                    padding: EdgeInsets.only(
+                                                                                      left: 30.0.toWidth,
+                                                                                      top: 0,
+                                                                                      right: 30.toWidth,
+                                                                                      bottom: 0,
+                                                                                    ),
+                                                                                    height: 170.toHeight,
+                                                                                    width: 400.toWidth,
+                                                                                    child: Text(
+                                                                                      "All your previous messages will be recalled. Do you really want to recall your messages?",
+                                                                                      style: TextStyle(fontSize: 15.toFont, fontWeight: FontWeight.w500, color: Colors.black),
+                                                                                      maxLines: null,
+                                                                                    ),
+                                                                                  ),
+                                                                                  Container(
+                                                                                    height: 10.toHeight,
+                                                                                    width: 320.toWidth,
+                                                                                  ),
+                                                                                  Container(
+                                                                                      height: 50.toHeight,
+                                                                                      width: 400.toWidth,
+                                                                                      child: Row(children: <Widget>[
+                                                                                        Container(
+                                                                                            width: 127.toWidth,
+                                                                                            height: 80.toHeight,
+                                                                                            decoration: BoxDecoration(
+                                                                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                                                            ),
+                                                                                            child: RaisedButton(
+                                                                                                elevation: 0.0,
+                                                                                                shape: RoundedRectangleBorder(
+                                                                                                  borderRadius: BorderRadius.circular(20.0),
+                                                                                                ),
+                                                                                                color: Colors.white,
+                                                                                                onPressed: () {
+                                                                                                  Navigator.pop(context);
+                                                                                                },
+                                                                                                child: Text(
+                                                                                                  "No",
+                                                                                                  style: GoogleFonts.quicksand(
+                                                                                                    fontWeight: FontWeight.w900,
+                                                                                                    color: Color(0xFF8F8E94),
+                                                                                                    fontSize: 15.toFont,
+                                                                                                  ),
+                                                                                                  textAlign: TextAlign.center,
+                                                                                                ))),
+                                                                                        Container(
+                                                                                          width: 5.toWidth,
+                                                                                          height: 80.toHeight,
+                                                                                        ),
+                                                                                        Container(
+                                                                                            width: 127.toWidth,
+                                                                                            height: 80.toHeight,
+                                                                                            decoration: BoxDecoration(
+                                                                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                                                              boxShadow: <BoxShadow>[
+                                                                                                BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 0.5, offset: Offset(0.0, 1)),
+                                                                                              ],
+                                                                                            ),
+                                                                                            child: RaisedButton(
+                                                                                                //MaterialButton(
+                                                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: BorderSide(color: Colors.red)),
+                                                                                                elevation: 5.0,
+                                                                                                color: Colors.red, //Color(0xFF584797)
+                                                                                                onPressed: () async {
+                                                                                                  await ChatService().deleteMessages(_filteredList[index]!.contact!.atSign.toString());
+                                                                                                  Navigator.pop(context);
+                                                                                                },
+                                                                                                child: Text(
+                                                                                                  "Yes, recall",
+                                                                                                  style: GoogleFonts.quicksand(
+                                                                                                    fontWeight: FontWeight.w900,
+                                                                                                    color: Colors.white,
+                                                                                                    fontSize: 15.toFont,
+                                                                                                  ),
+                                                                                                  textAlign: TextAlign.center,
+                                                                                                ))),
+                                                                                      ]))
+                                                                                ]))
+                                                                          ]))));
+                                                        },
+                                                      ),
+                                                      IconSlideAction(
+                                                        caption:
+                                                            TextStrings().block,
+                                                        // color: ColorConstants.inputFieldColor,
+                                                        color: Colors.grey[300],
+                                                        icon: Icons.block,
+                                                        onTap: () {
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) =>
+                                                                  AlertDialog(
+                                                                      contentPadding:
+                                                                          EdgeInsets
+                                                                              .only(
+                                                                        left: 0,
+                                                                        top: 10
+                                                                            .toHeight,
+                                                                        right: 0,
+                                                                        bottom: 0,
+                                                                      ),
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(
+                                                                                Radius.circular(20.0)),
+                                                                      ),
+                                                                      content: Container(
+                                                                          height: 350.toHeight,
+                                                                          width: 300.toWidth,
+                                                                          child: Column(children: <Widget>[
+                                                                            Container(
+                                                                              alignment:
+                                                                                  Alignment.topRight,
+                                                                              height:
+                                                                                  30.toHeight,
+                                                                              width:
+                                                                                  300.toWidth,
+                                                                              child:
+                                                                                  FloatingActionButton(
+                                                                                child: Icon(
+                                                                                  Icons.close,
+                                                                                  size: 30.toFont,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                                onPressed: () {
+                                                                                  Navigator.pop(context);
+                                                                                },
+                                                                                backgroundColor: Colors.white,
+                                                                                mini: true,
+                                                                                elevation: 0.0,
+                                                                              ),
+                                                                            ),
+                                                                            Container(
+                                                                                height: 40.toHeight,
+                                                                                child: Icon(
+                                                                                  Icons.warning,
+                                                                                  size: 60.toFont,
+                                                                                  color: Colors.red,
+                                                                                )),
+                                                                            Container(
+                                                                                padding: EdgeInsets.only(
+                                                                                  left: 15.0.toWidth,
+                                                                                  top: 10.toHeight,
+                                                                                  right: 15.toWidth,
+                                                                                  bottom: 0,
+                                                                                ),
+                                                                                height: 260.toHeight,
+                                                                                child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                                                                  Container(
+                                                                                    height: 20.toHeight,
+                                                                                    width: 50.toWidth,
+                                                                                  ),
+                                                                                  Container(
+                                                                                    alignment: Alignment.center,
+                                                                                    padding: EdgeInsets.only(
+                                                                                      left: 30.0.toWidth,
+                                                                                      top: 0,
+                                                                                      right: 30.toWidth,
+                                                                                      bottom: 0,
+                                                                                    ),
+                                                                                    height: 170.toHeight,
+                                                                                    width: 400.toWidth,
+                                                                                    child: Text(
+                                                                                      "This contact will be deleted, chat history will be recalled and you will never receive any signal from this contact. Do you really want to block this contact?",
+                                                                                      style: TextStyle(fontSize: 15.toFont, fontWeight: FontWeight.w500, color: Colors.black),
+                                                                                      maxLines: null,
+                                                                                    ),
+                                                                                  ),
+                                                                                  Container(
+                                                                                    height: 10.toHeight,
+                                                                                    width: 320.toWidth,
+                                                                                  ),
+                                                                                  Container(
+                                                                                      height: 50.toHeight,
+                                                                                      width: 400.toWidth,
+                                                                                      child: Row(children: <Widget>[
+                                                                                        Container(
+                                                                                            width: 127.toWidth,
+                                                                                            height: 80.toHeight,
+                                                                                            decoration: BoxDecoration(
+                                                                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                                                            ),
+                                                                                            child: RaisedButton(
+                                                                                                elevation: 0.0,
+                                                                                                shape: RoundedRectangleBorder(
+                                                                                                  borderRadius: BorderRadius.circular(20.0),
+                                                                                                ),
+                                                                                                color: Colors.white,
+                                                                                                onPressed: () {
+                                                                                                  Navigator.pop(context);
+                                                                                                },
+                                                                                                child: Text(
+                                                                                                  "No",
+                                                                                                  style: GoogleFonts.quicksand(
+                                                                                                    fontWeight: FontWeight.w900,
+                                                                                                    color: Color(0xFF8F8E94),
+                                                                                                    fontSize: 15.toFont,
+                                                                                                  ),
+                                                                                                  textAlign: TextAlign.center,
+                                                                                                ))),
+                                                                                        Container(
+                                                                                          width: 5.toWidth,
+                                                                                          height: 80.toHeight,
+                                                                                        ),
+                                                                                        Container(
+                                                                                            width: 127.toWidth,
+                                                                                            height: 80.toHeight,
+                                                                                            decoration: BoxDecoration(
+                                                                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                                                              boxShadow: <BoxShadow>[
+                                                                                                BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 0.5, offset: Offset(0.0, 1)),
+                                                                                              ],
+                                                                                            ),
+                                                                                            child: RaisedButton(
+                                                                                                //MaterialButton(
+                                                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: BorderSide(color: Colors.red)),
+                                                                                                elevation: 5.0,
+                                                                                                color: Colors.red, //Color(0xFF584797)
+                                                                                                onPressed: () async {
+                                                                                                  // _deletechathistory();
+                                                                                                  await ChatService().deleteMessages(_filteredList[index]!.contact!.atSign.toString());
+                                                                                                  // await _contactService!.deleteAtSign(atSign: _filteredList[index].atSign);
+                                                                                                  await _contactService!.blockUnblockContact(contact: _filteredList[index]!.contact!, blockAction: true);
+                                                                                                  Navigator.pop(context);
+                                                                                                },
+                                                                                                child: Text(
+                                                                                                  "Yes, block",
+                                                                                                  style: GoogleFonts.quicksand(
+                                                                                                    fontWeight: FontWeight.w900,
+                                                                                                    color: Colors.white,
+                                                                                                    fontSize: 15.toFont,
+                                                                                                  ),
+                                                                                                  textAlign: TextAlign.center,
+                                                                                                ))),
+                                                                                      ]))
+                                                                                ]))
+                                                                          ]))));
+                                                        },
+                                                      ),
+                                                      IconSlideAction(
+                                                        caption:
+                                                            TextStrings().delete,
+                                                        color: Colors.red,
+                                                        icon: Icons.delete,
+                                                        onTap: () {
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) =>
+                                                                  AlertDialog(
+                                                                      contentPadding:
+                                                                          EdgeInsets
+                                                                              .only(
+                                                                        left: 0,
+                                                                        top: 10
+                                                                            .toHeight,
+                                                                        right: 0,
+                                                                        bottom: 0,
+                                                                      ),
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(
+                                                                                Radius.circular(20.0)),
+                                                                      ),
+                                                                      content: Container(
+                                                                          height: 350.toHeight,
+                                                                          width: 300.toWidth,
+                                                                          child: Column(children: <Widget>[
+                                                                            Container(
+                                                                              alignment:
+                                                                                  Alignment.topRight,
+                                                                              height:
+                                                                                  30.toHeight,
+                                                                              width:
+                                                                                  300.toWidth,
+                                                                              child:
+                                                                                  FloatingActionButton(
+                                                                                child: Icon(
+                                                                                  Icons.close,
+                                                                                  size: 30.toFont,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                                onPressed: () {
+                                                                                  Navigator.pop(context);
+                                                                                },
+                                                                                backgroundColor: Colors.white,
+                                                                                mini: true,
+                                                                                elevation: 0.0,
+                                                                              ),
+                                                                            ),
+                                                                            // ),
+                                                                            Container(
+                                                                                height: 40.toHeight,
+                                                                                child: Icon(
+                                                                                  Icons.warning,
+                                                                                  size: 60.toFont,
+                                                                                  color: Colors.red,
+                                                                                )),
 
-                                    //                                         Container(
-                                    //                                             padding: EdgeInsets.only(
-                                    //                                               left: 15.0.toWidth,
-                                    //                                               top: 10.toHeight,
-                                    //                                               right: 15.toWidth,
-                                    //                                               bottom: 0,
-                                    //                                             ),
-                                    //                                             height: 260.toHeight,
-                                    //                                             child: Column(
-                                    //                                                 //新建一个Column来放文字信息，发件人名字和最近信息
-                                    //                                                 crossAxisAlignment: CrossAxisAlignment.center, //左对齐
-                                    //                                                 children: [
-                                    //                                                   Container(
-                                    //                                                     height: 20.toHeight,
-                                    //                                                     width: 50.toWidth,
-                                    //                                                   ),
-                                    //                                                   Container(
-                                    //                                                     alignment: Alignment.center,
-                                    //                                                     padding: EdgeInsets.only(
-                                    //                                                       left: 30.0.toWidth,
-                                    //                                                       top: 0,
-                                    //                                                       right: 30.toWidth,
-                                    //                                                       bottom: 0,
-                                    //                                                     ),
-                                    //                                                     height: 170.toHeight,
-                                    //                                                     width: 400.toWidth,
-                                    //                                                     child: Text(
-                                    //                                                       "This contact will be deleted and chat history will be recalled. Do you really want to delete?",
-                                    //                                                       style: TextStyle(fontSize: 15.toFont, fontWeight: FontWeight.w500, color: Colors.black), //Color(0xFF584797)
-                                    //                                                       maxLines: null,
-                                    //                                                     ),
-                                    //                                                   ),
-                                    //                                                   Container(
-                                    //                                                     height: 10.toHeight,
-                                    //                                                     width: 320.toWidth,
-                                    //                                                   ),
-                                    //                                                   Container(
-                                    //                                                       height: 50.toHeight,
-                                    //                                                       width: 400.toWidth,
-                                    //                                                       child: Row(children: <Widget>[
-                                    //                                                         Container(
-                                    //                                                             width: 127.toWidth,
-                                    //                                                             height: 80.toHeight,
-                                    //                                                             decoration: BoxDecoration(
-                                    //                                                               borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    //                                                             ),
-                                    //                                                             child: RaisedButton(
-                                    //                                                                 //MaterialButton(
-                                    //                                                                 elevation: 0.0,
-                                    //                                                                 shape: RoundedRectangleBorder(
-                                    //                                                                   borderRadius: BorderRadius.circular(20.0),
-                                    //                                                                 ),
-                                    //                                                                 color: Colors.white, //:Colors.grey,
-                                    //                                                                 onPressed: () {
-                                    //                                                                   Navigator.pop(context);
-                                    //                                                                 },
-                                    //                                                                 child: Text(
-                                    //                                                                   "No",
-                                    //                                                                   style: GoogleFonts.quicksand(
-                                    //                                                                     fontWeight: FontWeight.w900,
-                                    //                                                                     color: Color(0xFF8F8E94),
-                                    //                                                                     fontSize: 15.toFont,
-                                    //                                                                   ),
-                                    //                                                                   textAlign: TextAlign.center,
-                                    //                                                                 ))),
-                                    //                                                         Container(
-                                    //                                                           width: 5.toWidth,
-                                    //                                                           height: 80.toHeight,
-                                    //                                                         ),
-                                    //                                                         Container(
-                                    //                                                             width: 127.toWidth,
-                                    //                                                             height: 80.toHeight,
-                                    //                                                             decoration: BoxDecoration(
-                                    //                                                               borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    //                                                               boxShadow: <BoxShadow>[
-                                    //                                                                 BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 0.5, offset: Offset(0.0, 1)),
-                                    //                                                               ],
-                                    //                                                             ),
-                                    //                                                             child: RaisedButton(
-                                    //                                                                 //MaterialButton(
-                                    //                                                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: BorderSide(color: Colors.red)),
-                                    //                                                                 elevation: 5.0,
-                                    //                                                                 //minWidth: 320,
-                                    //                                                                 // height: 50,
-                                    //                                                                 color: Colors.red, //Color(0xFF584797)
-                                    //                                                                 //padding: EdgeInsets.symmetric(vertical: 15.0),
-                                    //                                                                 onPressed: () async {
-                                    //                                                                   Navigator.pop(context);
-                                    //                                                                   await ChatService().deleteMessages(_filteredList[index].atSign.toString());
-                                    //                                                                   await _contactService!.deleteAtSign(atSign: _filteredList[index].atSign);
-                                    //                                                                 },
-                                    //                                                                 child: Text(
-                                    //                                                                   "Yes, delete",
-                                    //                                                                   style: GoogleFonts.quicksand(
-                                    //                                                                     fontWeight: FontWeight.w900,
-                                    //                                                                     color: Colors.white,
-                                    //                                                                     fontSize: 15.toFont,
-                                    //                                                                   ),
-                                    //                                                                   textAlign: TextAlign.center,
-                                    //                                                                 ))),
-                                    //                                                       ]))
-                                    //                                                 ]))
-                                    //                                       ]))));
-                                    //                     },
-                                    //                   ),
-                                    //                 ],
-                                    //                 child: CustomListTile(
-                                    //                   contactService:
-                                    //                       _contactService,
-                                    //                   onTap: () {
-                                    //                     chatWithAtSign =
-                                    //                         _filteredList[index]
-                                    //                             .atSign
-                                    //                             .toString();
-                                    //                     setAtsignToChatWith();
-                                    //                     Navigator.push(
-                                    //                         context,
-                                    //                         MaterialPageRoute(
-                                    //                           builder: (context) =>
-                                    //                               chatwithatsign(),
-                                    //                           settings:
-                                    //                               RouteSettings(
-                                    //                             arguments:
-                                    //                                 chatWithAtSign
-                                    //                                     .toString()
-                                    //                                     .substring(
-                                    //                                         1),
-                                    //                           ),
-                                    //                         ));
-                                    //                   },
-                                    //                   asSelectionTile: widget
-                                    //                       .asSelectionScreen,
-                                    //                   asSingleSelectionTile: widget
-                                    //                       .asSingleSelectionScreen,
-                                    //                   contact:
-                                    //                       _filteredList[index],
-                                    //                   selectedList: (s) {
-                                    //                     selectedList = (s != null)
-                                    //                         as List<AtContact>;
-                                    //                     widget.selectedList!(
-                                    //                         selectedList);
-                                    //                   },
-                                    //                   onTrailingPressed: widget
-                                    //                       .onSendIconPressed,
-                                    //                 ),
-                                    //               ),
-                                    //             );
-                                    //           }));
+                                                                            Container(
+                                                                                padding: EdgeInsets.only(
+                                                                                  left: 15.0.toWidth,
+                                                                                  top: 10.toHeight,
+                                                                                  right: 15.toWidth,
+                                                                                  bottom: 0,
+                                                                                ),
+                                                                                height: 260.toHeight,
+                                                                                child: Column(
+                                                                                    //新建一个Column来放文字信息，发件人名字和最近信息
+                                                                                    crossAxisAlignment: CrossAxisAlignment.center, //左对齐
+                                                                                    children: [
+                                                                                      Container(
+                                                                                        height: 20.toHeight,
+                                                                                        width: 50.toWidth,
+                                                                                      ),
+                                                                                      Container(
+                                                                                        alignment: Alignment.center,
+                                                                                        padding: EdgeInsets.only(
+                                                                                          left: 30.0.toWidth,
+                                                                                          top: 0,
+                                                                                          right: 30.toWidth,
+                                                                                          bottom: 0,
+                                                                                        ),
+                                                                                        height: 170.toHeight,
+                                                                                        width: 400.toWidth,
+                                                                                        child: Text(
+                                                                                          "This contact will be deleted and chat history will be recalled. Do you really want to delete?",
+                                                                                          style: TextStyle(fontSize: 15.toFont, fontWeight: FontWeight.w500, color: Colors.black), //Color(0xFF584797)
+                                                                                          maxLines: null,
+                                                                                        ),
+                                                                                      ),
+                                                                                      Container(
+                                                                                        height: 10.toHeight,
+                                                                                        width: 320.toWidth,
+                                                                                      ),
+                                                                                      Container(
+                                                                                          height: 50.toHeight,
+                                                                                          width: 400.toWidth,
+                                                                                          child: Row(children: <Widget>[
+                                                                                            Container(
+                                                                                                width: 127.toWidth,
+                                                                                                height: 80.toHeight,
+                                                                                                decoration: BoxDecoration(
+                                                                                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                                                                ),
+                                                                                                child: RaisedButton(
+                                                                                                    //MaterialButton(
+                                                                                                    elevation: 0.0,
+                                                                                                    shape: RoundedRectangleBorder(
+                                                                                                      borderRadius: BorderRadius.circular(20.0),
+                                                                                                    ),
+                                                                                                    color: Colors.white, //:Colors.grey,
+                                                                                                    onPressed: () {
+                                                                                                      Navigator.pop(context);
+                                                                                                    },
+                                                                                                    child: Text(
+                                                                                                      "No",
+                                                                                                      style: GoogleFonts.quicksand(
+                                                                                                        fontWeight: FontWeight.w900,
+                                                                                                        color: Color(0xFF8F8E94),
+                                                                                                        fontSize: 15.toFont,
+                                                                                                      ),
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                    ))),
+                                                                                            Container(
+                                                                                              width: 5.toWidth,
+                                                                                              height: 80.toHeight,
+                                                                                            ),
+                                                                                            Container(
+                                                                                                width: 127.toWidth,
+                                                                                                height: 80.toHeight,
+                                                                                                decoration: BoxDecoration(
+                                                                                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                                                                  boxShadow: <BoxShadow>[
+                                                                                                    BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 0.5, offset: Offset(0.0, 1)),
+                                                                                                  ],
+                                                                                                ),
+                                                                                                child: RaisedButton(
+                                                                                                    //MaterialButton(
+                                                                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: BorderSide(color: Colors.red)),
+                                                                                                    elevation: 5.0,
+                                                                                                    //minWidth: 320,
+                                                                                                    // height: 50,
+                                                                                                    color: Colors.red, //Color(0xFF584797)
+                                                                                                    //padding: EdgeInsets.symmetric(vertical: 15.0),
+                                                                                                    onPressed: () async {
+                                                                                                      Navigator.pop(context);
+                                                                                                      await ChatService().deleteMessages(_filteredList[index]!.contact!.atSign.toString());
+                                                                                                      await _contactService!.deleteAtSign(atSign: _filteredList[index]!.contact!.atSign.toString());
+                                                                                                    },
+                                                                                                    child: Text(
+                                                                                                      "Yes, delete",
+                                                                                                      style: GoogleFonts.quicksand(
+                                                                                                        fontWeight: FontWeight.w900,
+                                                                                                        color: Colors.white,
+                                                                                                        fontSize: 15.toFont,
+                                                                                                      ),
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                    ))),
+                                                                                          ]))
+                                                                                    ]))
+                                                                          ]))
+                                                                  )
+                                                          );
+                                                        },
+                                                      ),
+                                                    ],
+                                                    child: CustomListTile(
+                                                      contactService:
+                                                          _contactService,
+                                                      onTap: () {
+                                                        chatWithAtSign =
+                                                            _filteredList[index]!.contact!
+                                                                .atSign
+                                                                .toString();
+                                                        setAtsignToChatWith();
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  chatwithatsign(),
+                                                              settings:
+                                                                  RouteSettings(
+                                                                arguments:
+                                                                    chatWithAtSign
+                                                                        .toString()
+                                                                        .substring(
+                                                                            1),
+                                                              ),
+                                                            ));
+                                                      },
+                                                      asSelectionTile: widget
+                                                          .asSelectionScreen,
+                                                      asSingleSelectionTile: widget
+                                                          .asSingleSelectionScreen,
+                                                      contact:
+                                                          _filteredList[index]!.contact!,
+                                                      selectedList: (s) {
+                                                        selectedList = (s != null)
+                                                            as List<AtContact>;
+                                                        widget.selectedList!(
+                                                            selectedList);
+                                                      },
+                                                      onTrailingPressed: widget
+                                                          .onSendIconPressed,
+                                                    ),
+                                                  ),
+                                                );
+                                              }));
 
-                                    //   //   },
-                                    //   // );
+                                      //   },
+                                      // );
                                   }
                                 }
                               },
@@ -861,7 +864,7 @@ class _ContactScreenState extends State<ContactScreen> {
   setAtsignToChatWith() {
     // print(activeAtSign);
     // print(chatWithAtSign);
-    setChatWithAtSign(chatWithAtSign!);
+    // setChatWithAtSign(chatWithAtSign!);
   }
 
   _getSharedKeys() async {
