@@ -1,6 +1,7 @@
 // import 'package:spacesignal/utils/message_model.dart';
 // import 'package:at_chat_flutter/models/message_model.dart';
 import 'package:at_chat_flutter/utils/colors.dart';
+import 'package:at_client/at_client.dart';
 import 'package:spacesignal/app/modules/chat/utils/message_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ import 'package:spacesignal/app/modules/chat/views/incoming_message.dart';
 import 'package:spacesignal/app/modules/chat/views/send_message.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:spacesignal/app/modules/chat/controllers/chat_service.dart';
-
+import 'package:spacesignal/app/modules/chat/controllers/init_chat_service.dart';
+import '../../../../sdk_service.dart';
 import 'initial_message.dart';
 
 
@@ -68,6 +70,11 @@ class _ChatScreenState extends State<ChatScreen> {
     _scrollController = ScrollController();
     _chatService = ChatService();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      String? currentAtSign = await AtService.getInstance().getAtSign();
+      AtClientManager _atclientmanager = await AtService.getInstance().atClientManager;
+      // initializeContactsService(clientSdkService!.atClientServiceInstance!.atClient!,currentAtSign!,rootDomain: MixedConstants.ROOT_DOMAIN);
+      // initializeChatService(AtClientManager.getInstance(), currentAtSign!);
+      initializeChatService(_atclientmanager, currentAtSign!);
       await _chatService.getChatHistory();
     });
   }

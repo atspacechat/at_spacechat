@@ -87,11 +87,13 @@ class _ContactScreenState extends State<ContactScreen> {
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       String? currentAtSign = await AtService.getInstance().getAtSign();
+      AtClientManager _atclientmanager = await AtService.getInstance().atClientManager;
       // initializeContactsService(clientSdkService!.atClientServiceInstance!.atClient!,currentAtSign!,rootDomain: MixedConstants.ROOT_DOMAIN);
       var _result = await _contactService!.fetchContacts();
       print('$_result = true');
       activeAtSign = currentAtSign;
-      initializeChatService(AtClientManager.getInstance(), currentAtSign!);
+      // initializeChatService(AtClientManager.getInstance(), currentAtSign!);
+      initializeChatService(_atclientmanager, currentAtSign!);
       // await _chatService.getChatHistory();
       _addreceiver();
 
@@ -758,7 +760,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                             _filteredList[index]!.contact!
                                                                 .atSign
                                                                 .toString();
-                                                        setAtsignToChatWith();
+                                                        _chatService.setAtsignToChatWith(chatWithAtSign, false,"",[]);
                                                         Navigator.push(
                                                             context,
                                                             MaterialPageRoute(

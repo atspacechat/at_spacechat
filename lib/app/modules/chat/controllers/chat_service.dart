@@ -155,12 +155,17 @@ class ChatService {
         ..sharedWith = chatWithAtSign
         ..metadata = Metadata();
       key.metadata?.ccd = true;
-      var keyValue = await atClientManager.atClient.get(key).catchError((e) {
+      var a = await atClientManager.atClient;
+      print(a);
+      print(key);
+      print(await a.get(key));
+      var keyValue = await a.get(key).catchError((e) {
         // print('error in get ${e.errorCode} ${e.errorMessage}');
         print('error in get');
       });
       // ignore: unnecessary_null_comparison
-      if (keyValue != null && keyValue.value != null) {
+      print(keyValue.value);
+      if (keyValue.value != null) {
         chatHistoryMessages = json.decode((keyValue.value) as String) as List;
       } else {
         chatHistoryMessages = [];
@@ -171,23 +176,29 @@ class ChatService {
           (chatWithAtSign != null ? currentAtSign! : ' ').substring(1);
       key.sharedBy = chatWithAtSign;
       key.sharedWith = currentAtSign!;
-      keyValue = await atClientManager.atClient.get(key).catchError((e) {
-        print(
-            'error in getting other history');
-        //  'error in getting other history ${e.errorCode} ${e.errorMessage}');
-      });
-      if (keyValue != null && keyValue.value != null) {
-        chatHistoryMessagesOther =
-        json.decode((keyValue.value) as String) as List;
-      } else {
-        chatHistoryMessagesOther = [];
-      }
-      chatHistory =
-      await interleave(chatHistoryMessages, chatHistoryMessagesOther);
-      chatSink.add(chatHistory);
+      print(key);
+
+      var b = await a.get(key);
+      print(b);
+      // keyValue = await atClientManager.atClient.get(key).catchError((e) {
+      //   print(
+      //       'error in getting other history');
+      //   //  'error in getting other history ${e.errorCode} ${e.errorMessage}');
+      // });
+      // print(keyValue.value);
+      //
+      // if (keyValue.value != null) {
+      //   chatHistoryMessagesOther =
+      //   json.decode((keyValue.value) as String) as List;
+      // } else {
+      //   chatHistoryMessagesOther = [];
+      // }
+      // chatHistory =
+      // await interleave(chatHistoryMessages, chatHistoryMessagesOther);
+      // chatSink.add(chatHistory);
     } catch (error) {
       print('Error in getting chat -> $error');
-      chatSink.add(chatHistory);
+      // chatSink.add(chatHistory);
     }
   }
 

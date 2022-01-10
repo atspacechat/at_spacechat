@@ -428,7 +428,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                             print("check"+_contactService!.getAtSignError);
                                                             // if (_contactService!.checkAtSign != null && _contactService!.checkAtSign!) {
                                                               String chatWithAtSign = sender;
-                                                              var atClientManager = await AtClientManager.getInstance();
+                                                              var atClientManager = await AtService.getInstance().atClientManager;
                                                               initializeChatService(atClientManager,activeAtSign);
                                                               ChatService().setAtsignToChatWith(chatWithAtSign,false,"",[]);
                                                               // await _addsignaltochat();
