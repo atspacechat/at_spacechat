@@ -94,6 +94,19 @@ class HomeController extends GetxController {
         onError: _onErrorCallback);
   }
 
+  //notify sender
+  Future<void> notifysender(AtKey key, String? value) async {
+    print("Notification value" + value!);
+    var notifiService = clientSdkService.atClientManager.notificationService;
+    // key.sharedWith = "@tallcaterpillar";
+    // Metadata _metadata = Metadata()..ttr = -1;
+    //
+    // key.metadata = _metadata;
+    notifiService.notify(NotificationParams.forUpdate(key, value: value),
+        onSuccess: _onSuccessCallback,
+        //TODO: Try to resent
+        onError: _onErrorCallback);
+  }
   //shared  signal by me
 //specify sharedby with the current  atsign
 

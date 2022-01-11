@@ -147,6 +147,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                 avatarColor:
                                 widget.senderAvatarColor,
                               )
+
+                                  : (snapshot.data![index].type ==
+                                  MessageType.INITIAL
+                                  ? InitialMessageBubble(
+                                    message: snapshot.data![index]
+                                    // color: widget.incomingMessageColor,
+                                    // avatarColor: widget.senderAvatarColor,
+                                    )
                                   : OutgoingMessageBubble(
                                     (id) async {
                                   var result = await _chatService
@@ -166,7 +174,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 widget.outgoingMessageColor,
                                 avatarColor:
                                 widget.receiverAvatarColor,
-                              ),
+                              ))
                             );
                           });
                     })),

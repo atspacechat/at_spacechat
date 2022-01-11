@@ -53,11 +53,19 @@ class Message {
   }
 
   Map<String, dynamic> toMap() {
+    var t;
+    if (type == MessageType.values[0]){
+      t = 0;
+    }else if(type == MessageType.values[1]){
+      t = 1;
+    }else{
+      t = 2;
+    }
     return {
       'id': id,
       'time': time,
       'message': message,
-      'type': type == MessageType.values[0] ? 0 : 1,
+      'type': t,
       'content_type': contentType?.index,
       'sender': sender,
       'imageData': imageData

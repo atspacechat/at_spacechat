@@ -97,4 +97,9 @@ class AtService {
     atsign = !atsign.startsWith('@') ? '@' + atsign : atsign;
     return atsign;
   }
+
+//   Future<bool> notify(
+//       AtKey atKey, String value, OperationEnum operation) async {
+//     return await getAtClientForAtsign().notify(atKey, value, operation);
+//   }
 }

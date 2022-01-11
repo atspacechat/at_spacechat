@@ -145,6 +145,8 @@ class ChatService {
   }
 
   Future<void> getChatHistory({String? atsign}) async {
+    var emptyvalue = AtValue()
+        ..value = [];
     try {
       chatHistory = [];
       var key = AtKey()
@@ -162,10 +164,12 @@ class ChatService {
       var keyValue = await a.get(key).catchError((e) {
         // print('error in get ${e.errorCode} ${e.errorMessage}');
         print('error in get');
+        chatHistoryMessages = [];
+        return emptyvalue;
       });
       // ignore: unnecessary_null_comparison
       print(keyValue.value);
-      if (keyValue.value != null) {
+      if (keyValue.value != null && keyValue.value.toString() != "[]" && chatHistoryMessages != []) {
         chatHistoryMessages = json.decode((keyValue.value) as String) as List;
       } else {
         chatHistoryMessages = [];
@@ -177,28 +181,28 @@ class ChatService {
       key.sharedBy = chatWithAtSign;
       key.sharedWith = currentAtSign!;
       print(key);
-
-      var b = await a.get(key);
-      print(b);
-      // keyValue = await atClientManager.atClient.get(key).catchError((e) {
-      //   print(
-      //       'error in getting other history');
-      //   //  'error in getting other history ${e.errorCode} ${e.errorMessage}');
-      // });
-      // print(keyValue.value);
-      //
-      // if (keyValue.value != null) {
-      //   chatHistoryMessagesOther =
-      //   json.decode((keyValue.value) as String) as List;
-      // } else {
-      //   chatHistoryMessagesOther = [];
-      // }
-      // chatHistory =
-      // await interleave(chatHistoryMessages, chatHistoryMessagesOther);
-      // chatSink.add(chatHistory);
+      // var b = await a.get(key);
+      // print(b);
+      keyValue = await atClientManager.atClient.get(key).catchError((e) {
+        print(
+            'error in getting other history');
+        chatHistoryMessagesOther = [];
+        return emptyvalue;
+        //  'error in getting other history ${e.errorCode} ${e.errorMessage}');
+      });
+      // print("chec"+keyValue.value.toString());
+      // if (keyValue.value.toString() == "[]"){print("check");};
+      if (keyValue.value != null && keyValue.value != [] && chatHistoryMessagesOther != [] && keyValue.value.toString() != "[]") {
+        chatHistoryMessagesOther = json.decode((keyValue.value) as String) as List;
+      } else {
+        chatHistoryMessagesOther = [];
+      }
+      chatHistory =
+      await interleave(chatHistoryMessages, chatHistoryMessagesOther);
+      chatSink.add(chatHistory);
     } catch (error) {
       print('Error in getting chat -> $error');
-      // chatSink.add(chatHistory);
+      chatSink.add(chatHistory);
     }
   }
 

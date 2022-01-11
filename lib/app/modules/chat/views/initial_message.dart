@@ -1,11 +1,12 @@
 // import 'package:spacesignal/utils/message_model.dart';
-import 'package:at_chat_flutter/models/message_model.dart';
+// import 'package:at_chat_flutter/models/message_model.dart';
 import 'package:at_chat_flutter/utils/colors.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:at_common_flutter/at_common_flutter.dart';
 //import 'package:at_chat_flutter/widgets/contacts_initials.dart';
 // import 'package:spacesignal/utils/initial_image.dart';
 import 'package:flutter/material.dart';
+import 'package:spacesignal/app/modules/chat/utils/message_model.dart';
 
 class InitialMessageBubble extends StatefulWidget {
   final Message? message;
@@ -15,7 +16,7 @@ class InitialMessageBubble extends StatefulWidget {
   const InitialMessageBubble(
       {Key? key,
         this.message,
-        this.color = Colors.red,
+        this.color = Colors.yellow,
         // this.avatarColor = CustomColors.defaultColor
       })
       : super(key: key);

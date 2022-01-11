@@ -2,6 +2,7 @@
 // import 'package:at_chat_flutter/services/chat_service.dart';
 import 'package:at_client_mobile/at_client_mobile.dart';
 import 'package:at_common_flutter/services/size_config.dart';
+import 'package:at_commons/at_commons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -245,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             Container(
                               height: 40.toHeight,
                               child: Text(
-                                "You got a signal!",
+                                "You got a message!",
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.patuaOne(
                                   //quicksand  patuaOne
@@ -428,15 +429,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                             print("check"+_contactService!.getAtSignError);
                                                             // if (_contactService!.checkAtSign != null && _contactService!.checkAtSign!) {
                                                               String chatWithAtSign = sender;
+                                                            // String receivemessage = '${controllerx.searchedMessage}';
                                                               var atClientManager = await AtService.getInstance().atClientManager;
                                                               initializeChatService(atClientManager,activeAtSign);
                                                               ChatService().setAtsignToChatWith(chatWithAtSign,false,"",[]);
+                                                              _notifysender(chatWithAtSign);
                                                               // await _addsignaltochat();
                                                               await ChatService().setChatHistory(Message(
                                                                   message: controllerx.searchedMessage.value,
                                                                   sender: chatWithAtSign,
                                                                   time: DateTime.now().millisecondsSinceEpoch,
-                                                                  type: MessageType.INCOMING));
+                                                                  type: MessageType.INITIAL));
                                                             // setState(() {
                                                             //   _loading = false;
                                                             // });
@@ -480,4 +483,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       },
     );
   }
+
+  _notifysender(String sender) async {
+    if (sender != null) {
+      String value= "aseperatoratspacesignal"+ DateTime.now().millisecondsSinceEpoch.toString();
+      var metadata = Metadata()..ttr = -1;
+      AtKey atKey = AtKey()
+        ..key = "replier"
+        ..metadata = metadata
+        ..sharedBy = activeAtSign
+        ..sharedWith = sender;
+      var operation = OperationEnum.update;
+      // var notifiService = clientSdkService.atClientManager.notificationService;
+      // notifiService.notify(NotificationParams.forUpdate(atKey, value: value));
+      // await _contactService.notify(atKey, value, operation);
+      control.notifysender(atKey,value);
+      print("notify==>"+ value);
+
+    }
+  }
+
+
 }
