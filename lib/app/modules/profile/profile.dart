@@ -426,7 +426,7 @@ class settingitem {
 
 _launchURL() async {
   await FlutterWebBrowser.openWebPage(
-    url: "https://wavi.ng/@spacesignal",
+    url: "https://wavi.ng/@spacechat",
     customTabsOptions: CustomTabsOptions(
       toolbarColor: Colors.deepPurple,
       addDefaultShareMenuItem: true,
@@ -446,7 +446,7 @@ _launchURL() async {
 
 _launchURL2() async {
   await FlutterWebBrowser.openWebPage(
-    url: "https://www.instagram.com/spacesignalapp/",
+    url: "https://www.instagram.com/at_spacechat_app/",
     customTabsOptions: CustomTabsOptions(
       toolbarColor: Colors.deepPurple,
       addDefaultShareMenuItem: true,
