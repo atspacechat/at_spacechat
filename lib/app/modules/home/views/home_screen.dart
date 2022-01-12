@@ -433,22 +433,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                               ChatService().setAtsignToChatWith(chatWithAtSign,false,"",[]);
                                                               _notifysender(chatWithAtSign);
 
-                                                              // await ChatService().setChatHistory(Message(
-                                                              //     message: controllerx.searchedMessage.value,
-                                                              //     sender: chatWithAtSign,
-                                                              //     time: DateTime.now().millisecondsSinceEpoch,
-                                                              //     type: MessageType.INITIAL));
-                                                              //
-                                                              // Navigator.push(context, MaterialPageRoute(
-                                                              //       builder: (context) =>
-                                                              //               chatwithatsign(),
-                                                              //       settings: RouteSettings(
-                                                              //         arguments: chatWithAtSign.toString().substring(1),
-                                                              //       ),
-                                                              //     ));
-                                                              // print(ChatService().currentAtSign);
-                                                              // print(ChatService().chatWithAtSign);
-                                                            // }
+                                                              await ChatService().setChatHistory(Message(
+                                                                  message: controllerx.searchedMessage.value,
+                                                                  sender: chatWithAtSign,
+                                                                  time: DateTime.now().millisecondsSinceEpoch,
+                                                                  type: MessageType.INITIAL));
+
+                                                              Navigator.push(context, MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                            chatwithatsign(),
+                                                                    settings: RouteSettings(
+                                                                      arguments: chatWithAtSign.toString().substring(1),
+                                                                    ),
+                                                                  ));
+                                                              print(ChatService().currentAtSign);
+                                                              print(ChatService().chatWithAtSign);
+
                                                           },
                                                           child: Text(
                                                             "Reply",
