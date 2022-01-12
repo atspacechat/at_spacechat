@@ -149,21 +149,21 @@ class _ContactScreenState extends State<ContactScreen> {
                               Get.to(() => HomeScreen());
                             },
                           ),
-                          IconButton(
-                            padding: EdgeInsets.only(
-                              left: 12.toWidth,
-                              top: 10.toHeight,
-                            ),
-                            icon: Icon(
-                              Icons.add,
-                              color: Colors.grey,
-                              size: 45,
-                            ),
-                            // color: Colors.white,
-                            onPressed: () {
-                              Get.to(() => AddContactDialog());
-                            },
-                          )
+                          // IconButton(
+                          //   padding: EdgeInsets.only(
+                          //     left: 12.toWidth,
+                          //     top: 10.toHeight,
+                          //   ),
+                          //   icon: Icon(
+                          //     Icons.add,
+                          //     color: Colors.grey,
+                          //     size: 45,
+                          //   ),
+                          //   // color: Colors.white,
+                          //   onPressed: () {
+                          //     Get.to(() => AddContactDialog());
+                          //   },
+                          // )
                         ],
                       ),
                     ),

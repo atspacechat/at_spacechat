@@ -343,20 +343,23 @@ class _ProfileState extends State<Profile> {
                                             Icon(Icons.delete_forever_outlined),
                                         onPressed: () {
                                           Get.defaultDialog(
-                                            title: 'Delete Signal !',
+                                            title: 'Delete Message !',
                                             titleStyle: GoogleFonts.patuaOne(
                                               fontWeight: FontWeight.w600,
                                               color: Colors.deepPurple,
                                               fontSize: 25,
                                             ),
                                             middleText:
-                                                'Are you sure you want to delete this signal?',
+                                            'Are you sure you want to delete this message from the space?',
                                             onConfirm: () {
                                               controller.recallSignal(key);
                                               Navigator.pop(context);
                                             },
                                             textConfirm: 'Delete',
                                             textCancel: 'Cancel',
+                                            buttonColor: Colors.deepPurple,
+                                            cancelTextColor:Colors.grey,
+                                            confirmTextColor: Colors.white,
                                           );
                                         },
                                       ),
