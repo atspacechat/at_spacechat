@@ -86,7 +86,7 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                             ),
                             child: Container(
                               child: Image(
-                                image: AssetImage('assets/images/logo.png'),
+                                image: AssetImage('assets/images/logo_new.png'),
                               ),
                             ),
                           ),

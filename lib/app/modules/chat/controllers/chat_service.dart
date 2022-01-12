@@ -221,7 +221,10 @@ class ChatService {
           valueA.imageData = await getImage(valueA.message);
         }
         valueB = Message.fromJson(itb.current);
-        valueB.type = MessageType.INCOMING;
+        // valueB.type = MessageType.INCOMING;
+        if (valueB.type == MessageType.OUTGOING) {
+          valueB.type = MessageType.INCOMING;
+        }
         if (valueB.contentType == MessageContentType.IMAGE) {
           valueB.imageData = await getImage(valueB.message);
         }
@@ -247,14 +250,20 @@ class ChatService {
         }
       } else if (hasb) {
         valueB = Message.fromJson(itb.current);
-        valueB.type = MessageType.INCOMING;
+        // valueB.type = MessageType.INCOMING;
+        if (valueB.type == MessageType.OUTGOING) {
+          valueB.type = MessageType.INCOMING;
+        }
         if (valueB.contentType == MessageContentType.IMAGE) {
           valueB.imageData = await getImage(valueB.message);
         }
         result.add(valueB);
         while (hasb = itb.moveNext()) {
           valueB = Message.fromJson(itb.current);
-          valueB.type = MessageType.INCOMING;
+          // valueB.type = MessageType.INCOMING;
+          if (valueB.type == MessageType.OUTGOING) {
+            valueB.type = MessageType.INCOMING;
+          }
           if (valueB.contentType == MessageContentType.IMAGE) {
             valueB.imageData = await getImage(valueB.message);
           }
