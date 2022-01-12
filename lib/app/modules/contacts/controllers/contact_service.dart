@@ -518,7 +518,7 @@ class ContactService {
 
   Future<List<AtKey>> getAtKeys({String? regex, String? sharedBy}) async {
     //regex ??= conf.namespace;
-    return await AtService.getInstance().getAtKeys(sharedBy: sharedBy);
+    return await AtService.getInstance().getAtKeys3();
   }
 
   Future<String> get(AtKey atKey) async {

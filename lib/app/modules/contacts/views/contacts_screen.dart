@@ -872,45 +872,18 @@ class _ContactScreenState extends State<ContactScreen> {
   _getSharedKeys() async {
     // await _contactService!.sync();
     //return await _contactService.getAtKeys(regex: 'cached.*cookbook');
-    return await _contactService!.getAtKeys(regex: 'cached.*at_spacesignal');
+    return await _contactService!.getAtKeys();
   }
 
   _addreceiver() async {
     List<AtKey> sharedKeysList = await _getSharedKeys();
     print(sharedKeysList.length);
-
+    // sharedKeysList.retainWhere((element) => !element.metadata!.isCached);
     sharedKeysList.forEach((element) async {
-      if (element.key == "replier") {
+      // print(element.key.toString());
+      if (element.key == "spacesignalreplier") {
         await _contactService!.addAtSign(context, atSign: element.sharedBy);
-        print(element.sharedBy);
-
-        // String chatWithAtSign=element.sharedBy;
-        // setChatWithAtSign(chatWithAtSign);
-        //
-        // Metadata metadata = Metadata()..isCached = true;
-        // AtKey atKey = AtKey()
-        //     ..key = element.key
-        //     ..sharedWith = element.sharedWith
-        //     ..sharedBy = element.sharedBy
-        //     ..metadata = metadata;
-        //
-        // String value = await _contactService.get(atKey);
-        // print(value);
-        // print(value.length);
-        // String seperator="aseperatoratspacesignal";
-        // int index=value.indexOf(seperator);
-        // //print (index.toString());
-        // String signal=value.substring(0,index);
-        // //print(signal);
-        // int senttime=int.parse(value.substring(index+seperator.length,value.length-1));
-        //
-        // await ChatService().setChatHistory(Message(
-        //     message: signal,
-        //     sender:activeAtSign,
-        //     //time: DateTime.now().millisecondsSinceEpoch,
-        //     time:senttime,
-        //     type: MessageType.OUTGOING));
-
+        print("add a replier "+ element.sharedBy.toString());
         await _contactService!.delete(element);
       }
     });

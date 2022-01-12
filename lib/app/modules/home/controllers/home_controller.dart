@@ -103,9 +103,9 @@ class HomeController extends GetxController {
     //
     // key.metadata = _metadata;
     notifiService.notify(NotificationParams.forUpdate(key, value: value),
-        onSuccess: _onSuccessCallback,
+        onSuccess: _onSuccessCallback1,
         //TODO: Try to resent
-        onError: _onErrorCallback);
+        onError: _onErrorCallback1);
   }
   //shared  signal by me
 //specify sharedby with the current  atsign
@@ -224,13 +224,17 @@ class HomeController extends GetxController {
   void _onSuccessCallback(notificationResult) {
     print('Success message');
   }
-
+  void _onSuccessCallback1(notificationResult) {
+    print('success to notify the sender '+ notificationResult.toString());
+  }
   void _onErrorCallback(notificationResult) {
     print(notificationResult);
 
 // do something on notification error
   }
-
+  void _onErrorCallback1(notificationResult) {
+    print("faild to notify the sender "+notificationResult.toString());
+  }
   onsuccess(notificationResult) {
     // TODO: call readSignal();
     logger.d('Success message');

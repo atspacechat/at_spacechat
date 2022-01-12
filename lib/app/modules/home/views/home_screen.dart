@@ -421,37 +421,33 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                             // setState(() {
                                                             //   _loading = true;
                                                             // });
-                                                            print('on pressed ${controllerx.searchedMessageAtsign.value}');
-                                                            String sender = controllerx.searchedMessageAtsign.value;
+                                                            // print('on pressed ${controllerx.searchedMessageAtsign.value}');
+                                                            String sender = "@"+controllerx.searchedMessageAtsign.value;
                                                             print(sender);
                                                             var response = await _contactService!.addAtSign(context, atSign: sender);
-                                                            print(response);
-                                                            print("check"+_contactService!.getAtSignError);
-                                                            // if (_contactService!.checkAtSign != null && _contactService!.checkAtSign!) {
+
+                                                            // print("check add contact "+_contactService!.getAtSignError);
                                                               String chatWithAtSign = sender;
-                                                            // String receivemessage = '${controllerx.searchedMessage}';
                                                               var atClientManager = await AtService.getInstance().atClientManager;
                                                               initializeChatService(atClientManager,activeAtSign);
                                                               ChatService().setAtsignToChatWith(chatWithAtSign,false,"",[]);
                                                               _notifysender(chatWithAtSign);
-                                                              // await _addsignaltochat();
-                                                              await ChatService().setChatHistory(Message(
-                                                                  message: controllerx.searchedMessage.value,
-                                                                  sender: chatWithAtSign,
-                                                                  time: DateTime.now().millisecondsSinceEpoch,
-                                                                  type: MessageType.INITIAL));
-                                                            // setState(() {
-                                                            //   _loading = false;
-                                                            // });
-                                                              Navigator.push(context, MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                            chatwithatsign(),
-                                                                    settings: RouteSettings(
-                                                                      arguments: chatWithAtSign.toString().substring(1),
-                                                                    ),
-                                                                  ));
-                                                              print(ChatService().currentAtSign);
-                                                              print(ChatService().chatWithAtSign);
+
+                                                              // await ChatService().setChatHistory(Message(
+                                                              //     message: controllerx.searchedMessage.value,
+                                                              //     sender: chatWithAtSign,
+                                                              //     time: DateTime.now().millisecondsSinceEpoch,
+                                                              //     type: MessageType.INITIAL));
+                                                              //
+                                                              // Navigator.push(context, MaterialPageRoute(
+                                                              //       builder: (context) =>
+                                                              //               chatwithatsign(),
+                                                              //       settings: RouteSettings(
+                                                              //         arguments: chatWithAtSign.toString().substring(1),
+                                                              //       ),
+                                                              //     ));
+                                                              // print(ChatService().currentAtSign);
+                                                              // print(ChatService().chatWithAtSign);
                                                             // }
                                                           },
                                                           child: Text(
@@ -489,17 +485,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       String value= "aseperatoratspacesignal"+ DateTime.now().millisecondsSinceEpoch.toString();
       var metadata = Metadata()..ttr = -1;
       AtKey atKey = AtKey()
-        ..key = "replier"
+        ..key = "spacesignalreplier"
         ..metadata = metadata
         ..sharedBy = activeAtSign
         ..sharedWith = sender;
-      var operation = OperationEnum.update;
+      // var operation = OperationEnum.update;
       // var notifiService = clientSdkService.atClientManager.notificationService;
       // notifiService.notify(NotificationParams.forUpdate(atKey, value: value));
       // await _contactService.notify(atKey, value, operation);
-      control.notifysender(atKey,value);
+      var re = controllerx.notifysender(atKey,value);
+      print(atKey);
+      print(atKey.toString());
       print("notify==>"+ value);
-
+      print(re);
     }
   }
 
