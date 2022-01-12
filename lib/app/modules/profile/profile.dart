@@ -80,7 +80,7 @@ class _ProfileState extends State<Profile> {
                   //         // ),
                   //         Container(
                   child: ListView.separated(
-                      itemCount: 5,
+                      itemCount: 4,
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       separatorBuilder: (context, _) => Divider(
@@ -90,17 +90,18 @@ class _ProfileState extends State<Profile> {
                       itemBuilder: (context, index) {
                         return InkWell(
                             onTap: () async {
-                              if (index == 0) {
-                                // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => OnboardingScreen()),(route) => route == null);
-                              } else if (index == 1) {
+                              // if (index == 0) {
+                              //   // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => OnboardingScreen()),(route) => route == null);
+                              // } else
+                                if (index == 0) {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         BlockedScreen()));
-                              } else if (index == 2) {
+                              } else if (index == 1) {
                                 _launchURL();
-                              } else if (index == 3) {
+                              } else if (index == 2) {
                                 _launchURL2();
-                              } else if (index == 4) {
+                              } else if (index == 3) {
                                 // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginPage()),(route) => route == null);
                                 Get.to(() => OnbordingScreen());
 
@@ -389,10 +390,10 @@ class _ProfileState extends State<Profile> {
   }
 
   List<settingitem> settingitems = [
-    settingitem(
-      icon: Icons.book,
-      text: "User Guide",
-    ),
+    // settingitem(
+    //   icon: Icons.book,
+    //   text: "User Guide",
+    // ),
     settingitem(
       icon: Icons.list_alt,
       text: "Blocked Contacts",
