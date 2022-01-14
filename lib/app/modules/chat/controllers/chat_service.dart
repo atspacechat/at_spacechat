@@ -192,6 +192,7 @@ class ChatService {
       });
       // print("chec"+keyValue.value.toString());
       // if (keyValue.value.toString() == "[]"){print("check");};
+      print(keyValue.value);
       if (keyValue.value != null && keyValue.value != [] && chatHistoryMessagesOther != [] && keyValue.value.toString() != "[]") {
         chatHistoryMessagesOther = json.decode((keyValue.value) as String) as List;
       } else {
@@ -300,6 +301,7 @@ class ChatService {
   }
 
   Future<void> sendMessage(String? message) async {
+    print(DateTime.now().millisecondsSinceEpoch);
     await setChatHistory(Message(
         id: '${currentAtSign}_${DateTime.now().millisecondsSinceEpoch}',
         message: message,
@@ -307,6 +309,7 @@ class ChatService {
         time: DateTime.now().millisecondsSinceEpoch,
         type: MessageType.OUTGOING));
     print(message);
+
   }
 
   /// deletes self owned messages only

@@ -418,36 +418,39 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                           //:Colors.grey,
                                                           //padding: EdgeInsets.symmetric(vertical: 15.0),
                                                           onPressed: () async {
-                                                            // setState(() {
-                                                            //   _loading = true;
-                                                            // });
-                                                            // print('on pressed ${controllerx.searchedMessageAtsign.value}');
+                                                            // start loading
+                                                            controllerx.isLoading(true);
+
+                                                            // connect users and set the chat
                                                             String sender = "@"+controllerx.searchedMessageAtsign.value;
                                                             print(sender);
                                                             var response = await _contactService!.addAtSign(context, atSign: sender);
 
                                                             // print("check add contact "+_contactService!.getAtSignError);
-                                                              String chatWithAtSign = sender;
-                                                              var atClientManager = await AtService.getInstance().atClientManager;
-                                                              initializeChatService(atClientManager,activeAtSign);
-                                                              ChatService().setAtsignToChatWith(chatWithAtSign,false,"",[]);
-                                                              _notifysender(chatWithAtSign);
+                                                            String chatWithAtSign = sender;
+                                                            var atClientManager = await AtService.getInstance().atClientManager;
+                                                            initializeChatService(atClientManager,activeAtSign);
+                                                            ChatService().setAtsignToChatWith(chatWithAtSign,false,"",[]);
+                                                            _notifysender(chatWithAtSign);
 
-                                                              await ChatService().setChatHistory(Message(
-                                                                  message: controllerx.searchedMessage.value,
-                                                                  sender: chatWithAtSign,
-                                                                  time: DateTime.now().millisecondsSinceEpoch,
-                                                                  type: MessageType.INITIAL));
+                                                            await ChatService().setChatHistory(Message(
+                                                                message: controllerx.searchedMessage.value,
+                                                                sender: chatWithAtSign,
+                                                                time: DateTime.now().millisecondsSinceEpoch,
+                                                                type: MessageType.INITIAL));
 
-                                                              Navigator.push(context, MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                            chatwithatsign(),
-                                                                    settings: RouteSettings(
-                                                                      arguments: chatWithAtSign.toString().substring(1),
-                                                                    ),
-                                                                  ));
-                                                              print(ChatService().currentAtSign);
-                                                              print(ChatService().chatWithAtSign);
+                                                              // close loading
+                                                            // controllerx.isLoading(false);
+                                                            // go to the chat screen
+                                                            Navigator.push(context, MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                          chatwithatsign(),
+                                                                  settings: RouteSettings(
+                                                                    arguments: chatWithAtSign.toString().substring(1),
+                                                                  ),
+                                                                ));
+                                                            print(ChatService().currentAtSign);
+                                                            print(ChatService().chatWithAtSign);
 
                                                           },
                                                           child: Text(
