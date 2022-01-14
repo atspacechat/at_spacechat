@@ -10,20 +10,50 @@ import 'package:flutter/material.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 
+// import 'package:at_common_flutter/widgets/custom_app_bar.dart';
+import 'package:at_contact/at_contact.dart';
+import 'package:spacesignal/app/modules/contacts/utils/contact_base_model.dart';
+// import 'package:at_contacts_flutter/services/contact_service.dart';
+// import 'package:at_contacts_flutter/utils/colors.dart';
+// import 'package:at_contacts_flutter/utils/text_strings.dart';
+// import 'package:at_contacts_flutter/widgets/blocked_user_card.dart';
+// import 'package:at_contacts_flutter/widgets/error_screen.dart';
+// import 'package:flutter/material.dart';
+
+// import 'package:at_common_flutter/services/size_config.dart';
+
+/// Screen exposed to see blocked contacts and unblock them
 class BlockedScreen extends StatefulWidget {
+  const BlockedScreen({Key? key}) : super(key: key);
+
   @override
   _BlockedScreenState createState() => _BlockedScreenState();
 }
 
 class _BlockedScreenState extends State<BlockedScreen> {
-  ContactService? _contactService;
+  late ContactService _contactService;
+  bool errorOcurred = false;
+
+  /// Boolean indicator of unblock action
+  bool unblockingAtsign = false;
   @override
   void initState() {
     _contactService = ContactService();
-    _contactService!.fetchBlockContactList();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      var _result = await _contactService.fetchBlockContactList();
+      if (_result == null) {
+        if (mounted) {
+          setState(() {
+            errorOcurred = true;
+          });
+        }
+      }
+    });
+
     super.initState();
   }
 
+  /// boolean flag to indicate if blocking flow is in progress
   bool isBlocking = false;
 
   @override
@@ -37,12 +67,15 @@ class _BlockedScreenState extends State<BlockedScreen> {
         showLeadingIcon: true,
         titleText: TextStrings().blockedContacts,
       ),
-      body: RefreshIndicator(
+      body:
+      // errorOcurred
+      //     ?
+          RefreshIndicator(
         color: Colors.transparent,
         strokeWidth: 0,
         backgroundColor: Colors.transparent,
         onRefresh: () async {
-          await _contactService!.fetchBlockContactList();
+          await _contactService.fetchBlockContactList();
         },
         child: Container(
           color: ColorConstants.appBarColor,
@@ -50,32 +83,48 @@ class _BlockedScreenState extends State<BlockedScreen> {
             children: [
               Expanded(
                 child: StreamBuilder(
-                  initialData: _contactService!.blockContactList,
-                  stream: _contactService!.blockedContactStream,
-                  builder: (context, AsyncSnapshot snapshot) {
-                    return snapshot.data.isEmpty
-                        ? Center(
-                      child: Text(
-                        TextStrings().emptyBlockedList,
-                        style: TextStyle(
-                          fontSize: 16.toFont,
-                          color: ColorConstants.greyText,
+                  initialData: _contactService.baseBlockedList,
+                  stream: _contactService.blockedContactStream,
+                  builder: (context,
+                      AsyncSnapshot<List<BaseContact?>> snapshot) {
+                    if (snapshot.connectionState ==
+                        ConnectionState.active) {
+                      return (snapshot.data!.isEmpty)
+                          ? Center(
+                        child: Text(
+                          TextStrings().emptyBlockedList,
+                          style: TextStyle(
+                            fontSize: 16.toFont,
+                            color: ColorConstants.greyText,
+                          ),
                         ),
-                      ),
-                    )
-                        : ListView.separated(
-                      padding:
-                      EdgeInsets.symmetric(vertical: 40.toHeight),
-                      itemCount: _contactService!.blockContactList.length,
-                      separatorBuilder: (context, index) => Divider(
-                        indent: 16.toWidth,
-                      ),
-                      itemBuilder: (context, index) {
-                        return BlockedUserCard(
-                          blockeduser: snapshot.data[index],
-                        );
-                      },
-                    );
+                      )
+                          : ListView.separated(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 40.toHeight),
+                        itemCount:
+                        _contactService.blockContactList.length,
+                        separatorBuilder: (context, index) =>
+                            Divider(
+                              indent: 16.toWidth,
+                            ),
+                        itemBuilder: (context, index) {
+                          return BlockedUserCard(
+                              blockeduser:
+                              snapshot.data?[index]?.contact,
+                              // unblockAtsign: () async {
+                              //   await unblockAtsign(snapshot
+                              //       .data?[index]?.contact ??
+                              //       AtContact());
+                              // }
+                              );
+                        },
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                   },
                 ),
               ),
@@ -84,5 +133,33 @@ class _BlockedScreenState extends State<BlockedScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> unblockAtsign(AtContact atsign) async {
+    setState(() {
+      unblockingAtsign = true;
+    });
+    // ignore: unawaited_futures
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Center(
+          child: Text(TextStrings().unblockContact),
+        ),
+        content: SizedBox(
+          height: 100.toHeight,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ),
+    );
+    await _contactService.blockUnblockContact(
+        contact: atsign, blockAction: false);
+
+    setState(() {
+      unblockingAtsign = false;
+      Navigator.pop(context);
+    });
   }
 }
