@@ -19,6 +19,7 @@ class HomeController extends GetxController {
   var searchedMessage = "".obs;
   var searchedMessageAtsign = "".obs;
 
+  var serverError = true.obs;
   var isLoading = true.obs;
   var atClient = AtService.getInstance().getAtClientForAtsign();
   var signalByMelist = List<Map<String, dynamic>>.empty(growable: true).obs;
@@ -121,7 +122,12 @@ class HomeController extends GetxController {
 
     AtKey keyword = AtKey()..key = wkey;
 
-    notifysharesignal(keyword, val);
+    // try{
+      notifysharesignal(keyword, val);
+    // }catch (e) {
+    //   serverError(true);
+    //   isLoading(false);
+    // };
   }
 
   Future<void> readSharedByMeSignal() async {
@@ -191,6 +197,7 @@ class HomeController extends GetxController {
           searchedMessageAtsign.value = notification_atsign;
           //assign chatwith atsign also
           if (searchedMessage.value.isNotEmpty) {
+            serverError(false);
             isLoading(false);
           }
           print(searchedMessage);

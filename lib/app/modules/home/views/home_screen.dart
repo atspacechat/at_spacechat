@@ -53,9 +53,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   ContactService? _contactService;
   var blocked_list = [];
   // bool _loading = false;
-
+  // bool serverUp = false;
   void reqAsignal() {
     control.wantsSignal();
+    Future.delayed(const Duration(seconds: 13), (){
+      if(controllerx.searchedMessageAtsign.value == "" && controllerx.serverError.value){
+        controllerx.isLoading(false);
+      }
+    });
+
   }
 
   @override
@@ -170,15 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               onPressed: () {
                 controllerx.isLoading(true);
                 reqAsignal();
-
                 showLoaderDialog(context);
-
-                // if (controllerx.isLoading.value) {
-                //   CircularProgressIndicator();
-                // } else {
-                //   Get.defaultDialog(
-                //       middleText: controllerx.searchedMessage!.value);
-                // }
               },
               backgroundColor: Colors.white,
               tooltip: 'Increment',
@@ -220,8 +218,62 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         content: Row(children: [
           Obx(() => Container(
             child: controllerx.isLoading.value
-              ? CircularProgressIndicator()
-              : (blocked_list.contains("@"+controllerx.searchedMessageAtsign.value)
+              // ? CircularProgressIndicator(semanticsLabel: 'Loading')
+              ? Flexible(
+                child: Container(
+                    height: 90.toHeight,
+                    width: 300.toWidth,
+                    child: Column(
+                      children: <Widget>[
+                      Container(
+                        alignment: Alignment.topRight,
+                        height: 30.toHeight,
+                        width: 300.toWidth,
+                        child: FloatingActionButton(
+                          //FloatingActionButton(
+                          child: Icon(
+                            Icons.close,
+                            size: 30.toFont,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                          backgroundColor: Colors.white,
+
+                          mini: true,
+                          elevation: 0.0,
+                        ),
+                      ),
+                      Row(
+                          children: <Widget>[
+                            Container(
+                              // height: 40.toHeight,
+                              // width: 40.toHeight,
+                              child: CircularProgressIndicator(),
+                            ),
+                            Container(
+                              width: 30.toWidth,
+                            ),
+                            Container(
+                              // height: 40.toHeight,
+                              child: Text(
+                                "Searching in the space ...",
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                    fontSize: 15.toFont,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF584797)),
+                                maxLines: null,
+                              ),
+                            )
+                          ]
+                      ),
+
+                      ])))
+
+                    : (blocked_list.contains("@"+controllerx.searchedMessageAtsign.value) || controllerx.serverError.value
                 ? Flexible(
                   child: Container(
                     height: 340.toHeight,
@@ -308,7 +360,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     ),
                                     height: 120.toHeight,
                                     width: 400.toWidth,
-                                    child: Text(
+                                    child: controllerx.serverError.value
+                                      ? Text(
+                                        'Sorry! The server is taking a break or your internet is unstable. Please try again later.',
+                                        // message,
+                                        style: TextStyle(
+                                            fontSize: 15.toFont,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF584797)),
+                                        maxLines: null,
+                                        )
+                                      : Text(
                                       'Sorry! Your message got lost in the back hole. Please try again ~',
                                       // message,
                                       style: TextStyle(
@@ -423,8 +485,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                       //padding: EdgeInsets.symmetric(vertical: 15.0),
                                                       onPressed: () async {
                                                         // a new search
-                                                        reqAsignal();
-                                                        controllerx.isLoading(true);
+                                                        // reqAsignal();
+                                                        // controllerx.isLoading(true);
+                                                        Navigator.pop(context);
                                                       },
                                                       child: Text(
                                                         "Sure",
