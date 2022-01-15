@@ -193,15 +193,16 @@ class HomeController extends GetxController {
           Map<String, dynamic> _decoded = jsonDecode(value);
           print('$_decoded');
           String v = _decoded['Message'];
-          searchedMessage.value = v;
-          searchedMessageAtsign.value = notification_atsign;
+          print("Receive Signal: $v");
           //assign chatwith atsign also
-          if (searchedMessage.value.isNotEmpty) {
+          if (v.isNotEmpty && isLoading.value) {
             serverError(false);
+            searchedMessage.value = v;
+            searchedMessageAtsign.value = notification_atsign;
             isLoading(false);
+            // print(searchedMessage);
+            print("Monitor Signal: $v");
           }
-          print(searchedMessage);
-          print("Monitor Signal $v");
         }
       });
     } catch (e, stackTrace) {

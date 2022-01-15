@@ -83,7 +83,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ClipRRect(
+    return GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: ClipRRect(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(30.toHeight),
         topRight: Radius.circular(30.toHeight),
@@ -190,9 +192,12 @@ class _ChatScreenState extends State<ChatScreen> {
               },
               // onMediaPressed: showImagePicker,
             ),
+            Container(
+              height: 20.toHeight,
+            )
           ],
         ),
       ),
-    );
+    ));
   }
 }

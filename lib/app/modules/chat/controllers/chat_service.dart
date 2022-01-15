@@ -158,9 +158,8 @@ class ChatService {
         ..metadata = Metadata();
       key.metadata?.ccd = true;
       var a = await atClientManager.atClient;
-      print(a);
-      print(key);
-      print(await a.get(key));
+      // print(a);
+      // print(await a.get(key));
       var keyValue = await a.get(key).catchError((e) {
         // print('error in get ${e.errorCode} ${e.errorMessage}');
         print('error in get');
@@ -168,30 +167,30 @@ class ChatService {
         return emptyvalue;
       });
       // ignore: unnecessary_null_comparison
-      print(keyValue.value);
       if (keyValue.value != null && keyValue.value.toString() != "[]" && chatHistoryMessages != []) {
         chatHistoryMessages = json.decode((keyValue.value) as String) as List;
       } else {
         chatHistoryMessages = [];
       }
+      print(key);
+      print(keyValue.value);
       // get received messages
       key.key = storageKey +
           (isGroupChat ? groupChatId! : '') +
           (chatWithAtSign != null ? currentAtSign! : ' ').substring(1);
       key.sharedBy = chatWithAtSign;
       key.sharedWith = currentAtSign!;
-      print(key);
       // var b = await a.get(key);
       // print(b);
       keyValue = await atClientManager.atClient.get(key).catchError((e) {
-        print(
-            'error in getting other history');
+        print('error in getting other history');
         chatHistoryMessagesOther = [];
         return emptyvalue;
         //  'error in getting other history ${e.errorCode} ${e.errorMessage}');
       });
       // print("chec"+keyValue.value.toString());
       // if (keyValue.value.toString() == "[]"){print("check");};
+      print(key);
       print(keyValue.value);
       if (keyValue.value != null && keyValue.value != [] && chatHistoryMessagesOther != [] && keyValue.value.toString() != "[]") {
         chatHistoryMessagesOther = json.decode((keyValue.value) as String) as List;
