@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   int presstime = 1;
   ContactService? _contactService;
   var blocked_list = [];
-  // bool _loading = false;
+  bool isReply = false;
   // bool serverUp = false;
   void reqAsignal() {
     control.wantsSignal();
@@ -258,8 +258,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ),
                             Container(
                               // height: 40.toHeight,
-                              child: Text(
-                                "Searching in the space ...",
+                              child: isReply
+                              ? Text(
+                                "Loading the chat ...",
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                    fontSize: 15.toFont,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF584797)),
+                                maxLines: null,
+                              )
+                              :Text(
+                                "Searching outer space ...",
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                     fontSize: 15.toFont,
@@ -718,6 +728,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                           //padding: EdgeInsets.symmetric(vertical: 15.0),
                                                           onPressed: () async {
                                                             // start loading
+                                                            isReply = true;
                                                             controllerx.isLoading(true);
 
                                                             // connect users and set the chat
@@ -741,6 +752,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                               // close loading
                                                             // controllerx.isLoading(false);
                                                             // go to the chat screen
+                                                            isReply = false;
                                                             Navigator.push(context, MaterialPageRoute(
                                                                   builder: (context) =>
                                                                           chatwithatsign(),

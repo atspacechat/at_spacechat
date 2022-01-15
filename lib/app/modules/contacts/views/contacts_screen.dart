@@ -352,7 +352,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                     height: 170.toHeight,
                                                                                     width: 400.toWidth,
                                                                                     child: Text(
-                                                                                      "All your previous messages will be recalled. Do you really want to recall your messages?",
+                                                                                      "All of your previous messages will be recalled. Do you really want to recall your messages?",
                                                                                       style: TextStyle(fontSize: 15.toFont, fontWeight: FontWeight.w500, color: Colors.black),
                                                                                       maxLines: null,
                                                                                     ),
@@ -508,7 +508,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                     height: 170.toHeight,
                                                                                     width: 400.toWidth,
                                                                                     child: Text(
-                                                                                      "This contact will be deleted, chat history will be recalled and you will never receive any signal from this contact. Do you really want to block this contact?",
+                                                                                      "This contact will be deleted, chat history will be recalled, and you will never receive any messages from this contact again. Do you really want to block this contact?",
                                                                                       style: TextStyle(fontSize: 15.toFont, fontWeight: FontWeight.w500, color: Colors.black),
                                                                                       maxLines: null,
                                                                                     ),

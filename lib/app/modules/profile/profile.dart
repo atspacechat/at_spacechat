@@ -351,7 +351,7 @@ class _ProfileState extends State<Profile> {
                                               fontSize: 25,
                                             ),
                                             middleText:
-                                            'Are you sure you want to delete this message from the space?',
+                                            'Are you sure you want to delete this message from outer space?',
                                             onConfirm: () {
                                               controller.recallSignal(key);
                                               Navigator.pop(context);
