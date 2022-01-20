@@ -247,6 +247,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                             Text("You don't have any chat yet"),
                                       );
                                     }
+                                    print(_filteredList[2]!.contact!.tags!["name"]);
                                     // return Container();
                                       return Container(
                                           child: ListView.separated(
@@ -761,6 +762,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                 .atSign
                                                                 .toString();
                                                         _chatService.setAtsignToChatWith(chatWithAtSign, false,"",[]);
+                                                        String chatWithAtSignName;
+                                                        _filteredList[index]!.contact!.tags != null &&
+                                                            _filteredList[index]!.contact!.tags!['name'] != null
+                                                            ? chatWithAtSignName = _filteredList[index]!.contact!.tags!['name']
+                                                            : chatWithAtSignName = _filteredList[index]!.contact!.atSign!.substring(1);
                                                         Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
@@ -769,10 +775,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                               settings:
                                                                   RouteSettings(
                                                                 arguments:
-                                                                    chatWithAtSign
-                                                                        .toString()
-                                                                        .substring(
-                                                                            1),
+                                                                  chatWithAtSignName,
                                                               ),
                                                             ));
                                                       },
