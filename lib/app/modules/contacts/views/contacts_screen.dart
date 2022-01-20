@@ -252,7 +252,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                           child: ListView.separated(
                                               itemCount: _filteredList.length,
                                               physics:
-                                                  NeverScrollableScrollPhysics(),
+                                                const AlwaysScrollableScrollPhysics(),
                                               shrinkWrap: true,
                                               separatorBuilder: (context, _) =>
                                                   Divider(
