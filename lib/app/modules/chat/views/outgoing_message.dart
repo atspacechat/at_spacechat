@@ -14,11 +14,13 @@ class OutgoingMessageBubble extends StatefulWidget {
   final Color color;
   final Color avatarColor;
   final Function(String?) deleteCallback;
+  final initialimage myImage;
 
   const OutgoingMessageBubble(this.deleteCallback,
       {Key? key,
         this.message,
         this.color = CustomColors.outgoingMessageColor,
+        required this.myImage,
         this.avatarColor = CustomColors.defaultColor})
       : super(key: key);
   @override
@@ -74,9 +76,8 @@ class _OutgoingMessageBubbleState extends State<OutgoingMessageBubble> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(45.toWidth),
               ),
-              child: initialimage(
-                atsign: widget.message?.sender ?? '@',
-              ),
+              child: widget.myImage,
+
             ),
             SizedBox(
               width: 20.toWidth,

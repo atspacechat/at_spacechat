@@ -1,5 +1,7 @@
 // import 'package:at_chat_flutter/models/message_model.dart';
 // import 'package:at_chat_flutter/services/chat_service.dart';
+import 'dart:typed_data';
+
 import 'package:at_client_mobile/at_client_mobile.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:at_commons/at_commons.dart';
@@ -53,10 +55,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   ContactService? _contactService;
   var blocked_list = [];
   bool isReply = false;
+  Map<String, dynamic> mydetails = new Map<String, dynamic>();
+  initialimage myImage = new initialimage();
+  String myName = "";
   // bool serverUp = false;
   void reqAsignal() {
     control.wantsSignal();
-    Future.delayed(const Duration(seconds: 13), (){
+    Future.delayed(const Duration(seconds: 20), (){
       if(controllerx.searchedMessageAtsign.value == "" && controllerx.serverError.value){
         controllerx.isLoading(false);
       }
@@ -67,26 +72,46 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      _contactService = ContactService();
+      _contactService!.initContactsService('root.atsign.org', 64)
+          .then((result){
+        blocked_list = [];
+        _contactService!.blockContactList.forEach(
+                (c) {
+              if(c?.blocked==true){
+                blocked_list.add(c?.atSign);
+              }
+            }
+        );
+        print(blocked_list);
+      });
       String? currentAtSign = await clientSdkService.getAtSign();
       setState(() {
         activeAtSign = currentAtSign!;
+        _contactService!.getContactDetails(activeAtSign,"").then((Map<String, dynamic> result){
+          setState(() {
+            mydetails = result;
+            print(mydetails);
+            if (mydetails["image"]==null){
+              myImage = initialimage(atsign: activeAtSign);
+            }else{
+              myImage = initialimage(image: Uint8List.fromList(mydetails['image'].cast<int>()),
+                  atsign: activeAtSign);
+            }
+            if(mydetails["name"]==null){
+              myName = activeAtSign;
+            }else{
+              myName = mydetails["name"];
+            }
+          });
+        });
       });
       // _signalService.initSignalService(clientSdkService.atClientServiceInstance.atClient, activeAtSign,'root.atsign.org',64);
       // initializeContactsService(clientSdkService.atClientServiceInstance.atClient,activeAtSign,rootDomain: 'root.atsign.org');
     });
-    _contactService = ContactService();
-    _contactService!.initContactsService('root.atsign.org', 64)
-        .then((result){
-          blocked_list = [];
-          _contactService!.blockContactList.forEach(
-                  (c) {
-                if(c?.blocked==true){
-                  blocked_list.add(c?.atSign);
-                }
-              }
-          );
-          print(blocked_list);
-        });
+
+    // print("sign"+activeAtSign);
+
     scaffoldKey = GlobalKey<ScaffoldState>();
     super.initState();
   }
@@ -95,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -124,9 +148,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                       GestureDetector(
                           onTap: () {
-                            _profilescreen();
+                            // _profilescreen();
+                            Get.to(() => Profile(myAtSign: activeAtSign,myImage: myImage,myName: myName,));
+                            // _ProfileState();
                           },
-                          child: initialimage(atsign: activeAtSign)),
+                          child: myImage,),
                       SizedBox(
                         width: 13.0.toWidth,
                       ),
@@ -138,7 +164,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Container(
                               width: MediaQuery.of(context).size.width * 0.7,
                               child: Text(
-                                activeAtSign.substring(1),
+                                myName,
+                                // "test",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20.0.toFont,
@@ -202,14 +229,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             items: [
               FABBottomAppBarItem(iconData: Icons.send, text: 'Send'),
               FABBottomAppBarItem(iconData: Icons.chat, text: 'Chats'),
-            ],
+            ], myImage: myImage,
           ),
         ));
   }
 
-  void _profilescreen() {
-    Get.to(() => Profile());
-  }
+  // void _profilescreen() {
+  //   Get.to(() => Profile());
+  // }
 
   final HomeController controllerx = Get.put<HomeController>(HomeController());
 
@@ -734,6 +761,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                             // connect users and set the chat
                                                             String sender = "@"+controllerx.searchedMessageAtsign.value;
                                                             print(sender);
+                                                            initialimage senderImage = new initialimage(atsign: sender);
+                                                            _contactService!.getContactDetails(sender,"").then((Map<String, dynamic> result){
+                                                              setState(() {
+                                                                if (result["image"]!=null){
+                                                                  senderImage = initialimage(image: Uint8List.fromList(result['image'].cast<int>()),
+                                                                      atsign: sender);
+                                                                }
+                                                              });
+                                                            });
                                                             var response = await _contactService!.addAtSign(context, atSign: sender);
 
                                                             // print("check add contact "+_contactService!.getAtSignError);
@@ -755,7 +791,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                             isReply = false;
                                                             Navigator.push(context, MaterialPageRoute(
                                                                   builder: (context) =>
-                                                                          chatwithatsign(),
+                                                                          chatwithatsign(
+                                                                            contactImage: senderImage,
+                                                                            myImage: myImage),
                                                                   settings: RouteSettings(
                                                                     arguments: chatWithAtSign.toString().substring(1),
                                                                   ),

@@ -4,10 +4,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:spacesignal/app/modules/contacts/views/contacts_screen.dart';
 import 'package:spacesignal/app/modules/chat/views/chat_screen.dart';
 import 'package:get/get.dart';
+import 'package:spacesignal/utils/initial_image.dart';
 
 class chatwithatsign extends StatefulWidget {
-
-  static final String id = 'chatwithatsign';
+  final initialimage? contactImage;
+  final initialimage myImage;
+  // static final String id = 'chatwithatsign';
+  const chatwithatsign(
+      {Key? key,
+        this.contactImage,
+        required this.myImage,
+        // this.id,
+        })
+      : super(key: key);
   @override
   _ChatWithAtsignState createState() => _ChatWithAtsignState();
 }
@@ -75,7 +84,7 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
                                 fontSize: 30.toFont,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,),
-                              overflow: TextOverflow.visible,
+                                overflow: TextOverflow.ellipsis,
                             ),
                           )],
                       ),
@@ -88,6 +97,8 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
           Container(
             alignment: Alignment.bottomCenter,
             child:ChatScreen(
+              contactImage:widget.contactImage,
+              myImage: widget.myImage,
               height: MediaQuery.of(context).size.height/1.4,
               incomingMessageColor: Color(0xFFEEEDF5),//Colors.blue[100],
               outgoingMessageColor: Color(0xFFFFF2C1),//Colors.green[100],
@@ -109,7 +120,7 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
   }
 
   void _contact() {
-    Get.to(() => ContactScreen());
+    Get.to(() => ContactScreen(myImage: widget.myImage,));
     // Navigator.of(context).pushAndRemoveUntil(
     //     new MaterialPageRoute(builder: (context) => ContactScreen()),
     //         (route) => route == null);

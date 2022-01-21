@@ -1,4 +1,5 @@
 // import 'package:at_chat_flutter/models/message_model.dart';
+import 'package:at_contact/at_contact.dart';
 import 'package:spacesignal/app/modules/chat/utils/message_model.dart';
 import 'package:at_chat_flutter/utils/colors.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -11,12 +12,17 @@ class IncomingMessageBubble extends StatefulWidget {
   final Message? message;
   final Color color;
   final Color avatarColor;
+  final AtContact? contact;
+  final initialimage? contactImage;
 
   const IncomingMessageBubble(
       {Key? key,
         this.message,
+        this.contactImage,
         this.color = CustomColors.incomingMessageColor,
-        this.avatarColor = CustomColors.defaultColor})
+        this.avatarColor = CustomColors.defaultColor,
+        this.contact
+      })
       : super(key: key);
   @override
   _IncomingMessageBubbleState createState() => _IncomingMessageBubbleState();
@@ -40,10 +46,7 @@ class _IncomingMessageBubbleState extends State<IncomingMessageBubble> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(45.toWidth),
           ),
-          child: initialimage(
-            atsign: widget.message?.sender ?? '@',
-            backgroundColor: widget.avatarColor,
-          ),
+          child: widget.contactImage,
         ),
         SizedBox(
           width: 10.toWidth,

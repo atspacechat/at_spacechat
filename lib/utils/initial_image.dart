@@ -1,16 +1,26 @@
+import 'dart:typed_data';
+
+import 'package:at_chat_flutter/widgets/custom_circle_avatar.dart';
+import 'package:at_contact/at_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 
 // ignore: must_be_immutable
 class initialimage extends StatelessWidget {
+  AtContact? contact = null;
   double? size;
   String? atsign;
   Color? backgroundColor;
+  Uint8List? image;
+
   initialimage(
       {Key? key,
+        this.contact,
         this.size,
         this.atsign,
-        this.backgroundColor})
+        this.backgroundColor,
+        this.image,
+      })
       : super(key: key);
 
   RegExp _isLetterRegExp = RegExp(r'[a-z]', caseSensitive: false);
@@ -19,7 +29,17 @@ class initialimage extends StatelessWidget {
   @override
 
   Widget build(BuildContext context) {
+    if(contact == null && atsign == null && image == null){
+      return Container();
+    }
     SizeConfig().init(context);
+    // Uint8List? image;
+    if(contact != null){
+      if (contact!.tags != null && contact!.tags!['image'] != null) {
+        List<int> intList = contact!.tags!['image'].cast<int>();
+        image = Uint8List.fromList(intList);
+      }
+    }
     if (isLetter(atsign![1])){
       backgroundColor= color['${atsign![1].toUpperCase()}'];
     }else{
@@ -33,7 +53,14 @@ class initialimage extends StatelessWidget {
           shape: BoxShape.circle,
         //borderRadius: BorderRadius.circular(size.toWidth),
       ),
-      child: Center(
+      child: (image != null || (contact != null && contact!.tags != null && contact!.tags!['image'] != null))
+        ? Center(
+          child: CustomCircleAvatar(
+            size: 40,
+            byteImage: image,
+            nonAsset: true,
+        ))
+      : Center(
         child: ClipOval(
           child:Text(
           atsign.toString().substring(1).toUpperCase(),
@@ -48,6 +75,7 @@ class initialimage extends StatelessWidget {
       ),
     );
   }
+
   final color = {
     'A': Color(0xFFAA0DFE),
     'B': Color(0xFF3283FE),

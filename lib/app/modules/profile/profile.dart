@@ -13,35 +13,46 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:get/get.dart';
 
-class Profile extends StatefulWidget {
-  @override
-  _ProfileState createState() => _ProfileState();
-}
+class Profile extends StatelessWidget {
+  initialimage myImage = new initialimage();
+  String myName = "me";
+  String myAtSign = "";
+  Profile(
+      {Key? key,
+        required this.myName,
+        required this.myImage,
+        required this.myAtSign
+      })
+      : super(key: key);
 
-class _ProfileState extends State<Profile> {
+  // @override
+  // _ProfileState createState() => _ProfileState();
+// }
+
+// class _ProfileState extends StatelessWidget {
   // ProgressDialog? dialog;
   // ClientSdkService clientSdkService = ClientSdkService.getInstance();
-  String activeAtSign = "";
+
   GlobalKey<ScaffoldState>? scaffoldKey;
   PanelController _pc2 = new PanelController();
 
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      String? currentAtSign = await AtService.getInstance().getAtSign();
-      setState(() {
-        activeAtSign = currentAtSign!;
-      });
-    });
-    scaffoldKey = GlobalKey<ScaffoldState>();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+  //     String? currentAtSign = await AtService.getInstance().getAtSign();
+  //     setState(() {
+  //       activeAtSign = currentAtSign!;
+  //     });
+  //   });
+  //   scaffoldKey = GlobalKey<ScaffoldState>();
+  //   super.initState();
+  // }
 
   @override
   final HomeController controller = Get.put<HomeController>(HomeController());
 
   Widget build(BuildContext context) {
-
+    String activeAtSign = myAtSign;
 
     SizeConfig().init(context);
 
@@ -210,7 +221,8 @@ class _ProfileState extends State<Profile> {
                                             MediaQuery.of(context).size.width *
                                                 0.06,
                                       ),
-                                      initialimage(atsign: activeAtSign),
+                                      // initialimage(atsign: activeAtSign),
+                                      myImage,
                                       // CircleAvatar(
                                       //   radius: 30.0,
                                       //   backgroundImage:
@@ -234,7 +246,8 @@ class _ProfileState extends State<Profile> {
                                                       .width *
                                                   0.66,
                                               child: Text(
-                                                activeAtSign.substring(1),
+                                                // activeAtSign.substring(1),
+                                                myName,
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 23.0.toFont,
@@ -259,7 +272,7 @@ class _ProfileState extends State<Profile> {
                                             icon: Icon(
                                               // Icons.logout,
                                               Icons.settings,
-                                              color: Colors.grey,
+                                              color: Colors.grey[300],
                                               size: 35.toFont,
                                             ),
                                             // color: Colors.white,
@@ -403,7 +416,7 @@ class _ProfileState extends State<Profile> {
       text: "About Us",
     ),
     settingitem(
-      icon: Icons.email,
+      icon: Icons.camera_alt,
       text: "Follow Us",
     ),
     settingitem(
@@ -428,7 +441,7 @@ _launchURL() async {
   await FlutterWebBrowser.openWebPage(
     url: "https://wavi.ng/@spacechat",
     customTabsOptions: CustomTabsOptions(
-      toolbarColor: Colors.deepPurple,
+      toolbarColor: Color(0xFF45377D),
       addDefaultShareMenuItem: true,
       instantAppsEnabled: true,
       showTitle: true,
@@ -436,8 +449,8 @@ _launchURL() async {
     ),
     safariVCOptions: SafariViewControllerOptions(
       barCollapsingEnabled: true,
-      preferredBarTintColor: Colors.green,
-      preferredControlTintColor: Colors.amber,
+      preferredBarTintColor: Color(0xFF45377D),
+      preferredControlTintColor: Colors.white,
       dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
       modalPresentationCapturesStatusBarAppearance: true,
     ),
@@ -448,7 +461,7 @@ _launchURL2() async {
   await FlutterWebBrowser.openWebPage(
     url: "https://www.instagram.com/at_spacechat_app/",
     customTabsOptions: CustomTabsOptions(
-      toolbarColor: Colors.deepPurple,
+      toolbarColor: Color(0xFF45377D),
       addDefaultShareMenuItem: true,
       instantAppsEnabled: true,
       showTitle: true,
@@ -456,8 +469,8 @@ _launchURL2() async {
     ),
     safariVCOptions: SafariViewControllerOptions(
       barCollapsingEnabled: true,
-      preferredBarTintColor: Colors.green,
-      preferredControlTintColor: Colors.amber,
+      preferredBarTintColor: Color(0xFF45377D),
+      preferredControlTintColor: Colors.white,
       dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
       modalPresentationCapturesStatusBarAppearance: true,
     ),
@@ -475,159 +488,3 @@ class SignalSent {
     this.text,
   });
 }
-
-/*
-
-class RecentSignalSent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-        ),
-        child:Container(
-    margin: EdgeInsets.only(top: 20,),
-        child: ListView.builder(
-            itemCount: signals.length,
-            itemBuilder: (BuildContext context, int index) {
-              final SignalSent chat = signals[index];
-              if(chat.text.isNotEmpty) {
-                return Container(
-                  margin: EdgeInsets.only(
-                    top: 0,
-                    bottom: 0,
-                    right: 1.0,
-                    left: 1.0,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 8.0,
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      //color: chat.unread ? Color(0xFFFEF9EB) : Colors.white60,
-                      //设置聊天框的边框弧度和底色
-                      border: new Border.all(
-                        width: 0.2,
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(20.0),
-                        topLeft: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0),
-                      )),
-                  //这个Container里面用来设置边框等信息
-
-                  child: Row(
-                    //这个ROll里面包含了时间，和另一个roll（头像，发件人，信息）
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween, //让两个roll分开展示
-                    children: [
-                      Row(
-                        //这个roll里面包裹的是头像，发件人名字和信息
-                        children: <Widget>[
-
-                          SizedBox(
-                            width: 0.0,
-                          ),
-                          Column(
-                            //新建一个Column来放文字信息，发件人名字和最近信息
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start, //左对齐
-                            children: [
-
-                              SizedBox(
-                                height: 0.0,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(20)),
-                                  color: Colors.deepPurple[100],
-                                ),
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 0.65,
-                                child: Container(
-                                    padding: EdgeInsets.all(15),
-                                    child: Text(
-                                      chat.text,
-                                      style: TextStyle(
-                                        color: Colors.deepPurple[900],
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      // overflow: TextOverflow.ellipsis,
-                                    )),
-                              ),
-                              Container(
-                                  padding: EdgeInsets.only(left: 20, top: 7),
-                                  child: Text(
-                                    chat.time,
-                                    style: TextStyle(
-                                      fontSize: 13.0,
-                                      color: Colors.grey,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Container(
-                          alignment: Alignment.topLeft,
-                          child: FlatButton( //RaisedButton(//MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  side: BorderSide(
-                                      color: Colors.deepPurple[900])),
-                              //elevation: 5.0,
-                              minWidth: 60,
-                              height: 25,
-                              color: Colors.transparent,
-                              //:Colors.grey,
-                              //padding: EdgeInsets.symmetric(vertical: 15.0),
-                              onPressed: () {
-                                async()
-                               //this.setState(() {_signalsent = '';});
-                                /*Navigator.pushReplacement(
-                                         context,
-                                         MaterialPageRoute(
-                                              builder: (BuildContext context) => this));;*/
-                              },
-                              child: Text(
-                                "Recall",
-                                style: GoogleFonts.quicksand(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.deepPurple[900],
-                                  fontSize: 13,
-                                ),
-                                textAlign: TextAlign.center,
-                              ))
-                      ),
-                    ],
-                  ),
-                );
-              }else{
-                return null;}}),
-      ),
-    ));
-  }
-
-static String _signalsent = "Hello how are you?";
-
-  List<SignalSent> signals = [
-    SignalSent(time:'now', text:_signalsent),
-    //SignalSent('8:30 AM', ''),
-
-  ];
-
-}
-*/

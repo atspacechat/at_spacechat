@@ -12,6 +12,7 @@ import 'package:spacesignal/app/modules/chat/views/send_message.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:spacesignal/app/modules/chat/controllers/chat_service.dart';
 import 'package:spacesignal/app/modules/chat/controllers/init_chat_service.dart';
+import 'package:spacesignal/utils/initial_image.dart';
 import '../../../../sdk_service.dart';
 import 'initial_message.dart';
 
@@ -41,6 +42,8 @@ class ChatScreen extends StatefulWidget {
 
   /// [hintText] specifies the hint text to be displayed in the input box.
   final String? hintText;
+  final initialimage? contactImage;
+  final initialimage myImage;
 
   const ChatScreen(
       {Key? key,
@@ -51,6 +54,8 @@ class ChatScreen extends StatefulWidget {
         this.senderAvatarColor = CustomColors.defaultColor,
         this.receiverAvatarColor = CustomColors.defaultColor,
         this.title = 'Messages',
+        this.contactImage,
+        required this.myImage,
         this.hintText})
       : super(key: key);
 
@@ -143,6 +148,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               child: snapshot.data![index].type ==
                                   MessageType.INCOMING
                                   ? IncomingMessageBubble(
+                                contactImage:widget.contactImage,
                                 message: snapshot.data![index],
                                 color:
                                 widget.incomingMessageColor,
@@ -172,6 +178,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       Text(message)));
                                 },
                                 message: snapshot.data![index],
+                                myImage: widget.myImage,
                                 color:
                                 widget.outgoingMessageColor,
                                 avatarColor:

@@ -26,6 +26,7 @@ class CustomListTile extends StatefulWidget {
   final bool asSingleSelectionTile;
   final AtContact? contact;
   final ContactService? contactService;
+  final initialimage? contactImage;
   final ValueChanged<List<AtContact?>?>? selectedList;
 
   const CustomListTile(
@@ -36,6 +37,7 @@ class CustomListTile extends StatefulWidget {
         this.asSingleSelectionTile = false,
         this.contact,
         this.contactService,
+        this.contactImage,
         this.selectedList})
       : super(key: key);
 
@@ -48,7 +50,7 @@ class _CustomListTileState extends State<CustomListTile> {
 
   @override
   Widget build(BuildContext context) {
-    Widget contactImage;
+    // Widget contactImage;
     // if (widget.contact!.tags != null &&
     //     widget.contact!.tags!['image'] != null) {
     //   List<int> intList = widget.contact!.tags!['image'].cast<int>();
@@ -58,9 +60,10 @@ class _CustomListTileState extends State<CustomListTile> {
     //     nonAsset: true,
     //   );
     // } else {
-      contactImage = initialimage(
-        atsign: widget.contact!.atSign!,
-      );
+    //   contactImage = initialimage(
+    //     atsign: widget.contact!.atSign!,
+    //     contact: widget.contact!,
+    //   );
     // }
     return StreamBuilder<List<AtContact?>>(
         initialData: widget.contactService!.selectedContacts,
@@ -109,6 +112,7 @@ class _CustomListTileState extends State<CustomListTile> {
                 color: Colors.black,
                 fontSize: 14.toFont,
               ),
+              overflow: TextOverflow.ellipsis,
             ),
             subtitle: Text(
               (widget.contact!.tags != null &&
@@ -119,6 +123,7 @@ class _CustomListTileState extends State<CustomListTile> {
                 color: ColorConstants.fadedText,
                 fontSize: 14.toFont,
               ),
+              overflow: TextOverflow.ellipsis,
             ),
             leading: Container(
                 height: 40.toHeight,
@@ -127,7 +132,7 @@ class _CustomListTileState extends State<CustomListTile> {
                   color: Colors.black,
                   shape: BoxShape.circle,
                 ),
-                child: contactImage),
+                child: widget.contactImage),
             // trailing: IconButton(
             //   onPressed: widget.asSelectionTile
             //       ? selectRemoveContact()

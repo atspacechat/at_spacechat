@@ -471,6 +471,63 @@ class ContactService {
     return contactDetails;
   }
 
+
+  // Future<Map<String, dynamic>> getMyDetails(
+  //     String? atSign, String? nickName) async {
+  //   var contactDetails = <String, dynamic>{};
+  //
+  //   if (atClientManager.atClient == null || atSign == null) {
+  //     return contactDetails;
+  //   } else if (!atSign.contains('@')) {
+  //     atSign = '@' + atSign;
+  //   }
+  //   var metadata = Metadata();
+  //   metadata.isPublic = true;
+  //   metadata.namespaceAware = false;
+  //   var key = AtKey();
+  //   key.sharedBy = atSign;
+  //   key.metadata = metadata;
+  //   List contactFields = TextStrings().contactFields;
+  //
+  //   try {
+  //     // firstname
+  //     key.key = contactFields[0];
+  //     var result = await atClientManager.atClient.get(key).catchError((e) {
+  //       print('error in get ${e.errorCode} ${e.errorMessage}');
+  //     });
+  //     var firstname = result.value;
+  //
+  //     // lastname
+  //     key.key = contactFields[1];
+  //     result = await atClientManager.atClient.get(key);
+  //     var lastname = result.value;
+  //
+  //     // construct name
+  //     var name = ((firstname ?? '') + ' ' + (lastname ?? '')).trim();
+  //     if (name.length == 0) {
+  //       name = atSign.substring(1);
+  //     }
+  //
+  //     // profile picture
+  //     key.metadata?.isBinary = true;
+  //     key.key = contactFields[2];
+  //     result = await atClientManager.atClient.get(key);
+  //     var image = result.value;
+  //     contactDetails['name'] = name;
+  //     contactDetails['image'] = image;
+  //     contactDetails['nickname'] = nickName != '' ? nickName : null;
+  //   } catch (e) {
+  //     contactDetails['name'] = null;
+  //     contactDetails['image'] = null;
+  //     contactDetails['nickname'] = null;
+  //   }
+  //   return contactDetails;
+  // }
+  //
+
+
+
+
   void updateState(STATE_UPDATE stateToUpdate, AtContact contact, bool state) {
     var indexToUpdate;
     if (stateToUpdate == STATE_UPDATE.UNBLOCK) {

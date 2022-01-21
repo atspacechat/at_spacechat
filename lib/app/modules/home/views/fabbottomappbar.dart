@@ -6,6 +6,7 @@ import 'package:spacesignal/app/modules/home/controllers/home_controller.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:get/get.dart';
 import 'package:spacesignal/utils/constants.dart';
+import 'package:spacesignal/utils/initial_image.dart';
 import 'package:uuid/uuid.dart';
 
 class FABBottomAppBarItem {
@@ -26,6 +27,7 @@ class FABBottomAppBar extends StatefulWidget {
     this.selectedColor,
     this.notchedShape,
     this.onTabSelected,
+    required this.myImage,
   }) {
     assert(this.items!.length == 2 || this.items!.length == 4);
   }
@@ -38,6 +40,7 @@ class FABBottomAppBar extends StatefulWidget {
   final Color? selectedColor;
   final NotchedShape? notchedShape;
   final ValueChanged<int>? onTabSelected;
+  final initialimage myImage;
 
   @override
   State<StatefulWidget> createState() => FABBottomAppBarState();
@@ -60,7 +63,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     SizeConfig().init(context);
     List<Widget> items = List.generate(widget.items!.length, (int index) {
       return _buildTabItem(
-        item: widget.items![index],
+        item: widget.items![index], myImage: widget.myImage,
         //index: index,
         // onPressed: _updateIndex,
       );
@@ -98,7 +101,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     );
   }
 
-  Widget _buildTabItem({FABBottomAppBarItem? item}) {
+  Widget _buildTabItem({FABBottomAppBarItem? item, required initialimage myImage}) {
     //int index,ValueChanged<int> onPressed
     // Color color = _selectedIndex == index ? widget.selectedColor : widget.color;
     final HomeController _controller =
@@ -120,7 +123,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
           child: InkWell(
             onTap: () => {
               if (item!.text == "Chats")
-                Get.to(() => ContactScreen())
+                Get.to(() => ContactScreen(myImage: myImage,))
               else
                 {
                   Get.defaultDialog(
@@ -230,14 +233,14 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
 
   TextEditingController controller = TextEditingController();
 
-  initialsendsignal(String signal) async {
-    AtService clientSdkService = AtService.getInstance();
-    String? currentAtSign = await clientSdkService.getAtSign();
-    setState(() {
-      activeAtSign = currentAtSign;
-    });
-    // SignalService().initSignalService(clientSdkService.atClientServiceInstance.atClient, activeAtSign,'root.atsign.org',64);
-    // SignalService().sendSignal(signal);
-    // SignalService().showSignal();
-  }
+  // initialsendsignal(String signal) async {
+  //   AtService clientSdkService = AtService.getInstance();
+  //   String? currentAtSign = await clientSdkService.getAtSign();
+  //   setState(() {
+  //     activeAtSign = currentAtSign;
+  //   });
+  //   // SignalService().initSignalService(clientSdkService.atClientServiceInstance.atClient, activeAtSign,'root.atsign.org',64);
+  //   // SignalService().sendSignal(signal);
+  //   // SignalService().showSignal();
+  // }
 }

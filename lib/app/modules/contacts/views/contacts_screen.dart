@@ -8,6 +8,7 @@ import 'package:spacesignal/app/modules/chat/views/chatwithatsign.dart';
 import 'package:spacesignal/app/modules/contacts/utils/contact_base_model.dart';
 import 'package:spacesignal/app/modules/home/views/home_screen.dart';
 import 'package:spacesignal/utils/colors.dart';
+import 'package:spacesignal/utils/initial_image.dart';
 import 'package:spacesignal/utils/text_strings.dart';
 import 'package:spacesignal/app/modules/contacts/views/error_screen.dart';
 // import 'package:spacesignal/chat/chatwithatsign.dart';
@@ -39,6 +40,7 @@ import 'package:spacesignal/app/modules/contacts/views/add_contacts.dart';
 class ContactScreen extends StatefulWidget {
   static final String id = 'contactscreen';
   final BuildContext? context;
+  final initialimage myImage;
 
   final ValueChanged<List<AtContact>>? selectedList;
   final bool asSelectionScreen;
@@ -47,6 +49,7 @@ class ContactScreen extends StatefulWidget {
 
   const ContactScreen(
       {Key? key,
+        required this.myImage,
       this.selectedList,
       this.context,
       this.asSelectionScreen = false,
@@ -62,7 +65,6 @@ class _ContactScreenState extends State<ContactScreen> {
   // ClientSdkService? clientSdkService = ClientSdkService.getInstance();
   String? activeAtSign = '';
   GlobalKey<ScaffoldState>? scaffoldKey;
-  //
   // String chatWithAtSign;
   bool showOptions = false;
   bool isEnabled = true;
@@ -201,7 +203,7 @@ class _ContactScreenState extends State<ContactScreen> {
                     //   onPressed: () {
                     //     showDialog(
                     //       context: context,
-                    //       builder: (context) => a.AddContact(),
+                    //       builder: (context) => AddContactDialog(),
                     //     );},),
                     // ElevatedButton(
                     //   child: Text('blocked contacts'),
@@ -247,7 +249,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                             Text("You don't have any chat yet"),
                                       );
                                     }
-                                    print(_filteredList[2]!.contact!.tags!["name"]);
+                                    // print(_filteredList[2]!.contact!.tags!["name"]);
                                     // return Container();
                                       return Container(
                                           child: ListView.separated(
@@ -756,6 +758,24 @@ class _ContactScreenState extends State<ContactScreen> {
                                                     child: CustomListTile(
                                                       contactService:
                                                           _contactService,
+                                                      asSelectionTile: widget
+                                                          .asSelectionScreen,
+                                                      asSingleSelectionTile: widget
+                                                          .asSingleSelectionScreen,
+                                                      contact:
+                                                          _filteredList[index]!.contact!,
+                                                      contactImage: initialimage(
+                                                        atsign: _filteredList[index]!.contact!.atSign!,
+                                                        contact: _filteredList[index]!.contact!
+                                                      ),
+                                                      selectedList: (s) {
+                                                        selectedList = (s != null)
+                                                            as List<AtContact>;
+                                                        widget.selectedList!(
+                                                            selectedList);
+                                                      },
+                                                      onTrailingPressed: widget
+                                                          .onSendIconPressed,
                                                       onTap: () {
                                                         chatWithAtSign =
                                                             _filteredList[index]!.contact!
@@ -771,28 +791,19 @@ class _ContactScreenState extends State<ContactScreen> {
                                                             context,
                                                             MaterialPageRoute(
                                                               builder: (context) =>
-                                                                  chatwithatsign(),
+                                                                  chatwithatsign(
+                                                                    myImage: widget.myImage,
+                                                                    contactImage: initialimage(
+                                                                        atsign: _filteredList[index]!.contact!.atSign!,
+                                                                        contact: _filteredList[index]!.contact!
+                                                                  )),
                                                               settings:
-                                                                  RouteSettings(
+                                                              RouteSettings(
                                                                 arguments:
-                                                                  chatWithAtSignName,
+                                                                chatWithAtSignName,
                                                               ),
                                                             ));
                                                       },
-                                                      asSelectionTile: widget
-                                                          .asSelectionScreen,
-                                                      asSingleSelectionTile: widget
-                                                          .asSingleSelectionScreen,
-                                                      contact:
-                                                          _filteredList[index]!.contact!,
-                                                      selectedList: (s) {
-                                                        selectedList = (s != null)
-                                                            as List<AtContact>;
-                                                        widget.selectedList!(
-                                                            selectedList);
-                                                      },
-                                                      onTrailingPressed: widget
-                                                          .onSendIconPressed,
                                                     ),
                                                   ),
                                                 );
