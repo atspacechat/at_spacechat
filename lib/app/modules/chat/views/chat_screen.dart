@@ -169,13 +169,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                       .deleteSelectedMessage(id);
                                   Navigator.of(context).pop();
 
-                                  var message = result
-                                      ? 'Message is deleted'
-                                      : 'Failed to delete';
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                      content:
-                                      Text(message)));
+                                  // var message = result
+                                  //     ? 'Message is deleted'
+                                  //     : 'Failed to delete';
+                                  // ScaffoldMessenger.of(context)
+                                  //     .showSnackBar(SnackBar(
+                                  //     content:
+                                  //     Text(message)));
                                 },
                                 message: snapshot.data![index],
                                 myImage: widget.myImage,

@@ -27,7 +27,9 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
     // cast
     final String? chatWithAtSign = ModalRoute.of(context)!.settings.arguments as String;
     SizeConfig().init(context);
+    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       //appBar: AppBar(title: Text('Chat')),
       // TODO: Fill in the body parameter of the Scaffold
       body: Stack(
@@ -95,16 +97,34 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
                     ),
                   ])),
           Container(
-            alignment: Alignment.bottomCenter,
-            child:ChatScreen(
-              contactImage:widget.contactImage,
-              myImage: widget.myImage,
-              height: MediaQuery.of(context).size.height/1.4,
-              incomingMessageColor: Color(0xFFEEEDF5),//Colors.blue[100],
-              outgoingMessageColor: Color(0xFFFFF2C1),//Colors.green[100],
-              isScreen: true,
-            ),
+            alignment: Alignment.topCenter,
+            child: Column(
+              children: <Widget>[
+              SizedBox(
+              height: MediaQuery.of(context).size.height*0.28,),//45,
+              ChatScreen(
+                contactImage:widget.contactImage,
+                myImage: widget.myImage,
+                height: (keyboardHeight == 0)
+                    ? MediaQuery.of(context).size.height*0.72
+                    : MediaQuery.of(context).size.height*0.72 - keyboardHeight + 20.toHeight, // /1.4
+                incomingMessageColor: Color(0xFFEEEDF5),//Colors.blue[100],
+                outgoingMessageColor: Color(0xFFFFF2C1),//Colors.green[100],
+                isScreen: true,
+              ),
+                Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: (keyboardHeight==0)
+                          ? 0
+                          : keyboardHeight - 20.toHeight,
+                      color: Colors.white,
+                    )
+                )
+              ]
           ),
+          ),
+
         ],
       ),
     );

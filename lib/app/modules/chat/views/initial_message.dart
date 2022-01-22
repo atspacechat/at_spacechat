@@ -10,13 +10,13 @@ import 'package:spacesignal/app/modules/chat/utils/message_model.dart';
 
 class InitialMessageBubble extends StatefulWidget {
   final Message? message;
-  final Color color;
+  // final Color color;
   // final Color avatarColor;
 
   const InitialMessageBubble(
       {Key? key,
         this.message,
-        this.color = Colors.yellow,
+        // this.color = Colors.yellow,
         // this.avatarColor = CustomColors.defaultColor
       })
       : super(key: key);
@@ -28,6 +28,7 @@ class _InitialMessageBubbleState extends State<InitialMessageBubble> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    var color = Colors.purple[100];
     return Flex(
       direction: Axis.horizontal,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +54,7 @@ class _InitialMessageBubbleState extends State<InitialMessageBubble> {
         Container(
           padding: EdgeInsets.symmetric(vertical: 10.toHeight,horizontal: 13.toWidth),
           decoration: BoxDecoration(
-            color: widget.color,
+            color: color,
             borderRadius: BorderRadius.circular(10.toWidth),
           ),
           child: ConstrainedBox(
