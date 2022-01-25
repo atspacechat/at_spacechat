@@ -30,7 +30,34 @@ class initialimage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     if(contact == null && atsign == null && image == null){
-      return Container();
+      return Container(height: 40.toFont,
+        width: 40.toFont,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 3,
+            ),
+          ],
+          //borderRadius: BorderRadius.circular(size.toWidth),
+        ),
+        child: Center(
+          child: ClipOval(
+            child:Text(
+                "wow",
+                overflow: TextOverflow.fade,
+                softWrap: true,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.toFont,
+                  fontWeight: FontWeight.w700,
+                )),
+          ),
+        ),
+      );
     }
     SizeConfig().init(context);
     // Uint8List? image;
@@ -50,7 +77,15 @@ class initialimage extends StatelessWidget {
       width: 40.toFont,
       decoration: BoxDecoration(
         color: backgroundColor,
-          shape: BoxShape.circle,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 3,
+            // offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
         //borderRadius: BorderRadius.circular(size.toWidth),
       ),
       child: (image != null || (contact != null && contact!.tags != null && contact!.tags!['image'] != null))
