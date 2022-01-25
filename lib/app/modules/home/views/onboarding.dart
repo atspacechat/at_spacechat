@@ -95,53 +95,86 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                           ),
                           Container(
                             //width: double.infinity,
-                            height: 60.toHeight,
+                            // height: 120.toHeight,
                             padding: EdgeInsets.symmetric(
                               vertical: 5.toHeight,
                               horizontal: 10.toWidth,
                             ),
-
-                            child: MaterialButton(
-                              onPressed: () async {
-                                Onboarding(
-                                    domain: MixedConstants.rootDomain,
-                                    context: context,
-                                    atClientPreference: atClientPrefernce,
-                                    appColor:
-                                        const Color.fromARGB(255, 240, 94, 62),
-                                    onboard:
-                                        (Map<String?, AtClientService> value,
+                            child: Column(
+                              children: [
+                                MaterialButton(
+                                  onPressed: () async {
+                                    Onboarding(
+                                        domain: MixedConstants.rootDomain,
+                                        context: context,
+                                        atClientPreference: atClientPrefernce,
+                                        appColor: color1,
+                                        onboard:
+                                            (Map<String?, AtClientService> value,
                                             String? atsign) {
-                                      AtService.getInstance()
-                                          .atClientServiceMap = value;
-                                      _logger.finer(
-                                          'Successfully onboarded $atsign');
-                                          clientSdkService.currentAtsign =  atsign; 
-                                    },
-                                 
-                                    onError: (Object? error) {
-                                      _logger.severe(
-                                          'Onboarding throws $error error');
-                                    },
-                                    nextScreen: HomeScreen(),
-                                    appAPIKey: MixedConstants.apiKey,
-                                    rootEnvironment:
+                                          AtService.getInstance()
+                                              .atClientServiceMap = value;
+                                          _logger.finer(
+                                              'Successfully onboarded $atsign');
+                                          clientSdkService.currentAtsign =  atsign;
+                                        },
+
+                                        onError: (Object? error) {
+                                          _logger.severe(
+                                              'Onboarding throws $error error');
+                                        },
+                                        nextScreen: HomeScreen(),
+                                        appAPIKey: MixedConstants.apiKey,
+                                        rootEnvironment:
                                         RootEnvironment.Production);
-                                        
-                              },
-                              
-                              child: Text(
-                                "Let's start!",
-                                style: TextStyle(
-                                    color: color1,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              minWidth: double.infinity,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              color: color3,
-                            ),
+                                  },
+
+                                  child: Text(
+                                    "Let's start!",
+                                    style: TextStyle(
+                                        color: color1,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  minWidth: double.infinity,
+                                  height: 40.toHeight,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0)),
+                                  color: color3,
+                                ),
+                                SizedBox(height: 10.toHeight,),
+                                MaterialButton(
+                                  onPressed: () async {
+                                            KeyChainManager _keyChainManager =
+                                            KeyChainManager.getInstance();
+                                            var _atSignsList =
+                                            await _keyChainManager.getAtSignListFromKeychain();
+                                            _atSignsList?.forEach((element) {
+                                            _keyChainManager.deleteAtSignFromKeychain(element);
+                                            });
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                            content: Text(
+                                            'You have been logged out',
+                                            textAlign: TextAlign.center,
+                                            )));
+                                  },
+
+                                  child: Text(
+                                    "Log Out",
+                                    style: TextStyle(
+                                        color: color1,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  minWidth: double.infinity,
+                                  height: 40.toHeight,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0)),
+                                  color: color3,
+                                ),
+                              ],
+                            )
+
                           ),
                           SizedBox(
                             height: 50.toHeight,
