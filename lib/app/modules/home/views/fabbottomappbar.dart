@@ -28,6 +28,7 @@ class FABBottomAppBar extends StatefulWidget {
     this.notchedShape,
     this.onTabSelected,
     required this.myImage,
+    required this.myName,
   }) {
     assert(this.items!.length == 2 || this.items!.length == 4);
   }
@@ -41,6 +42,7 @@ class FABBottomAppBar extends StatefulWidget {
   final NotchedShape? notchedShape;
   final ValueChanged<int>? onTabSelected;
   final initialimage myImage;
+  final String myName;
 
   @override
   State<StatefulWidget> createState() => FABBottomAppBarState();
@@ -124,7 +126,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
           child: InkWell(
             onTap: () => {
               if (item!.text == "Chats")
-                Get.to(() => ContactScreen(myImage: myImage,))
+                Get.to(() => ContactScreen(myImage: widget.myImage, myName: widget.myName))
               else
                 {
                   Get.defaultDialog(

@@ -41,6 +41,7 @@ class ContactScreen extends StatefulWidget {
   static final String id = 'contactscreen';
   final BuildContext? context;
   final initialimage myImage;
+  final String myName;
 
   final ValueChanged<List<AtContact>>? selectedList;
   final bool asSelectionScreen;
@@ -49,6 +50,7 @@ class ContactScreen extends StatefulWidget {
 
   const ContactScreen(
       {Key? key,
+        required this.myName,
         required this.myImage,
       this.selectedList,
       this.context,
@@ -198,13 +200,13 @@ class _ContactScreenState extends State<ContactScreen> {
                       height: 25.toHeight,
                     ),
 
-                    // ElevatedButton(
-                    //   child: Text('add a contact'),
-                    //   onPressed: () {
-                    //     showDialog(
-                    //       context: context,
-                    //       builder: (context) => AddContactDialog(),
-                    //     );},),
+                    ElevatedButton(
+                      child: Text('add a contact'),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AddContactDialog(),
+                        );},),
                     // ElevatedButton(
                     //   child: Text('blocked contacts'),
                     //   onPressed: () {
@@ -793,6 +795,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                               builder: (context) =>
                                                                   chatwithatsign(
                                                                     myImage: widget.myImage,
+                                                                    myName: widget.myName,
                                                                     contactImage: initialimage(
                                                                         atsign: _filteredList[index]!.contact!.atSign!,
                                                                         contact: _filteredList[index]!.contact!
@@ -896,7 +899,7 @@ class _ContactScreenState extends State<ContactScreen> {
     sharedKeysList.forEach((element) async {
       // print(element.key.toString());
       if (element.key == "spacesignalreplier") {
-        await _contactService!.addAtSign(context, atSign: element.sharedBy);
+        await _contactService!.addAtSign(atSign: element.sharedBy);
         print("add a replier "+ element.sharedBy.toString());
         await _contactService!.delete(element);
       }

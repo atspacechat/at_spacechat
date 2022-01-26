@@ -139,7 +139,6 @@ class _AddContactDialogState extends State<AddContactDialog> {
                           isLoading = true;
                         });
                         await _contactService.addAtSign(
-                          context,
                           atSign: atsignName,
                           nickName: nickName,
                         );

@@ -1,13 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:at_onboarding_flutter/at_onboarding_flutter.dart';
 import 'package:at_utils/at_logger.dart';
 import 'package:at_client_mobile/at_client_mobile.dart';
+import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 import 'package:spacesignal/app/modules/home/views/home_screen.dart';
+import 'package:spacesignal/app/modules/home/views/loading.dart';
 import 'package:spacesignal/utils/constants.dart';
 import 'package:at_common_flutter/services/size_config.dart';
-
+import 'package:spacesignal/utils/initial_image.dart';
 import '../../../../sdk_service.dart';
-
+import 'package:get/get.dart';
 class OnbordingScreen extends StatefulWidget {
   const OnbordingScreen({Key? key}) : super(key: key);
 
@@ -30,7 +34,9 @@ class HexColor extends Color {
 class OnbordingScreenState extends State<OnbordingScreen> {
   late AtClientPreference atClientPrefernce;
   final _logger = AtSignLogger('Spacesignal');
-    AtService clientSdkService = AtService.getInstance();
+  AtService clientSdkService = AtService.getInstance();
+  // initialimage myImage = new initialimage();
+  // String myName = "";
 
   @override
   void initState() {
@@ -123,10 +129,35 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                           _logger.severe(
                                               'Onboarding throws $error error');
                                         },
-                                        nextScreen: HomeScreen(),
+                                        nextScreen: (HomeScreen()),
                                         appAPIKey: MixedConstants.apiKey,
                                         rootEnvironment:
                                         RootEnvironment.Production);
+                                        // String? currentAtSign = await clientSdkService.getAtSign();
+                                        // ContactService _contactService = ContactService();
+                                        // _contactService!.initContactsService('root.atsign.org', 64).then((result){
+                                        //     String activeAtSign = "@denise";//currentAtSign!;
+                                        //     _contactService!.getContactDetails(activeAtSign,"").then((Map<String, dynamic> result){
+                                        //   setState(() {
+                                        //     var mydetails = result;
+                                        //     print(mydetails);
+                                        //     if (mydetails["image"]==null){
+                                        //       myImage = initialimage(atsign: activeAtSign);
+                                        //     }else{
+                                        //       myImage = initialimage(image: Uint8List.fromList(mydetails['image'].cast<int>()),
+                                        //           atsign: activeAtSign);
+                                        //     }
+                                        //     if(mydetails["name"]==null){
+                                        //       myName = activeAtSign;
+                                        //     }else{
+                                        //       myName = mydetails["name"];
+                                        //     }
+                                        //   });
+                                        //   Get.to(() => HomeScreen(myImage:myImage, myName: myName,));
+                                        //
+                                        // });
+                                        // });
+                                        //
                                   },
 
                                   child: Text(

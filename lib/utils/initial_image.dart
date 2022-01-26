@@ -47,7 +47,7 @@ class initialimage extends StatelessWidget {
         child: Center(
           child: ClipOval(
             child:Text(
-                "wow",
+                " ",
                 overflow: TextOverflow.fade,
                 softWrap: true,
                 style: TextStyle(

@@ -44,7 +44,7 @@ AtContact? getCachedContactDetail(String atsign) {
   if (ContactService().cachedContactList.isNotEmpty) {
     var index = ContactService()
         .cachedContactList
-        .indexWhere((element) => element!.atSign == atsign);
+        .indexWhere((element) => element.atSign == atsign);
     if (index > -1) return ContactService().cachedContactList[index];
   }
   return null;

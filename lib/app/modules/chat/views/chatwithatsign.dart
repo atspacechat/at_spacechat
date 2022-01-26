@@ -9,11 +9,13 @@ import 'package:spacesignal/utils/initial_image.dart';
 class chatwithatsign extends StatefulWidget {
   final initialimage? contactImage;
   final initialimage myImage;
+  final String myName;
   // static final String id = 'chatwithatsign';
   const chatwithatsign(
       {Key? key,
         this.contactImage,
         required this.myImage,
+        required this.myName,
         // this.id,
         })
       : super(key: key);
@@ -140,7 +142,7 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
   }
 
   void _contact() {
-    Get.to(() => ContactScreen(myImage: widget.myImage,));
+    Get.to(() => ContactScreen(myImage: widget.myImage,myName: widget.myName,));
     // Navigator.of(context).pushAndRemoveUntil(
     //     new MaterialPageRoute(builder: (context) => ContactScreen()),
     //         (route) => route == null);

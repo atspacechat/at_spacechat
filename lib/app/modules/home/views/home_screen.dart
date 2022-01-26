@@ -23,7 +23,6 @@ import 'package:spacesignal/app/modules/chat/controllers/chat_service.dart';
 import 'package:spacesignal/app/modules/chat/utils/message_model.dart';
 
 class HomeScreen extends StatefulWidget {
-  static final String id = 'home';
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -58,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Map<String, dynamic> mydetails = new Map<String, dynamic>();
   initialimage myImage = new initialimage();
   String myName = "";
+  // bool loadingDetails = false;
   // bool serverUp = false;
   void reqAsignal() {
     control.wantsSignal();
@@ -73,21 +73,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       _contactService = ContactService();
+      // blocked_list = [];
       _contactService!.initContactsService('root.atsign.org', 64)
           .then((result){
         blocked_list = [];
-        _contactService!.blockContactList.forEach(
-                (c) {
-              if(c?.blocked==true){
-                blocked_list.add(c?.atSign);
+        if(_contactService!.blockContactList.length>0){
+          _contactService!.blockContactList.forEach(
+                  (c) {
+                if(c.blocked==true){
+                  blocked_list.add(c.atSign);
+                }
               }
-            }
-        );
+          );
+        }
         print(blocked_list);
       });
       String? currentAtSign = await clientSdkService.getAtSign();
       setState(() {
-        activeAtSign = currentAtSign!;
+        activeAtSign = "@denise";//currentAtSign!;
         _contactService!.getContactDetails(activeAtSign,"").then((Map<String, dynamic> result){
           setState(() {
             mydetails = result;
@@ -100,14 +103,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             }
             if(mydetails["name"]==null){
               myName = activeAtSign;
+              // loadingDetails = false;
             }else{
               myName = mydetails["name"];
+              // loadingDetails = false;
             }
           });
         });
       });
-      // _signalService.initSignalService(clientSdkService.atClientServiceInstance.atClient, activeAtSign,'root.atsign.org',64);
-      // initializeContactsService(clientSdkService.atClientServiceInstance.atClient,activeAtSign,rootDomain: 'root.atsign.org');
+
     });
 
     // print("sign"+activeAtSign);
@@ -127,6 +131,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         body: Stack(
             //不知道有没有多余的步骤
             children: [
+              // (loadingDetails)
+              // ? showLoaderDialog(context)
+              // : Container(),
               Container(
                 width: double.infinity,
                 height: double.infinity,
@@ -229,7 +236,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             items: [
               FABBottomAppBarItem(iconData: Icons.send, text: 'Send'),
               FABBottomAppBarItem(iconData: Icons.chat, text: 'Chats'),
-            ], myImage: myImage,
+            ],
+            myName: myName,
+            myImage: myImage,
           ),
         ));
   }
@@ -244,7 +253,63 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     AlertDialog alert = AlertDialog(
         content: Row(children: [
           Obx(() => Container(
-            child: controllerx.isLoading.value
+            child:
+              // loadingDetails
+              //     ? Flexible(
+              //     child: Container(
+              //         height: 90.toHeight,
+              //         width: 300.toWidth,
+              //         child: Column(
+              //             children: <Widget>[
+              //               Container(
+              //                 alignment: Alignment.topRight,
+              //                 height: 30.toHeight,
+              //                 width: 300.toWidth,
+              //                 child: FloatingActionButton(
+              //                   //FloatingActionButton(
+              //                   child: Icon(
+              //                     Icons.close,
+              //                     size: 30.toFont,
+              //                     color: Colors.grey,
+              //                   ),
+              //                   onPressed: () {
+              //                     Navigator.pop(context);
+              //                   },
+              //                   // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              //                   backgroundColor: Colors.white,
+              //                   mini: true,
+              //                   elevation: 0.0,
+              //                 ),
+              //               ),
+              //               Row(
+              //                   children: <Widget>[
+              //                     Container(
+              //                       // height: 40.toHeight,
+              //                       // width: 40.toHeight,
+              //                       child: CircularProgressIndicator(),
+              //                     ),
+              //                     Container(
+              //                       width: 30.toWidth,
+              //                     ),
+              //                     Container(
+              //                       // height: 40.toHeight,
+              //                       child: Text(
+              //                         "Loading your planet ...",
+              //                         textAlign: TextAlign.right,
+              //                         style: TextStyle(
+              //                             fontSize: 15.toFont,
+              //                             fontWeight: FontWeight.w500,
+              //                             color: Color(0xFF584797)),
+              //                         maxLines: null,
+              //                       ),
+              //                     )
+              //                   ]
+              //               ),
+              //
+              //             ])))
+
+                  // :(
+    controllerx.isLoading.value
               // ? CircularProgressIndicator(semanticsLabel: 'Loading')
               ? Flexible(
                 child: Container(
@@ -770,7 +835,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                                 }
                                                               });
                                                             });
-                                                            var response = await _contactService!.addAtSign(context, atSign: sender);
+                                                            var response = await _contactService!.addAtSign(atSign: sender);
 
                                                             // print("check add contact "+_contactService!.getAtSignError);
                                                             String chatWithAtSign = sender;
@@ -793,7 +858,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                                   builder: (context) =>
                                                                           chatwithatsign(
                                                                             contactImage: senderImage,
-                                                                            myImage: myImage),
+                                                                            myImage: myImage,
+                                                                            myName: myName,),
                                                                   settings: RouteSettings(
                                                                     arguments: chatWithAtSign.toString().substring(1),
                                                                   ),
@@ -821,7 +887,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       )
                                     ]))
                           ])),
-                )))),
+                ))
+          ))
+          // ),
     ]));
     showDialog(
       barrierDismissible: false,
