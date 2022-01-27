@@ -54,12 +54,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   ContactService? _contactService;
   ChatService? _chatService;
   var blocked_list = [];
-  bool isReply = false;
-  Map<String, dynamic> mydetails = new Map<String, dynamic>();
+  // bool isReply = false;
+  Map<dynamic, dynamic> mydetails = new Map<dynamic, dynamic>();
   initialimage myImage = new initialimage();
   String myName = "";
-  // bool loadingDetails = false;
-  // bool serverUp = false;
+
   void reqAsignal() {
     control.wantsSignal();
     Future.delayed(const Duration(seconds: 20), (){
@@ -74,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       _contactService = ContactService();
-      // blocked_list = [];
+      blocked_list = [];
       _contactService!.initContactsService('root.atsign.org', 64)
           .then((result){
         blocked_list = [];
@@ -88,40 +87,65 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           );
         }
         print(blocked_list);
-      });
-      String? currentAtSign = await clientSdkService.getAtSign();
-      activeAtSign = currentAtSign!;
-      setState(() {
-        _contactService!.getContactDetails(activeAtSign,"").then((Map<String, dynamic> result){
-          setState(() {
-            mydetails = result;
+        // print(_contactService!.loggedInUserDetails!.tags);
+        setState(() {
+          if(_contactService!.loggedInUserDetails!.tags != null) {
+            mydetails = _contactService!.loggedInUserDetails!.tags!.cast<
+                dynamic,
+                dynamic>();
             print(mydetails);
-            if (mydetails["image"]==null){
+            if (mydetails["image"] == null) {
               myImage = initialimage(atsign: activeAtSign);
-            }else{
-              myImage = initialimage(image: Uint8List.fromList(mydetails['image'].cast<int>()),
+            } else {
+              myImage = initialimage(
+                  image: Uint8List.fromList(mydetails['image'].cast<int>()),
                   atsign: activeAtSign);
             }
-            if(mydetails["name"]==null){
+            if (mydetails["name"] == null) {
               myName = activeAtSign;
               // loadingDetails = false;
-            }else{
+            } else {
               myName = mydetails["name"];
               // loadingDetails = false;
             }
-          });
+          }
         });
+
+
       });
+      String? currentAtSign = await clientSdkService.getAtSign();
+      activeAtSign = currentAtSign!;
+      // setState(() {
+      //   _contactService!.getContactDetails(activeAtSign,"").then((Map<String, dynamic> result){
+      //     setState(() {
+      //       mydetails = result;
+      //       print(mydetails);
+      //       if (mydetails["image"]==null){
+      //         myImage = initialimage(atsign: activeAtSign);
+      //       }else{
+      //         myImage = initialimage(image: Uint8List.fromList(mydetails['image'].cast<int>()),
+      //             atsign: activeAtSign);
+      //       }
+      //       if(mydetails["name"]==null){
+      //         myName = activeAtSign;
+      //         // loadingDetails = false;
+      //       }else{
+      //         myName = mydetails["name"];
+      //         // loadingDetails = false;
+      //       }
+      //     });
+      //   // });
+      // });
       _chatService = ChatService();
       var atClientManager = AtService.getInstance().atClientManager;
       // _chatService = await new ChatService();
       _chatService!.initChatService(atClientManager,activeAtSign,'root.atsign.org',64);
     });
-
-    // print("sign"+activeAtSign);
-
     scaffoldKey = GlobalKey<ScaffoldState>();
     super.initState();
+
+
+
   }
 
   //main screen, top bar, bottom bar, menu
@@ -258,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         content: Row(children: [
           Obx(() => Container(
             child:
-    controllerx.isLoading.value
+              controllerx.isLoading.value
               // ? CircularProgressIndicator(semanticsLabel: 'Loading')
               ? Flexible(
                 child: Container(
@@ -299,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ),
                             Container(
                               // height: 40.toHeight,
-                              child: isReply
+                              child: controllerx.isReply.value
                               ? Text(
                                 "Loading the chat ...",
                                 textAlign: TextAlign.right,
@@ -324,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                       ])))
 
-                    : (blocked_list.contains("@"+controllerx.searchedMessageAtsign.value) || controllerx.serverError.value
+                    : (blocked_list.contains(controllerx.searchedMessageAtsign.value) || controllerx.serverError.value
                 ? Flexible(
                   child: Container(
                     height: 340.toHeight,
@@ -348,6 +372,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               color: Colors.grey,
                             ),
                             onPressed: () {
+                              controllerx.gotMessage.value == false;
                               Navigator.pop(context);
                             },
                             // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -712,6 +737,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                       //padding: EdgeInsets.symmetric(vertical: 15.0),
                                                       onPressed: () {
                                                         // Navigator.of(context).pop(controller.text.toString());
+                                                        controllerx.gotMessage.value == false;
                                                         Navigator.pop(context);
                                                       },
                                                       child: Text(
@@ -769,7 +795,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                           //padding: EdgeInsets.symmetric(vertical: 15.0),
                                                           onPressed: () async {
                                                             // start loading
-                                                            isReply = true;
+                                                            controllerx.gotMessage.value == false;
+                                                            controllerx.isReply.value = true;
                                                             controllerx.isLoading(true);
 
                                                             // connect users and set the chat
@@ -799,10 +826,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                                               atsign: sender);
                                                                         }
                                                                         // close loading
+
+
                                                                         controllerx.isLoading(false);
-                                                                        isReply = false;
-
-
+                                                                        controllerx.isReply.value = false;
                                                                         Navigator.push(context, MaterialPageRoute(
                                                                           builder: (context) =>
                                                                               chatwithatsign(

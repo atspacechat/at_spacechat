@@ -200,13 +200,13 @@ class _ContactScreenState extends State<ContactScreen> {
                       height: 25.toHeight,
                     ),
 
-                    ElevatedButton(
-                      child: Text('add a contact'),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AddContactDialog(),
-                        );},),
+                    // ElevatedButton(
+                    //   child: Text('add a contact'),
+                    //   onPressed: () {
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) => AddContactDialog(),
+                    //     );},),
                     // ElevatedButton(
                     //   child: Text('blocked contacts'),
                     //   onPressed: () {

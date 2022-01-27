@@ -18,6 +18,7 @@ import 'package:spacesignal/utils/text_strings.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:spacesignal/app/modules/contacts/utils/contact_base_model.dart';
 // import 'package:at_client/at_client.dart';
+// import 'package:spacesignal/app/modules/contacts/controllers/at_contacts_impl.dart' as a;
 
 class ContactService {
   /// Singleton instance declaration
@@ -123,9 +124,12 @@ class ContactService {
     rootPort = rootPortFromApp;
     atClientManager = AtClientManager.getInstance();
     currentAtsign = atClientManager.atClient.getCurrentAtSign()!;
+    print(currentAtsign);
     atContactImpl = await AtContactsImpl.getInstance(currentAtsign);
     loggedInUserDetails = await getAtSignDetails(currentAtsign);
+    // print("details" + loggedInUserDetails.toString());
     cachedContactList = await atContactImpl.listContacts();
+    // print(cachedContactList);
     await fetchBlockContactList();
   }
 

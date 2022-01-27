@@ -19,8 +19,10 @@ class HomeController extends GetxController {
   var searchedMessage = "".obs;
   var searchedMessageAtsign = "".obs;
 
-  var serverError = true.obs;
+  var serverError = false.obs;
   var isLoading = true.obs;
+  var isReply = false.obs;
+  var gotMessage = false.obs;
   var atClient = AtService.getInstance().getAtClientForAtsign();
   var signalByMelist = List<Map<String, dynamic>>.empty(growable: true).obs;
   var atClientPreference;
@@ -112,8 +114,8 @@ class HomeController extends GetxController {
 //specify sharedby with the current  atsign
 
   void wantsSignal() {
-    searchedMessage.value = '';
-    searchedMessageAtsign.value = '';
+    // searchedMessage.value = '';
+    // searchedMessageAtsign.value = '';
     // A get variable initialized to null everytime this fuction calls
     // searchedMessage?.value = '';
     var uuid = const Uuid();
@@ -169,49 +171,58 @@ class HomeController extends GetxController {
           .listen((notification) async {
         print(notification);
 
-        var keyCut =
-            notification.key.substring(notification.key.indexOf('headless'));
+        if(isLoading.value == true && isReply.value == false && gotMessage.value == false) {
+          gotMessage.value == true;
+          var keyCut =
+              notification.key.substring(notification.key.indexOf('headless'));
 
-        String sCut = keyCut.substring(0, keyCut.indexOf('*'));
+          String sCut = keyCut.substring(0, keyCut.indexOf('*'));
 
-        String atSigns = keyCut.split('*').last;
-        sCut = sCut.replaceAll('headless', '');
-        String notification_atsign =
-            atSigns.replaceAll('.spacesignal@tallcaterpillar', "");
-        print('FROM atSIGN ------------- $notification_atsign');
-        print(sCut);
-        if(notification_atsign.substring(0,1) != "@"){
-          notification_atsign = "@" + notification_atsign;
-        }
-        //TODO: retrive notification_atsign from the received notification string
-        Metadata data = Metadata()..isPublic = true;
-        AtKey _atKey = AtKey()
-          ..key = sCut
-          ..sharedBy = notification_atsign
-          ..metadata = data;
-        print(_atKey);
-        var value = await clientSdkService.get(_atKey);
-        print(value);
-        // we will receive a map so have to do a json decode
-        // we need the message only and the notification_atsign nothing else
-        if (value != null) {
-          Map<String, dynamic> _decoded = jsonDecode(value);
-          print('$_decoded');
-          String v = _decoded['Message'];
-          print("Receive Signal: $v");
-          //assign chatwith atsign also
-          if (v.isNotEmpty && isLoading.value == true) {
-            serverError(false);
-            searchedMessage.value = v;
-            searchedMessageAtsign.value = notification_atsign;
-            isLoading(false);
-            // print(searchedMessage);
-            print("Monitor Signal: $v");
-          }else{
-            isLoading(false);
+          String atSigns = keyCut.split('*').last;
+          sCut = sCut.replaceAll('headless', '');
+          String notification_atsign =
+              atSigns.replaceAll('.spacesignal@tallcaterpillar', "");
+          print('FROM atSIGN ------------- $notification_atsign');
+          print(sCut);
+          if(notification_atsign.substring(0,1) != "@"){
+            notification_atsign = "@" + notification_atsign;
           }
-        }
-      });
+          //TODO: retrive notification_atsign from the received notification string
+          Metadata data = Metadata()..isPublic = true;
+          AtKey _atKey = AtKey()
+            ..key = sCut
+            ..sharedBy = notification_atsign
+            ..metadata = data;
+          print(_atKey);
+          var value = await clientSdkService.get(_atKey);
+          print(value);
+          // we will receive a map so have to do a json decode
+          // we need the message only and the notification_atsign nothing else
+          if (value != null) {
+            Map<String, dynamic> _decoded = jsonDecode(value);
+            print('$_decoded');
+            String v = _decoded['Message'];
+            print("Receive Signal: $v");
+            //assign chatwith atsign also
+            if (v.isNotEmpty) {
+                serverError(false);
+                searchedMessage.value = v;
+                searchedMessageAtsign.value = notification_atsign;
+                isLoading(false);
+                // print(searchedMessage);
+                print("Wanna Reply To $notification_atsign On Signal: $v ?");
+            }else{
+              // serverError(true);
+              searchedMessageAtsign.value = "debug";
+              isLoading(false);
+              // gotMessage(false);
+            }
+          }
+          // else{
+          //   gotMessage(false);
+          // }
+        // }
+          }});
     } catch (e, stackTrace) {
       print(e.toString());
     }
