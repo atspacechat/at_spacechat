@@ -811,7 +811,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                             _notifysender(chatWithAtSign);
                                                             _chatService!.setAtsignToChatWith(chatWithAtSign,false,"",[]);
                                                             // _chatService!.getChatHistory(atsign:chatWithAtSign);
-                                                            _chatService!.getChatHistory(atsign:chatWithAtSign).then((value){
+                                                            _chatService!.getMyChatHistory().then((value){
                                                               _chatService!.setChatHistory(
                                                                 Message(
                                                                   message: controllerx.searchedMessage.value,

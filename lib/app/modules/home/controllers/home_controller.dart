@@ -195,7 +195,7 @@ class HomeController extends GetxController {
             ..metadata = data;
           print(_atKey);
           var value = await clientSdkService.get(_atKey);
-          print(value);
+          // print(value);
           // we will receive a map so have to do a json decode
           // we need the message only and the notification_atsign nothing else
           if (value != null) {
@@ -204,7 +204,7 @@ class HomeController extends GetxController {
             String v = _decoded['Message'];
             print("Receive Signal: $v");
             //assign chatwith atsign also
-            if (v.isNotEmpty) {
+            if (v != "") {
                 serverError(false);
                 searchedMessage.value = v;
                 searchedMessageAtsign.value = notification_atsign;
@@ -213,10 +213,12 @@ class HomeController extends GetxController {
                 print("Wanna Reply To $notification_atsign On Signal: $v ?");
             }else{
               // serverError(true);
-              searchedMessageAtsign.value = "debug";
+              searchedMessageAtsign.value = "empty message?";
               isLoading(false);
               // gotMessage(false);
             }
+          }else{
+            print("atvalue is null");
           }
           // else{
           //   gotMessage(false);

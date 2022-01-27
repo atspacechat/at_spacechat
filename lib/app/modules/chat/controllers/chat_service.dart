@@ -206,6 +206,41 @@ class ChatService {
     }
   }
 
+  Future<void> getMyChatHistory({String? atsign}) async {
+    var emptyvalue = AtValue()
+      ..value = [];
+    try {
+      chatHistory = [];
+      var key = AtKey()
+        ..key = storageKey +
+            (isGroupChat ? groupChatId! : '') +
+            (chatWithAtSign ?? ' ').substring(1)
+        ..sharedBy = currentAtSign!
+        ..sharedWith = chatWithAtSign
+        ..metadata = Metadata();
+      key.metadata?.ccd = true;
+      var a = await atClientManager.atClient;
+      // print(a);
+      // print(await a.get(key));
+      var keyValue = await a.get(key).catchError((e) {
+        // print('error in get ${e.errorCode} ${e.errorMessage}');
+        print('error in get my chat history');
+        chatHistoryMessages = [];
+        return emptyvalue;
+      });
+      // ignore: unnecessary_null_comparison
+      if (keyValue.value != null && keyValue.value.toString() != "[]" && chatHistoryMessages != []) {
+        chatHistoryMessages = json.decode((keyValue.value) as String) as List;
+      } else {
+        chatHistoryMessages = [];
+      }
+      print(key);
+      print(chatHistoryMessages);
+    } catch (error) {
+      print('Error in getting my chat -> $error');
+    }
+  }
+
   /// function to mix the incoming and outgoing messages by timestamp
   Future<List<Message>> interleave<T>(List a, List b) async {
     List result = [];
