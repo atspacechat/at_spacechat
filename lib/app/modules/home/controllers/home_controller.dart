@@ -97,7 +97,7 @@ class HomeController extends GetxController {
 
   //notify sender
   Future<void> notifysender(AtKey key, String? value) async {
-    print("Notification value" + value!);
+    print("Notification value " + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
     // key.sharedWith = "@tallcaterpillar";
     // Metadata _metadata = Metadata()..ttr = -1;
@@ -180,13 +180,18 @@ class HomeController extends GetxController {
             atSigns.replaceAll('.spacesignal@tallcaterpillar', "");
         print('FROM atSIGN ------------- $notification_atsign');
         print(sCut);
+        if(notification_atsign.substring(0,1) != "@"){
+          notification_atsign = "@" + notification_atsign;
+        }
         //TODO: retrive notification_atsign from the received notification string
         Metadata data = Metadata()..isPublic = true;
         AtKey _atKey = AtKey()
           ..key = sCut
           ..sharedBy = notification_atsign
           ..metadata = data;
+        print(_atKey);
         var value = await clientSdkService.get(_atKey);
+        print(value);
         // we will receive a map so have to do a json decode
         // we need the message only and the notification_atsign nothing else
         if (value != null) {
@@ -195,13 +200,15 @@ class HomeController extends GetxController {
           String v = _decoded['Message'];
           print("Receive Signal: $v");
           //assign chatwith atsign also
-          if (v.isNotEmpty && isLoading.value) {
+          if (v.isNotEmpty && isLoading.value == true) {
             serverError(false);
             searchedMessage.value = v;
             searchedMessageAtsign.value = notification_atsign;
             isLoading(false);
             // print(searchedMessage);
             print("Monitor Signal: $v");
+          }else{
+            isLoading(false);
           }
         }
       });
@@ -233,7 +240,8 @@ class HomeController extends GetxController {
     print('Success message');
   }
   void _onSuccessCallback1(notificationResult) {
-    print('success to notify the sender '+ notificationResult.toString());
+    print('success to notify the sender ');
+    print(notificationResult.toString());
   }
   void _onErrorCallback(notificationResult) {
     print(notificationResult);
@@ -241,7 +249,8 @@ class HomeController extends GetxController {
 // do something on notification error
   }
   void _onErrorCallback1(notificationResult) {
-    print("faild to notify the sender "+notificationResult.toString());
+    print("faild to notify the sender ");
+    print(notificationResult.toString());
   }
   onsuccess(notificationResult) {
     // TODO: call readSignal();

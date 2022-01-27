@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   // String message;
   int presstime = 1;
   ContactService? _contactService;
+  ChatService? _chatService;
   var blocked_list = [];
   bool isReply = false;
   Map<String, dynamic> mydetails = new Map<String, dynamic>();
@@ -89,8 +90,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         print(blocked_list);
       });
       String? currentAtSign = await clientSdkService.getAtSign();
+      activeAtSign = currentAtSign!;
       setState(() {
-        activeAtSign = "@denise";//currentAtSign!;
         _contactService!.getContactDetails(activeAtSign,"").then((Map<String, dynamic> result){
           setState(() {
             mydetails = result;
@@ -111,7 +112,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           });
         });
       });
-
+      _chatService = ChatService();
+      var atClientManager = AtService.getInstance().atClientManager;
+      // _chatService = await new ChatService();
+      _chatService!.initChatService(atClientManager,activeAtSign,'root.atsign.org',64);
     });
 
     // print("sign"+activeAtSign);
@@ -254,61 +258,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         content: Row(children: [
           Obx(() => Container(
             child:
-              // loadingDetails
-              //     ? Flexible(
-              //     child: Container(
-              //         height: 90.toHeight,
-              //         width: 300.toWidth,
-              //         child: Column(
-              //             children: <Widget>[
-              //               Container(
-              //                 alignment: Alignment.topRight,
-              //                 height: 30.toHeight,
-              //                 width: 300.toWidth,
-              //                 child: FloatingActionButton(
-              //                   //FloatingActionButton(
-              //                   child: Icon(
-              //                     Icons.close,
-              //                     size: 30.toFont,
-              //                     color: Colors.grey,
-              //                   ),
-              //                   onPressed: () {
-              //                     Navigator.pop(context);
-              //                   },
-              //                   // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              //                   backgroundColor: Colors.white,
-              //                   mini: true,
-              //                   elevation: 0.0,
-              //                 ),
-              //               ),
-              //               Row(
-              //                   children: <Widget>[
-              //                     Container(
-              //                       // height: 40.toHeight,
-              //                       // width: 40.toHeight,
-              //                       child: CircularProgressIndicator(),
-              //                     ),
-              //                     Container(
-              //                       width: 30.toWidth,
-              //                     ),
-              //                     Container(
-              //                       // height: 40.toHeight,
-              //                       child: Text(
-              //                         "Loading your planet ...",
-              //                         textAlign: TextAlign.right,
-              //                         style: TextStyle(
-              //                             fontSize: 15.toFont,
-              //                             fontWeight: FontWeight.w500,
-              //                             color: Color(0xFF584797)),
-              //                         maxLines: null,
-              //                       ),
-              //                     )
-              //                   ]
-              //               ),
-              //
-              //             ])))
-
-                  // :(
     controllerx.isLoading.value
               // ? CircularProgressIndicator(semanticsLabel: 'Loading')
               ? Flexible(
@@ -824,48 +773,58 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                             controllerx.isLoading(true);
 
                                                             // connect users and set the chat
-                                                            String sender = "@"+controllerx.searchedMessageAtsign.value;
-                                                            print(sender);
+                                                            String sender = controllerx.searchedMessageAtsign.value;
+                                                            // print(sender);
+                                                            await _contactService!.addAtSign(atSign: sender);
+                                                            print("add atsign " + sender);
                                                             initialimage senderImage = new initialimage(atsign: sender);
-                                                            _contactService!.getContactDetails(sender,"").then((Map<String, dynamic> result){
-                                                              setState(() {
-                                                                if (result["image"]!=null){
-                                                                  senderImage = initialimage(image: Uint8List.fromList(result['image'].cast<int>()),
-                                                                      atsign: sender);
-                                                                }
-                                                              });
-                                                            });
-                                                            var response = await _contactService!.addAtSign(atSign: sender);
 
                                                             // print("check add contact "+_contactService!.getAtSignError);
                                                             String chatWithAtSign = sender;
-                                                            var atClientManager = await AtService.getInstance().atClientManager;
-                                                            initializeChatService(atClientManager,activeAtSign);
-                                                            ChatService().setAtsignToChatWith(chatWithAtSign,false,"",[]);
                                                             _notifysender(chatWithAtSign);
+                                                            _chatService!.setAtsignToChatWith(chatWithAtSign,false,"",[]);
+                                                            // _chatService!.getChatHistory(atsign:chatWithAtSign);
+                                                            _chatService!.getChatHistory(atsign:chatWithAtSign).then((value){
+                                                              _chatService!.setChatHistory(
+                                                                Message(
+                                                                  message: controllerx.searchedMessage.value,
+                                                                  sender: chatWithAtSign,
+                                                                  time: DateTime.now().millisecondsSinceEpoch,
+                                                                  type: MessageType.INITIAL))
+                                                                    .then((value){
+                                                                      _contactService!.getContactDetails(sender,"").then((Map<String, dynamic> result){
+                                                                        // setState(() {
+                                                                        if (result["image"]!=null){
+                                                                          senderImage = initialimage(image: Uint8List.fromList(result['image'].cast<int>()),
+                                                                              atsign: sender);
+                                                                        }
+                                                                        // close loading
+                                                                        controllerx.isLoading(false);
+                                                                        isReply = false;
 
-                                                            await ChatService().setChatHistory(Message(
-                                                                message: controllerx.searchedMessage.value,
-                                                                sender: chatWithAtSign,
-                                                                time: DateTime.now().millisecondsSinceEpoch,
-                                                                type: MessageType.INITIAL));
 
-                                                              // close loading
-                                                            // controllerx.isLoading(false);
-                                                            // go to the chat screen
-                                                            isReply = false;
-                                                            Navigator.push(context, MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                          chatwithatsign(
-                                                                            contactImage: senderImage,
-                                                                            myImage: myImage,
-                                                                            myName: myName,),
-                                                                  settings: RouteSettings(
-                                                                    arguments: chatWithAtSign.toString().substring(1),
-                                                                  ),
-                                                                ));
-                                                            print(ChatService().currentAtSign);
-                                                            print(ChatService().chatWithAtSign);
+                                                                        Navigator.push(context, MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              chatwithatsign(
+                                                                                contactImage: senderImage,
+                                                                                myImage: myImage,
+                                                                                myName: myName,),
+                                                                          settings: RouteSettings(
+                                                                            arguments: chatWithAtSign.toString().substring(1),
+                                                                          ),
+                                                                        ));
+
+
+                                                                  // print("myatsign"+_chatService!.currentAtSign.toString());
+                                                                  // print("chatwith"+ _chatService!.chatWithAtSign.toString());
+
+                                                                });
+                                                              });
+                                                              // print("setchathistory of chat "+controllerx.searchedMessage.value);
+                                                              // print("setchathistory with "+ chatWithAtSign);
+                                                            });
+
+
 
                                                           },
                                                           child: Text(
@@ -914,12 +873,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // notifiService.notify(NotificationParams.forUpdate(atKey, value: value));
       // await _contactService.notify(atKey, value, operation);
       var re = controllerx.notifysender(atKey,value);
-      print(atKey);
-      print(atKey.toString());
-      print("notify==>"+ value);
-      print(re);
+      // print(atKey);
+      // print(atKey.toString());
+      // print("notify==>"+ value);
+      // print(re);
     }
   }
-
-
 }
