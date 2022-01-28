@@ -6,6 +6,7 @@ import 'package:at_common_flutter/services/size_config.dart';
 import 'package:get/get.dart';
 import 'package:spacesignal/app/modules/chat/views/chatwithatsign.dart';
 import 'package:spacesignal/app/modules/contacts/utils/contact_base_model.dart';
+import 'package:spacesignal/app/modules/home/controllers/home_controller.dart';
 import 'package:spacesignal/app/modules/home/views/home_screen.dart';
 import 'package:spacesignal/utils/colors.dart';
 import 'package:spacesignal/utils/initial_image.dart';
@@ -150,6 +151,8 @@ class _ContactScreenState extends State<ContactScreen> {
                             ),
                             // color: Colors.white,
                             onPressed: () {
+                              final HomeController controllerx = Get.put<HomeController>(HomeController());
+                              controllerx.gotMessage.value = false;
                               Get.to(() => HomeScreen());
                             },
                           ),

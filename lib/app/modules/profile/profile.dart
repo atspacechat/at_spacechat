@@ -186,6 +186,8 @@ class Profile extends StatelessWidget {
                                 ),
                                 // color: Colors.white,
                                 onPressed: () {
+                                  final HomeController controllerx = Get.put<HomeController>(HomeController());
+                                  controllerx.gotMessage.value = false;
                                   Get.to(HomeScreen());
                                 },
                               )

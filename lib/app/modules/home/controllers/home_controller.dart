@@ -172,7 +172,7 @@ class HomeController extends GetxController {
         print(notification);
 
         if(isLoading.value == true && isReply.value == false && gotMessage.value == false) {
-          gotMessage.value == true;
+          gotMessage.value = true;
           var keyCut =
               notification.key.substring(notification.key.indexOf('headless'));
 
@@ -211,6 +211,9 @@ class HomeController extends GetxController {
                 isLoading(false);
                 // print(searchedMessage);
                 print("Wanna Reply To $notification_atsign On Signal: $v ?");
+                print(isLoading.value);
+                print(isReply.value);
+                print(gotMessage.value);
             }else{
               // serverError(true);
               searchedMessageAtsign.value = "empty message?";
@@ -224,7 +227,13 @@ class HomeController extends GetxController {
           //   gotMessage(false);
           // }
         // }
-          }});
+          }else{
+          print("not gonna process");
+          print(isLoading.value);
+          print(isReply.value);
+          print(gotMessage.value);
+        }
+          });
     } catch (e, stackTrace) {
       print(e.toString());
     }

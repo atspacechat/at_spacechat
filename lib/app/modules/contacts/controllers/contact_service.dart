@@ -375,6 +375,70 @@ class ContactService {
     }
   }
 
+  Future<Map<String, dynamic>> addAtSignAndReturnImage({
+    String? atSign,
+    String? nickName,
+  }) async {
+    var contactDetails = <String, dynamic>{};
+    contactDetails['name'] = null;
+    contactDetails['image'] = null;
+    contactDetails['nickname'] = null;
+    if (atSign == null || atSign == '') {
+      getAtSignError = TextStrings().emptyAtsign;
+      return contactDetails;
+
+    } else if (atSign[0] != '@') {
+      atSign = '@' + atSign;
+    }
+    atSign = atSign.toLowerCase().trim();
+
+    if (atSign == atClientManager.atClient.getCurrentAtSign()) {
+      getAtSignError = TextStrings().addingLoggedInUser;
+
+      return contactDetails;
+    }
+    try {
+      isContactPresent = false;
+
+      getAtSignError = '';
+      var contact = AtContact();
+
+      checkAtSign = await checkAtsign(atSign);
+
+      if (!checkAtSign!) {
+        getAtSignError = TextStrings().unknownAtsign(atSign);
+      } else {
+        for (var element in contactList) {
+          if (element.atSign == atSign) {
+            getAtSignError = TextStrings().atsignExists(atSign);
+            isContactPresent = true;
+            break;
+          }
+        }
+      }
+      if (!isContactPresent && checkAtSign!) {
+        var details = await getContactDetails(atSign, nickName);
+        contact = AtContact(
+          atSign: atSign,
+          tags: details,
+        );
+        print('details==>${contact.atSign}');
+        var result = await atContactImpl.add(contact).catchError((e) {
+          print('error to add contact => $e');
+        });
+        print(result);
+        fetchContacts();
+        return details;
+      } else {
+        return contactDetails;
+      }
+    } catch (e) {
+      print(e);
+      return contactDetails;
+    }
+  }
+
+
   void removeSelectedAtSign(AtContact? contact) {
     try {
       for (AtContact? atContact in selectedContacts) {
@@ -454,7 +518,8 @@ class ContactService {
       // firstname
       key.key = contactFields[0];
       var result = await atClientManager.atClient.get(key).catchError((e) {
-        print('error in get ${e.errorCode} ${e.errorMessage}');
+        print(key);
+        print('error in get contactfields ${e.errorCode} ${e.errorMessage}');
       });
       var firstname = result.value;
 
@@ -482,7 +547,7 @@ class ContactService {
         // firstname
         key.key = contactFieldsPersona[0];
         var result = await atClientManager.atClient.get(key).catchError((e) {
-          print('error in get ${e.errorCode} ${e.errorMessage}');
+          print('error in get contactfields persona ${e.errorCode} ${e.errorMessage}');
         });
         var firstname = result.value;
 
