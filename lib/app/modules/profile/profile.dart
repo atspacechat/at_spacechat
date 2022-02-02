@@ -36,6 +36,7 @@ class Profile extends StatelessWidget {
   GlobalKey<ScaffoldState>? scaffoldKey;
   PanelController _pc2 = new PanelController();
 
+
   // @override
   // void initState() {
   //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
@@ -53,7 +54,6 @@ class Profile extends StatelessWidget {
 
   Widget build(BuildContext context) {
     String activeAtSign = myAtSign;
-
     SizeConfig().init(context);
 
     return Material(
@@ -114,7 +114,9 @@ class Profile extends StatelessWidget {
                                 _launchURL2();
                               } else if (index == 3) {
                                 // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginPage()),(route) => route == null);
-
+                                  Controller1 c = Get.put(Controller1());
+                                  c.isLoading.value = false;
+                                  Get.to(() => OnbordingScreen());
                                 KeyChainManager _keyChainManager =
                                     KeyChainManager.getInstance();
                                 var _atSignsList = await _keyChainManager
@@ -123,19 +125,7 @@ class Profile extends StatelessWidget {
                                   _keyChainManager
                                       .deleteAtSignFromKeychain(element);
                                 });
-                                  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  //   content: Text(
-                                  //   'You have been logged out',
-                                  //   textAlign: TextAlign.center,
-                                  //   )));
 
-                                Get.to(() => OnbordingScreen());
-
-                                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                //     content: Text(
-                                //       'You have been logged out',
-                                //       textAlign: TextAlign.center,
-                                //     )));
                               }
                             },
                             child: Row(children: <Widget>[

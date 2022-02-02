@@ -170,9 +170,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                       GestureDetector(
                           onTap: () {
-                            // _profilescreen();
                             Get.to(() => Profile(myAtSign: activeAtSign,myImage: widget.myImage,myName: widget.myName,));
-                            // _ProfileState();
                           },
                           child: widget.myImage,),
                       SizedBox(

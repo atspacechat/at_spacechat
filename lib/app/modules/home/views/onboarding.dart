@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -41,6 +42,7 @@ class OnbordingScreenState extends State<OnbordingScreen> {
   Map<dynamic, dynamic> mydetails = new Map<dynamic, dynamic>();
   initialimage myImage = new initialimage();
   String myName = "";
+  Controller1 c = Get.put(Controller1());
   // initialimage myImage = new initialimage();
   // String myName = "";
 
@@ -49,6 +51,7 @@ class OnbordingScreenState extends State<OnbordingScreen> {
     AtService.getInstance()
         .getAtClientPreference()
         .then((AtClientPreference value) => atClientPrefernce = value);
+    c.isLoading.value = false;
     super.initState();
   }
 
@@ -63,7 +66,7 @@ class OnbordingScreenState extends State<OnbordingScreen> {
         resizeToAvoidBottomInset: false,
         body: Builder(
           builder: (context) => Stack(
-            children: <Widget>[
+            children:[
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -75,17 +78,54 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                   ),
                 ),
               ),
-              Container(
+              Obx(() => Container(
                 height: double.infinity,
                 width: double.infinity,
                 alignment: Alignment.center,
-                child: SingleChildScrollView(
+                color: (c.isLoading==true)
+                ?Colors.black.withOpacity(0.35)
+                :Colors.transparent,
+                child: (c.isLoading==true)
+                ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                    Container(
+                    // height: 40.toHeight,
+                    // width: 40.toHeight,
+                      child: CircularProgressIndicator(),
+                    ),
+                    Container(
+                    width: 30.toWidth,
+                    ),
+                    Container(
+                    // height: 40.toHeight,
+                      child: Text(
+                    "Loading your planet ...",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                    fontSize: 15.toFont,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+                    maxLines: null,
+                    )
+                    )
+                    ]
+                    )
+                : Container())),
+
+              Obx(() => Container(
+                height: double.infinity,
+                width: double.infinity,
+                alignment: Alignment.center,
+                child:SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(
                     horizontal: 25.0.toWidth,
                     vertical: 55.0.toHeight,
                   ),
-                  child: Column(
+                  child: (c.isLoading==true)
+                    ? Container()
+                    :Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -125,6 +165,7 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                         onboard:
                                             (Map<String?, AtClientService> value,
                                             String? atsign) async{
+                                          c.isLoading.value = true;
                                           AtService.getInstance()
                                               .atClientServiceMap = value;
                                           _logger.finer(
@@ -153,8 +194,17 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                             myImage = initialimage(atsign: atsign);
                                             myName = atsign.toString();
                                           }
-                                          Get.to(()=>HomeScreen(myImage: myImage,myName: myName,));
-                                        },
+                                          Timer.periodic(Duration(seconds: 1), (timer) {
+                                            // do something or call a function
+                                            if(myName != "") {
+                                              timer.cancel();
+                                              // c.isLoading.value = false;
+                                              Get.to(() =>
+                                                  HomeScreen(myImage: myImage,
+                                                    myName: myName,));
+                                            }
+                                          });
+                                          },
                                         onError: (Object? error) {
                                           _logger.severe(
                                               'Onboarding throws $error error');
@@ -186,19 +236,22 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                 ),
                                 SizedBox(height: 10.toHeight,),
                                 MaterialButton(
-                                  onPressed: () async {
-                                            KeyChainManager _keyChainManager =
-                                            KeyChainManager.getInstance();
-                                            var _atSignsList =
-                                            await _keyChainManager.getAtSignListFromKeychain();
-                                            _atSignsList?.forEach((element) {
-                                            _keyChainManager.deleteAtSignFromKeychain(element);
-                                            });
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                              content: Text(
+                                  onPressed:() async {
+                                      KeyChainManager _keyChainManager =
+                                      KeyChainManager.getInstance();
+                                      var _atSignsList =
+                                      await _keyChainManager
+                                          .getAtSignListFromKeychain();
+                                      _atSignsList?.forEach((element) {
+                                        _keyChainManager
+                                            .deleteAtSignFromKeychain(element);
+                                      });
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                            content: Text(
                                             'You have been logged out',
                                             textAlign: TextAlign.center,
-                                            )));
+                                          )));
+
                                   },
 
                                   child: Text(
@@ -227,11 +280,14 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                   ),
                 ),
               ),
-
-            ],
+              )],
           ),
         ),
       ),
     );
   }
+}
+
+class Controller1 extends GetxController {
+  RxBool isLoading = false.obs;
 }
