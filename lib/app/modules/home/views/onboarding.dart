@@ -13,7 +13,10 @@ import 'package:spacesignal/utils/initial_image.dart';
 import '../../../../sdk_service.dart';
 import 'package:get/get.dart';
 class OnbordingScreen extends StatefulWidget {
-  const OnbordingScreen({Key? key}) : super(key: key);
+  // String? snackBarText;
+  // OnbordingScreen({Key? key,
+  //   this.snackBarText,
+  // }) : super(key: key);
 
   @override
   OnbordingScreenState createState() => OnbordingScreenState();
@@ -35,6 +38,9 @@ class OnbordingScreenState extends State<OnbordingScreen> {
   late AtClientPreference atClientPrefernce;
   final _logger = AtSignLogger('Spacesignal');
   AtService clientSdkService = AtService.getInstance();
+  Map<dynamic, dynamic> mydetails = new Map<dynamic, dynamic>();
+  initialimage myImage = new initialimage();
+  String myName = "";
   // initialimage myImage = new initialimage();
   // String myName = "";
 
@@ -51,6 +57,7 @@ class OnbordingScreenState extends State<OnbordingScreen> {
     SizeConfig().init(context);
     Color color1 = HexColor("45377D");
     Color color3 = HexColor("FFFFFF");
+
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -117,47 +124,51 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                         appColor: color1,
                                         onboard:
                                             (Map<String?, AtClientService> value,
-                                            String? atsign) {
+                                            String? atsign) async{
                                           AtService.getInstance()
                                               .atClientServiceMap = value;
                                           _logger.finer(
                                               'Successfully onboarded $atsign');
                                           clientSdkService.currentAtsign =  atsign;
+                                          ContactService _contactService = ContactService();
+                                          await _contactService.initContactsService('root.atsign.org', 64);
+                                          if(_contactService.loggedInUserDetails!.tags != null) {
+                                            mydetails = _contactService.loggedInUserDetails!.tags!.cast<dynamic, dynamic>();
+                                            print(mydetails);
+                                            if (mydetails["image"] == null) {
+                                              myImage = initialimage(atsign: atsign);
+                                            } else {
+                                              myImage = initialimage(
+                                                  image: Uint8List.fromList(mydetails['image'].cast<int>()),
+                                                  atsign: atsign);
+                                            }
+                                            if (mydetails["name"] == null) {
+                                              myName = atsign.toString();
+                                              // loadingDetails = false;
+                                            } else {
+                                              myName = mydetails["name"];
+                                              // loadingDetails = false;
+                                            }
+                                          }else{
+                                            myImage = initialimage(atsign: atsign);
+                                            myName = atsign.toString();
+                                          }
+                                          Get.to(()=>HomeScreen(myImage: myImage,myName: myName,));
                                         },
-
                                         onError: (Object? error) {
                                           _logger.severe(
                                               'Onboarding throws $error error');
+                                          // showLoaderDialog(context);
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                              content: Text(
+                                                'Please check your internet and try again later.',
+                                                textAlign: TextAlign.center,
+                                              )));
                                         },
-                                        nextScreen: (HomeScreen()),
+                                        // nextScreen: (HomeScreen(myImage: myImage,myName: myName,)),
                                         appAPIKey: MixedConstants.apiKey,
                                         rootEnvironment:
                                         RootEnvironment.Production);
-                                        // String? currentAtSign = await clientSdkService.getAtSign();
-                                        // ContactService _contactService = ContactService();
-                                        // _contactService!.initContactsService('root.atsign.org', 64).then((result){
-                                        //     String activeAtSign = "@denise";//currentAtSign!;
-                                        //     _contactService!.getContactDetails(activeAtSign,"").then((Map<String, dynamic> result){
-                                        //   setState(() {
-                                        //     var mydetails = result;
-                                        //     print(mydetails);
-                                        //     if (mydetails["image"]==null){
-                                        //       myImage = initialimage(atsign: activeAtSign);
-                                        //     }else{
-                                        //       myImage = initialimage(image: Uint8List.fromList(mydetails['image'].cast<int>()),
-                                        //           atsign: activeAtSign);
-                                        //     }
-                                        //     if(mydetails["name"]==null){
-                                        //       myName = activeAtSign;
-                                        //     }else{
-                                        //       myName = mydetails["name"];
-                                        //     }
-                                        //   });
-                                        //   Get.to(() => HomeScreen(myImage:myImage, myName: myName,));
-                                        //
-                                        // });
-                                        // });
-                                        //
                                   },
 
                                   child: Text(
@@ -184,7 +195,7 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                             _keyChainManager.deleteAtSignFromKeychain(element);
                                             });
                                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                            content: Text(
+                                              content: Text(
                                             'You have been logged out',
                                             textAlign: TextAlign.center,
                                             )));
@@ -215,7 +226,8 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                     ],
                   ),
                 ),
-              )
+              ),
+
             ],
           ),
         ),

@@ -23,6 +23,14 @@ import 'package:spacesignal/app/modules/chat/controllers/chat_service.dart';
 import 'package:spacesignal/app/modules/chat/utils/message_model.dart';
 
 class HomeScreen extends StatefulWidget {
+  final initialimage myImage;
+  final String myName;
+  const HomeScreen(
+      {Key? key,
+        required this.myName,
+        required this.myImage,
+})
+      : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -55,10 +63,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   ContactService? _contactService;
   ChatService? _chatService;
   var blocked_list = [];
-  // bool isReply = false;
-  Map<dynamic, dynamic> mydetails = new Map<dynamic, dynamic>();
-  initialimage myImage = new initialimage();
-  String myName = "";
+
+  // Map<dynamic, dynamic> mydetails = new Map<dynamic, dynamic>();
+  // initialimage myImage = new initialimage();
+  // String myName = "";
 
 
   void reqAsignal() {
@@ -91,28 +99,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         }
         print(blocked_list);
         // print(_contactService!.loggedInUserDetails!.tags);
-        setState(() {
-          if(_contactService!.loggedInUserDetails!.tags != null) {
-            mydetails = _contactService!.loggedInUserDetails!.tags!.cast<
-                dynamic,
-                dynamic>();
-            print(mydetails);
-            if (mydetails["image"] == null) {
-              myImage = initialimage(atsign: activeAtSign);
-            } else {
-              myImage = initialimage(
-                  image: Uint8List.fromList(mydetails['image'].cast<int>()),
-                  atsign: activeAtSign);
-            }
-            if (mydetails["name"] == null) {
-              myName = activeAtSign;
-              // loadingDetails = false;
-            } else {
-              myName = mydetails["name"];
-              // loadingDetails = false;
-            }
-          }
-        });
+        // setState(() {
+        //   if(_contactService!.loggedInUserDetails!.tags != null) {
+        //     mydetails = _contactService!.loggedInUserDetails!.tags!.cast<dynamic, dynamic>();
+        //     print(mydetails);
+        //     if (mydetails["image"] == null) {
+        //       myImage = initialimage(atsign: activeAtSign);
+        //     } else {
+        //       myImage = initialimage(
+        //           image: Uint8List.fromList(mydetails['image'].cast<int>()),
+        //           atsign: activeAtSign);
+        //     }
+        //     if (mydetails["name"] == null) {
+        //       myName = activeAtSign;
+        //       // loadingDetails = false;
+        //     } else {
+        //       myName = mydetails["name"];
+        //       // loadingDetails = false;
+        //     }
+        //   }
+        // });
 
 
       });
@@ -165,10 +171,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       GestureDetector(
                           onTap: () {
                             // _profilescreen();
-                            Get.to(() => Profile(myAtSign: activeAtSign,myImage: myImage,myName: myName,));
+                            Get.to(() => Profile(myAtSign: activeAtSign,myImage: widget.myImage,myName: widget.myName,));
                             // _ProfileState();
                           },
-                          child: myImage,),
+                          child: widget.myImage,),
                       SizedBox(
                         width: 13.0.toWidth,
                       ),
@@ -180,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Container(
                               width: MediaQuery.of(context).size.width * 0.7,
                               child: Text(
-                                myName,
+                                widget.myName,
                                 // "test",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -246,8 +252,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               FABBottomAppBarItem(iconData: Icons.send, text: 'Send'),
               FABBottomAppBarItem(iconData: Icons.chat, text: 'Chats'),
             ],
-            myName: myName,
-            myImage: myImage,
+            myName: widget.myName,
+            myImage: widget.myImage,
           ),
         ));
   }
@@ -824,8 +830,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                                           builder: (context) =>
                                                                               chatwithatsign(
                                                                                 contactImage: senderImage,
-                                                                                myImage: myImage,
-                                                                                myName: myName,),
+                                                                                myImage: widget.myImage,
+                                                                                myName: widget.myName,),
                                                                           settings: RouteSettings(
                                                                             arguments: chatWithAtSign.toString().substring(1),
                                                                           ),

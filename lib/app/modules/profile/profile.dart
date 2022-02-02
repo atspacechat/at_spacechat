@@ -114,7 +114,6 @@ class Profile extends StatelessWidget {
                                 _launchURL2();
                               } else if (index == 3) {
                                 // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginPage()),(route) => route == null);
-                                Get.to(() => OnbordingScreen());
 
                                 KeyChainManager _keyChainManager =
                                     KeyChainManager.getInstance();
@@ -124,6 +123,19 @@ class Profile extends StatelessWidget {
                                   _keyChainManager
                                       .deleteAtSignFromKeychain(element);
                                 });
+                                  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  //   content: Text(
+                                  //   'You have been logged out',
+                                  //   textAlign: TextAlign.center,
+                                  //   )));
+
+                                Get.to(() => OnbordingScreen());
+
+                                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                //     content: Text(
+                                //       'You have been logged out',
+                                //       textAlign: TextAlign.center,
+                                //     )));
                               }
                             },
                             child: Row(children: <Widget>[
@@ -188,7 +200,7 @@ class Profile extends StatelessWidget {
                                 onPressed: () {
                                   final HomeController controllerx = Get.put<HomeController>(HomeController());
                                   controllerx.gotMessage.value = false;
-                                  Get.to(HomeScreen());
+                                  Get.to(()=>HomeScreen(myImage: myImage,myName: myName,));
                                 },
                               )
                             ],
