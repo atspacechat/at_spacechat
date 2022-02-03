@@ -153,7 +153,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             onPressed: () {
                               final HomeController controllerx = Get.put<HomeController>(HomeController());
                               controllerx.gotMessage.value = false;
-                              Get.to(() => HomeScreen(myName: widget.myName,myImage: widget.myImage,));
+                              Get.to(() => HomeScreen(myName: widget.myName,myImage: widget.myImage,myAtSign: activeAtSign.toString(),));
                             },
                           ),
                           // IconButton(

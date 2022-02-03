@@ -14,9 +14,9 @@ import 'package:at_common_flutter/services/size_config.dart';
 import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
-  initialimage myImage = new initialimage();
-  String myName = "me";
-  String myAtSign = "";
+  final initialimage myImage;
+  final String myName;
+  final String myAtSign;
   Profile(
       {Key? key,
         required this.myName,
@@ -190,7 +190,7 @@ class Profile extends StatelessWidget {
                                 onPressed: () {
                                   final HomeController controllerx = Get.put<HomeController>(HomeController());
                                   controllerx.gotMessage.value = false;
-                                  Get.to(()=>HomeScreen(myImage: myImage,myName: myName,));
+                                  Get.to(()=>HomeScreen(myImage: myImage,myName: myName,myAtSign: myAtSign,));
                                 },
                               )
                             ],

@@ -25,10 +25,12 @@ import 'package:spacesignal/app/modules/chat/utils/message_model.dart';
 class HomeScreen extends StatefulWidget {
   final initialimage myImage;
   final String myName;
+  final String myAtSign;
   const HomeScreen(
       {Key? key,
         required this.myName,
         required this.myImage,
+        required this.myAtSign,
 })
       : super(key: key);
   @override
@@ -52,21 +54,11 @@ class HexColor extends Color {
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   AtService clientSdkService = AtService.getInstance();
   final HomeController control = Get.put<HomeController>(HomeController());
-
-  // var _contactService = ContactService();
-  // ClientSdkService clientSdkService = ClientSdkService.getInstance();
   String activeAtSign = "";
   late GlobalKey<ScaffoldState> scaffoldKey;
-  // SignalService _signalService = SignalService();
-  // String message;
-  int presstime = 1;
   ContactService? _contactService;
   ChatService? _chatService;
   var blocked_list = [];
-
-  // Map<dynamic, dynamic> mydetails = new Map<dynamic, dynamic>();
-  // initialimage myImage = new initialimage();
-  // String myName = "";
 
 
   void reqAsignal() {
@@ -82,6 +74,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      // String currentAtSign = (await clientSdkService.getAtSign())!;
+      // print("current"+currentAtSign);
       controllerx.gotMessage.value = false;
       _contactService = ContactService();
       blocked_list = [];
@@ -98,37 +92,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           );
         }
         print(blocked_list);
-        // print(_contactService!.loggedInUserDetails!.tags);
-        // setState(() {
-        //   if(_contactService!.loggedInUserDetails!.tags != null) {
-        //     mydetails = _contactService!.loggedInUserDetails!.tags!.cast<dynamic, dynamic>();
-        //     print(mydetails);
-        //     if (mydetails["image"] == null) {
-        //       myImage = initialimage(atsign: activeAtSign);
-        //     } else {
-        //       myImage = initialimage(
-        //           image: Uint8List.fromList(mydetails['image'].cast<int>()),
-        //           atsign: activeAtSign);
-        //     }
-        //     if (mydetails["name"] == null) {
-        //       myName = activeAtSign;
-        //       // loadingDetails = false;
-        //     } else {
-        //       myName = mydetails["name"];
-        //       // loadingDetails = false;
-        //     }
-        //   }
-        // });
-
-
       });
-      String? currentAtSign = await clientSdkService.getAtSign();
-      activeAtSign = currentAtSign!;
+      activeAtSign = widget.myAtSign;//(await clientSdkService.getAtSign())!;
       _chatService = ChatService();
       var atClientManager = AtService.getInstance().atClientManager;
       _chatService!.initChatService(atClientManager,activeAtSign,'root.atsign.org',64);
     });
     scaffoldKey = GlobalKey<ScaffoldState>();
+    // print("activeatsign"+activeAtSign);
     super.initState();
 
 
@@ -197,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             //给信息一个Container，指定一个宽度，让文字overflow
                             width: MediaQuery.of(context).size.width * 0.7,
                             child: Text(
-                              activeAtSign,
+                              widget.myAtSign,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 14.0.toFont,

@@ -201,7 +201,7 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                               // c.isLoading.value = false;
                                               Get.to(() =>
                                                   HomeScreen(myImage: myImage,
-                                                    myName: myName,));
+                                                    myName: myName,myAtSign: atsign.toString()));
                                             }
                                           });
                                           },
