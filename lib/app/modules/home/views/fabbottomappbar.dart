@@ -200,8 +200,10 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                           elevation: 5.0,
                           color: Colors.deepPurple,
                           onPressed: () {
-                            sharesignal(
-                                _controller.signalEditingController!.text);
+                            if(_controller.signalEditingController!.text.trim() != ""){
+                              sharesignal(
+                                  _controller.signalEditingController!.text);
+                            }
                           },
                           child: Text(
                             "Send",
