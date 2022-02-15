@@ -74,7 +74,7 @@ class HomeController extends GetxController {
     bool result = await clientSdkService.put(atKey, encodedValue);
     print(result);
     if (result == true) {
-      notifysharesignal(atKey, atKey.key);
+      await notifysharesignal(atKey, atKey.key);
       clearSignalEditingController();
       signalByMelist.clear();
 
@@ -88,10 +88,10 @@ class HomeController extends GetxController {
     print("Notification value" + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
     key.sharedWith = "@tallcaterpillar";
-    Metadata _metadata = Metadata()..ttr = -1;
-
+    Metadata _metadata = Metadata()..ttr = -1
+                                    ..ttl = 604800000;
     key.metadata = _metadata;
-    notifiService.notify(NotificationParams.forUpdate(key, value: value),
+    await notifiService.notify(NotificationParams.forUpdate(key, value: value),
         onSuccess: _onSuccessCallback,
         //TODO: Try to resent
         onError: _onErrorCallback);
@@ -102,10 +102,10 @@ class HomeController extends GetxController {
     print("Notification value " + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
     // key.sharedWith = "@tallcaterpillar";
-    // Metadata _metadata = Metadata()..ttr = -1;
-    //
-    // key.metadata = _metadata;
-    notifiService.notify(NotificationParams.forUpdate(key, value: value),
+    Metadata _metadata = Metadata()..ttr = -1
+                                    ..ttl = 2629800000;
+    key.metadata = _metadata;
+    await notifiService.notify(NotificationParams.forUpdate(key, value: value),
         onSuccess: _onSuccessCallback1,
         //TODO: Try to resent
         onError: _onErrorCallback1);
@@ -113,7 +113,7 @@ class HomeController extends GetxController {
   //shared  signal by me
 //specify sharedby with the current  atsign
 
-  void wantsSignal() {
+  Future<void> wantsSignal() async{
     // searchedMessage.value = '';
     // searchedMessageAtsign.value = '';
     // A get variable initialized to null everytime this fuction calls
@@ -125,7 +125,7 @@ class HomeController extends GetxController {
     AtKey keyword = AtKey()..key = wkey;
 
     // try{
-      notifysharesignal(keyword, val);
+     await notifysharesignal(keyword, val);
     // }catch (e) {
     //   serverError(true);
     //   isLoading(false);
@@ -158,7 +158,7 @@ class HomeController extends GetxController {
       print(result);
       signalByMelist.clear();
       readSharedByMeSignal();
-      notifydeletesignal(unikey);
+      await notifydeletesignal(unikey);
     } else {
       print("Error Deleting");
     }
@@ -194,7 +194,13 @@ class HomeController extends GetxController {
             ..sharedBy = notification_atsign
             ..metadata = data;
           print(_atKey);
-          var value = await clientSdkService.get(_atKey);
+          var value = await clientSdkService.get(_atKey).catchError((e) {
+            serverError(true);
+            isLoading(false);
+            print(e.toString());
+            print(serverError);
+            print(isLoading);
+          });
           // print(value);
           // we will receive a map so have to do a json decode
           // we need the message only and the notification_atsign nothing else
@@ -211,17 +217,19 @@ class HomeController extends GetxController {
                 isLoading(false);
                 // print(searchedMessage);
                 print("Wanna Reply To $notification_atsign On Signal: $v ?");
-                print(isLoading.value);
-                print(isReply.value);
-                print(gotMessage.value);
+                // print(isLoading.value);
+                // print(isReply.value);
+                // print(gotMessage.value);
             }else{
               // serverError(true);
-              searchedMessageAtsign.value = "empty message?";
+              serverError(true);
               isLoading(false);
               // gotMessage(false);
             }
           }else{
             print("atvalue is null");
+            serverError(true);
+            isLoading(false);
           }
           // else{
           //   gotMessage(false);
@@ -229,25 +237,31 @@ class HomeController extends GetxController {
         // }
           }else{
           print("not gonna process");
-          print(isLoading.value);
-          print(isReply.value);
-          print(gotMessage.value);
+          // print(isLoading.value);
+          // print(isReply.value);
+          // print(gotMessage.value);
         }
           });
-    } catch (e, stackTrace) {
+    } catch (e) {
+      serverError(true);
+      isLoading(false);
       print(e.toString());
+      print(serverError);
+      print(isLoading);
     }
   }
 
   Future<void> notifydeletesignal(String key) async {
     NotificationService notificationService =
         AtService.getInstance().atClientManager.notificationService;
-    Metadata _metadata = Metadata()..ttr = -1;
+    Metadata _metadata = Metadata()..ttr = -1
+                                    ..ttl = 604800000;
+
     AtKey atKey = AtKey()
       ..key = key
       ..sharedWith = "@tallcaterpillar"
       ..metadata = _metadata;
-    notificationService.notify(
+    await notificationService.notify(
       NotificationParams.forDelete(atKey),
     );
   }

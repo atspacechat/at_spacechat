@@ -259,6 +259,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             color: Colors.grey,
                           ),
                           onPressed: () {
+                            controllerx.isReply.value = false;
                             Navigator.pop(context);
                           },
                           // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -393,17 +394,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     ),
                                     height: 120.toHeight,
                                     width: 400.toWidth,
-                                    child: controllerx.serverError.value
-                                      ? Text(
-                                        'Sorry! The server is taking a break or your internet is unstable. Please try again later.',
-                                        // message,
-                                        style: TextStyle(
-                                            fontSize: 15.toFont,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF584797)),
-                                        maxLines: null,
-                                        )
-                                      : Text(
+                                    child: Text(
                                       'Sorry! Your message got lost in the back hole. Please try again ~',
                                       // message,
                                       style: TextStyle(
@@ -460,7 +451,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   //:Colors.grey,
                                                   //padding: EdgeInsets.symmetric(vertical: 15.0),
                                                   onPressed: () {
-                                                    // Navigator.of(context).pop(controller.text.toString());
+                                                    controllerx.gotMessage.value = false;
                                                     Navigator.pop(context);
                                                   },
                                                   child: Text(
@@ -520,6 +511,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                         // a new search
                                                         // reqAsignal();
                                                         // controllerx.isLoading(true);
+                                                        controllerx.gotMessage.value = false;
                                                         Navigator.pop(context);
                                                       },
                                                       child: Text(
@@ -768,7 +760,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                                                             // print("check add contact "+_contactService!.getAtSignError);
                                                             String chatWithAtSign = sender;
-                                                            _notifysender(chatWithAtSign);
+                                                            await _notifysender(chatWithAtSign);
                                                             _chatService!.setAtsignToChatWith(chatWithAtSign,false,"",[]);
                                                             // _chatService!.getChatHistory(atsign:chatWithAtSign);
                                                             await _chatService!.getMyChatHistory();
@@ -845,7 +837,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  _notifysender(String sender) async {
+  Future<void>_notifysender(String sender) async {
     if (sender != null) {
       String value= "aseperatoratspacesignal"+ DateTime.now().millisecondsSinceEpoch.toString();
       var metadata = Metadata()..ttr = -1;
@@ -854,15 +846,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ..metadata = metadata
         ..sharedBy = activeAtSign
         ..sharedWith = sender;
-      // var operation = OperationEnum.update;
-      // var notifiService = clientSdkService.atClientManager.notificationService;
-      // notifiService.notify(NotificationParams.forUpdate(atKey, value: value));
-      // await _contactService.notify(atKey, value, operation);
-      var re = controllerx.notifysender(atKey,value);
-      // print(atKey);
-      // print(atKey.toString());
-      // print("notify==>"+ value);
-      // print(re);
+      var re = await controllerx.notifysender(atKey,value);
     }
   }
 }

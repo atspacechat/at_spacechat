@@ -25,29 +25,9 @@ class Profile extends StatelessWidget {
       })
       : super(key: key);
 
-  // @override
-  // _ProfileState createState() => _ProfileState();
-// }
-
-// class _ProfileState extends StatelessWidget {
-  // ProgressDialog? dialog;
-  // ClientSdkService clientSdkService = ClientSdkService.getInstance();
 
   GlobalKey<ScaffoldState>? scaffoldKey;
   PanelController _pc2 = new PanelController();
-
-
-  // @override
-  // void initState() {
-  //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-  //     String? currentAtSign = await AtService.getInstance().getAtSign();
-  //     setState(() {
-  //       activeAtSign = currentAtSign!;
-  //     });
-  //   });
-  //   scaffoldKey = GlobalKey<ScaffoldState>();
-  //   super.initState();
-  // }
 
   @override
   final HomeController controller = Get.put<HomeController>(HomeController());
@@ -58,10 +38,6 @@ class Profile extends StatelessWidget {
 
     return Material(
         child: SlidingUpPanel(
-            // panelBuilder: (scrollController)=> DefaultTabController(
-            //     length: 2,
-            //     child: Scaffold(
-            //         appBar:AppBar(title: Icon(Icons.drag_handle),centerTitle: true,))),
             minHeight: 0,
             maxHeight: MediaQuery.of(context).size.height * 0.75,
             controller: _pc2,
@@ -83,13 +59,7 @@ class Profile extends StatelessWidget {
               Container(
                   padding: const EdgeInsets.only(
                       top: 20, left: 35, right: 35, bottom: 20),
-                  // child:Center(
-                  //   child: Column(
-                  //       children: <Widget>[
-                  //         // Container(
-                  //         //   height: 35.toHeight,
-                  //         // ),
-                  //         Container(
+
                   child: ListView.separated(
                       itemCount: 4,
                       physics: NeverScrollableScrollPhysics(),
@@ -369,8 +339,8 @@ class Profile extends StatelessWidget {
                                             ),
                                             middleText:
                                             'Are you sure you want to delete this message from outer space?',
-                                            onConfirm: () {
-                                              controller.recallSignal(key);
+                                            onConfirm: () async {
+                                              await controller.recallSignal(key);
                                               Navigator.pop(context);
                                             },
                                             textConfirm: 'Delete',

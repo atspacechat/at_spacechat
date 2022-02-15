@@ -27,16 +27,22 @@ dependencies:
   logger: ^1.1.0
   at_commons: ^3.0.2
   at_onboarding_flutter: ^3.1.4
-  at_client_mobile: ^3.1.4
-  at_client: ^3.0.8
+#  at_client_mobile: ^3.1.4
+#  at_client: ^3.0.8
 
 
-#dependency_overrides:
-#  at_client:
-#    git:
-#      url: https://github.com/atsign-foundation/at_client_sdk.git
-#      path: at_client
-#      ref: fix_format_exception
+dependency_overrides:
+  at_client:
+    git:
+      url: https://github.com/atsign-foundation/at_client_sdk.git
+      path: at_client
+      ref: switch_atsign_bug
+
+  at_client_mobile:
+    git:
+      url: https://github.com/atsign-foundation/at_client_sdk.git
+      path: at_client_mobile
+      ref: switch_atsign_bug
 
 dev_dependencies: 
   flutter_lints: ^1.0.0
