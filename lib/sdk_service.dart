@@ -38,7 +38,7 @@ class AtService {
   }
 
   Future<bool> makeAtSignPrimary(String atsign) async {
-    atClientManager.setCurrentAtSign(
+    await atClientManager.setCurrentAtSign(
         atsign, MixedConstants.appNamespace, AtClientPreference());
     currentAtsign = atsign;
     return await _keyChainManager.makeAtSignPrimary(atsign);

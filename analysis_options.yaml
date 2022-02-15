@@ -1,4 +1,10 @@
 
 linter:
   rules:
-    
+    - unawaited_futures
+#analyzer:
+#  language:
+#    strict-casts: true
+#    strict-inference: true
+#    strict-raw-types: true
+#    unawaited_futures : true

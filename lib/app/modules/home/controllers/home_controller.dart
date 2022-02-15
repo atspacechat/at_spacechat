@@ -79,7 +79,7 @@ class HomeController extends GetxController {
       signalByMelist.clear();
 
       //TODO: readsignal shouldnt  be call here cuz after delivering  the notif it should be read so that user can perform operation on to them
-      readSharedByMeSignal();
+      await readSharedByMeSignal();
     }
   }
 
@@ -88,8 +88,7 @@ class HomeController extends GetxController {
     print("Notification value" + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
     key.sharedWith = "@tallcaterpillar";
-    Metadata _metadata = Metadata()..ttr = -1
-                                    ..ttl = 604800000;
+    Metadata _metadata = Metadata()..ttr = -1; //cached
     key.metadata = _metadata;
     await notifiService.notify(NotificationParams.forUpdate(key, value: value),
         onSuccess: _onSuccessCallback,
@@ -103,7 +102,8 @@ class HomeController extends GetxController {
     var notifiService = clientSdkService.atClientManager.notificationService;
     // key.sharedWith = "@tallcaterpillar";
     Metadata _metadata = Metadata()..ttr = -1
-                                    ..ttl = 2629800000;
+                                    ..ttl = 2629800000
+                                    ..ccd = true;
     key.metadata = _metadata;
     await notifiService.notify(NotificationParams.forUpdate(key, value: value),
         onSuccess: _onSuccessCallback1,
@@ -157,7 +157,7 @@ class HomeController extends GetxController {
     if (result == true) {
       print(result);
       signalByMelist.clear();
-      readSharedByMeSignal();
+      await readSharedByMeSignal();
       await notifydeletesignal(unikey);
     } else {
       print("Error Deleting");
@@ -254,19 +254,18 @@ class HomeController extends GetxController {
   Future<void> notifydeletesignal(String key) async {
     NotificationService notificationService =
         AtService.getInstance().atClientManager.notificationService;
-    Metadata _metadata = Metadata()..ttr = -1
-                                    ..ttl = 604800000;
+    // Metadata _metadata = Metadata();
 
     AtKey atKey = AtKey()
       ..key = key
-      ..sharedWith = "@tallcaterpillar"
-      ..metadata = _metadata;
+      ..sharedWith = "@tallcaterpillar";
+      // ..metadata = _metadata;
     await notificationService.notify(
       NotificationParams.forDelete(atKey),
     );
   }
 
-  onerror(notificationResult) {
+  void onerror(notificationResult) {
     print(notificationResult);
 
     logger.d('Error message');
@@ -288,11 +287,10 @@ class HomeController extends GetxController {
     print("faild to notify the sender ");
     print(notificationResult.toString());
   }
-  onsuccess(notificationResult) {
+  void onsuccess(notificationResult) {
     // TODO: call readSignal();
     logger.d('Success message');
     print(notificationResult);
-
     readSharedByMeSignal();
   }
 }

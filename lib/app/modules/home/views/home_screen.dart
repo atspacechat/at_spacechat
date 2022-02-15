@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       controllerx.gotMessage.value = false;
       _contactService = ContactService();
       blocked_list = [];
-      _contactService!.initContactsService('root.atsign.org', 64)
+      await _contactService!.initContactsService('root.atsign.org', 64)
           .then((result){
         blocked_list = [];
         if(_contactService!.blockContactList.length>0){
@@ -395,7 +395,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     height: 120.toHeight,
                                     width: 400.toWidth,
                                     child: Text(
-                                      'Sorry! Your message got lost in the back hole. Please try again ~',
+                                      'Sorry! Your message got lost in the black hole. Please try again ~',
                                       // message,
                                       style: TextStyle(
                                           fontSize: 15.toFont,
@@ -787,7 +787,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                                         print(controllerx.isLoading.value);
                                                                         print(controllerx.isReply.value);
                                                                         print(controllerx.gotMessage.value);
-                                                                        Navigator.push(context, MaterialPageRoute(
+                                                                        await Navigator.push(context, MaterialPageRoute(
                                                                           builder: (context) =>
                                                                               chatwithatsign(
                                                                                 contactImage: senderImage,

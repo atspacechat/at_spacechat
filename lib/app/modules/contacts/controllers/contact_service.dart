@@ -307,7 +307,7 @@ class ContactService {
     try {
       var result = await atContactImpl.delete(atSign);
       print('delete result => $result');
-      fetchContacts();
+      await fetchContacts();
       return result;
     } catch (error) {
       print('error in delete atsign:$error');
@@ -364,7 +364,7 @@ class ContactService {
           print('error to add contact => $e');
         });
         print(result);
-        fetchContacts();
+        await fetchContacts();
         return true;
       } else {
         return false;
@@ -427,7 +427,7 @@ class ContactService {
           print('error to add contact => $e');
         });
         print(result);
-        fetchContacts();
+        await fetchContacts();
         return details;
       } else {
         return contactDetails;

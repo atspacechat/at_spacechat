@@ -75,7 +75,7 @@ class Profile extends StatelessWidget {
                               //   // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => OnboardingScreen()),(route) => route == null);
                               // } else
                                 if (index == 0) {
-                                Navigator.of(context).push(MaterialPageRoute(
+                                await Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         BlockedScreen()));
                               } else if (index == 1) {
@@ -86,7 +86,7 @@ class Profile extends StatelessWidget {
                                 // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginPage()),(route) => route == null);
                                   Controller1 c = Get.put(Controller1());
                                   c.isLoading.value = false;
-                                  Get.to(() => OnbordingScreen());
+                                  await Get.to(() => OnbordingScreen());
                                 KeyChainManager _keyChainManager =
                                     KeyChainManager.getInstance();
                                 var _atSignsList = await _keyChainManager
