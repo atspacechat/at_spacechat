@@ -63,7 +63,8 @@ class HomeController extends GetxController {
     String unikey = await data['unisignal'];
     var metadata = Metadata()
       ..isPublic = true
-      ..ttl = 604800000; // 1 week to live
+      ..ttl = 604800000
+      ..ccd = true; // 1 week to live
 
     AtKey atKey = AtKey()
       ..key = unikey

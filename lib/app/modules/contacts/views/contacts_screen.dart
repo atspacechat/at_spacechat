@@ -80,6 +80,7 @@ class _ContactScreenState extends State<ContactScreen> {
   bool errorOcurred = false;
   late ChatService _chatService;
   final String storageKey = 'atspacesignalchatHistory.';
+  var loading_control = new loading_controller();
 
   List<AtContact> selectedList = [];
   @override
@@ -287,7 +288,28 @@ class _ContactScreenState extends State<ContactScreen> {
                                                           showDialog(
                                                               context: context,
                                                               builder: (context) =>
-                                                                  AlertDialog(
+                                                                  Obx(() => Container(
+                                                                      child: loading_control.loading.value
+                                                                          ? AlertDialog(
+                                                                            content: Container(
+                                                                              child:Row(children: <Widget>[
+                                                                                CircularProgressIndicator(),
+                                                                                Container(
+                                                                                  height: 10.toHeight,
+                                                                                  width: 30.toWidth,
+                                                                                ),
+                                                                                Text(
+                                                                                  "Recalling ...",
+                                                                                  textAlign: TextAlign.right,
+                                                                                  style: TextStyle(
+                                                                                      fontSize: 15.toFont,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                      color: Color(0xFF584797)),
+                                                                                  maxLines: null,
+                                                                                )
+                                                                              ])
+                                                                      ))
+                                                                    : AlertDialog(
                                                                       contentPadding:
                                                                           EdgeInsets
                                                                               .only(
@@ -322,6 +344,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                   color: Colors.grey,
                                                                                 ),
                                                                                 onPressed: () {
+                                                                                  loading_control.loading.value = false;
                                                                                   Navigator.pop(context);
                                                                                 },
                                                                                 backgroundColor: Colors.white,
@@ -329,6 +352,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                 elevation: 0.0,
                                                                               ),
                                                                             ),
+
                                                                             Container(
                                                                                 height: 40.toHeight,
                                                                                 child: Icon(
@@ -386,6 +410,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                 ),
                                                                                                 color: Colors.white,
                                                                                                 onPressed: () {
+                                                                                                  loading_control.loading.value=false;
                                                                                                   Navigator.pop(context);
                                                                                                 },
                                                                                                 child: Text(
@@ -416,7 +441,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                 elevation: 5.0,
                                                                                                 color: Colors.red, //Color(0xFF584797)
                                                                                                 onPressed: () async {
+                                                                                                  loading_control.loading.value = true;
                                                                                                   await ChatService().deleteMessages(_filteredList[index]!.contact!.atSign.toString());
+                                                                                                  loading_control.loading.value = false;
                                                                                                   Navigator.pop(context);
                                                                                                 },
                                                                                                 child: Text(
@@ -430,7 +457,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                 ))),
                                                                                       ]))
                                                                                 ]))
-                                                                          ]))));
+                                                                          ]))))));
                                                         },
                                                       ),
                                                       IconSlideAction(
@@ -443,7 +470,28 @@ class _ContactScreenState extends State<ContactScreen> {
                                                           showDialog(
                                                               context: context,
                                                               builder: (context) =>
-                                                                  AlertDialog(
+                                                              Obx(() => Container(
+                                                              child: loading_control.loading.value
+                                                                  ? AlertDialog(
+                                                                  content: Container(
+                                                                      child:Row(children: <Widget>[
+                                                                        CircularProgressIndicator(),
+                                                                        Container(
+                                                                          height: 10.toHeight,
+                                                                          width: 30.toWidth,
+                                                                        ),
+                                                                        Text(
+                                                                          "Blocking ...",
+                                                                          textAlign: TextAlign.right,
+                                                                          style: TextStyle(
+                                                                              fontSize: 15.toFont,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              color: Color(0xFF584797)),
+                                                                          maxLines: null,
+                                                                        )
+                                                                      ])
+                                                                  ))
+                                                                  :AlertDialog(
                                                                       contentPadding:
                                                                           EdgeInsets
                                                                               .only(
@@ -478,6 +526,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                   color: Colors.grey,
                                                                                 ),
                                                                                 onPressed: () {
+                                                                                  loading_control.loading.value = false;
                                                                                   Navigator.pop(context);
                                                                                 },
                                                                                 backgroundColor: Colors.white,
@@ -542,6 +591,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                 ),
                                                                                                 color: Colors.white,
                                                                                                 onPressed: () {
+                                                                                                  loading_control.loading.value = false;
                                                                                                   Navigator.pop(context);
                                                                                                 },
                                                                                                 child: Text(
@@ -572,10 +622,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                 elevation: 5.0,
                                                                                                 color: Colors.red, //Color(0xFF584797)
                                                                                                 onPressed: () async {
-                                                                                                  // _deletechathistory();
+                                                                                                  loading_control.loading.value = true;
                                                                                                   await ChatService().deleteMessages(_filteredList[index]!.contact!.atSign.toString());
                                                                                                   // await _contactService!.deleteAtSign(atSign: _filteredList[index].atSign);
                                                                                                   await _contactService!.blockUnblockContact(contact: _filteredList[index]!.contact!, blockAction: true);
+                                                                                                  loading_control.loading.value = false;
                                                                                                   Navigator.pop(context);
                                                                                                 },
                                                                                                 child: Text(
@@ -589,7 +640,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                 ))),
                                                                                       ]))
                                                                                 ]))
-                                                                          ]))));
+                                                                          ]))))));
                                                         },
                                                       ),
                                                       IconSlideAction(
@@ -601,7 +652,28 @@ class _ContactScreenState extends State<ContactScreen> {
                                                           showDialog(
                                                               context: context,
                                                               builder: (context) =>
-                                                                  AlertDialog(
+                                                              Obx(() => Container(
+                                                              child: loading_control.loading.value
+                                                                  ? AlertDialog(
+                                                                  content: Container(
+                                                                      child:Row(children: <Widget>[
+                                                                        CircularProgressIndicator(),
+                                                                        Container(
+                                                                          height: 10.toHeight,
+                                                                          width: 30.toWidth,
+                                                                        ),
+                                                                        Text(
+                                                                          "Deleting ...",
+                                                                          textAlign: TextAlign.right,
+                                                                          style: TextStyle(
+                                                                              fontSize: 15.toFont,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              color: Color(0xFF584797)),
+                                                                          maxLines: null,
+                                                                        )
+                                                                      ])
+                                                                  ))
+                                                                  :AlertDialog(
                                                                       contentPadding:
                                                                           EdgeInsets
                                                                               .only(
@@ -636,6 +708,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                   color: Colors.grey,
                                                                                 ),
                                                                                 onPressed: () {
+                                                                                  loading_control.loading.value = false;
                                                                                   Navigator.pop(context);
                                                                                 },
                                                                                 backgroundColor: Colors.white,
@@ -706,6 +779,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                     ),
                                                                                                     color: Colors.white, //:Colors.grey,
                                                                                                     onPressed: () {
+                                                                                                      loading_control.loading.value = false;
                                                                                                       Navigator.pop(context);
                                                                                                     },
                                                                                                     child: Text(
@@ -739,10 +813,12 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                                     color: Colors.red, //Color(0xFF584797)
                                                                                                     //padding: EdgeInsets.symmetric(vertical: 15.0),
                                                                                                     onPressed: () async {
-                                                                                                      Navigator.pop(context);
+                                                                                                      loading_control.loading.value = true;
                                                                                                       await ChatService().deleteMessages(_filteredList[index]!.contact!.atSign.toString());
                                                                                                       await _contactService!.deleteAtSign(atSign: _filteredList[index]!.contact!.atSign.toString());
-                                                                                                    },
+                                                                                                      loading_control.loading.value = false;
+                                                                                                      Navigator.pop(context);
+                                                                                                      },
                                                                                                     child: Text(
                                                                                                       "Yes, delete",
                                                                                                       style: GoogleFonts.quicksand(
@@ -756,7 +832,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                                     ]))
                                                                           ]))
                                                                   )
-                                                          );
+                                                          )));
                                                         },
                                                       ),
                                                     ],
@@ -908,4 +984,8 @@ class _ContactScreenState extends State<ContactScreen> {
       }
     });
   }
+}
+
+class loading_controller {
+  var loading = false.obs;
 }
