@@ -85,16 +85,24 @@ class Profile extends StatelessWidget {
                               } else if (index == 3) {
                                 // Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginPage()),(route) => route == null);
                                   Controller1 c = Get.put(Controller1());
+                                  KeyChainManager _keyChainManager =
+                                  KeyChainManager.getInstance();
+                                  var _atSignsList = await _keyChainManager
+                                      .getAtSignListFromKeychain();
+                                  _atSignsList?.forEach((element) {
+                                    _keyChainManager
+                                        .deleteAtSignFromKeychain(element);
+                                  });
                                   c.isLoading.value = false;
                                   await Get.to(() => OnbordingScreen());
-                                KeyChainManager _keyChainManager =
-                                    KeyChainManager.getInstance();
-                                var _atSignsList = await _keyChainManager
-                                    .getAtSignListFromKeychain();
-                                _atSignsList?.forEach((element) {
-                                  _keyChainManager
-                                      .deleteAtSignFromKeychain(element);
-                                });
+                                // KeyChainManager _keyChainManager =
+                                //     KeyChainManager.getInstance();
+                                // var _atSignsList = await _keyChainManager
+                                //     .getAtSignListFromKeychain();
+                                // _atSignsList?.forEach((element) {
+                                //   _keyChainManager
+                                //       .deleteAtSignFromKeychain(element);
+                                // });
 
                               }
                             },

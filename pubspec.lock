@@ -54,8 +54,8 @@ packages:
     dependency: "direct overridden"
     description:
       path: at_client
-      ref: switch_atsign_bug
-      resolved-ref: "29e1ca29e73b20b20f5bb61cd45f3ebf887cebd0"
+      ref: trunk
+      resolved-ref: "78abbe6b3a83fb2e1909c16de8a3f10356facd7f"
       url: "https://github.com/atsign-foundation/at_client_sdk.git"
     source: git
     version: "3.0.9"
@@ -63,11 +63,11 @@ packages:
     dependency: "direct overridden"
     description:
       path: at_client_mobile
-      ref: switch_atsign_bug
-      resolved-ref: "29e1ca29e73b20b20f5bb61cd45f3ebf887cebd0"
+      ref: trunk
+      resolved-ref: "78abbe6b3a83fb2e1909c16de8a3f10356facd7f"
       url: "https://github.com/atsign-foundation/at_client_sdk.git"
     source: git
-    version: "3.1.4"
+    version: "3.1.5"
   at_common_flutter:
     dependency: transitive
     description:
@@ -97,12 +97,14 @@ packages:
     source: hosted
     version: "4.0.0"
   at_lookup:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: at_lookup
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.7"
+      path: at_lookup
+      ref: trunk
+      resolved-ref: b99cf51b0761a6ddf6a0ffdc43af7ede59a03c97
+      url: "https://github.com/atsign-foundation/at_libraries.git"
+    source: git
+    version: "3.0.8"
   at_onboarding_flutter:
     dependency: "direct main"
     description:
@@ -503,6 +505,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  mutex:
+    dependency: transitive
+    description:
+      name: mutex
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   path:
     dependency: transitive
     description:

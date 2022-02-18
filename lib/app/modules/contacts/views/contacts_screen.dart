@@ -857,7 +857,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                       },
                                                       onTrailingPressed: widget
                                                           .onSendIconPressed,
-                                                      onTap: () {
+                                                      onTap: () async {
                                                         chatWithAtSign =
                                                             _filteredList[index]!.contact!
                                                                 .atSign
@@ -868,7 +868,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                             _filteredList[index]!.contact!.tags!['name'] != null
                                                             ? chatWithAtSignName = _filteredList[index]!.contact!.tags!['name']
                                                             : chatWithAtSignName = _filteredList[index]!.contact!.atSign!.substring(1);
-                                                        Navigator.push(
+                                                        await Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
                                                               builder: (context) =>

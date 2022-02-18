@@ -222,6 +222,7 @@ class ChatService {
       var a = await atClientManager.atClient;
       // print(a);
       // print(await a.get(key));
+      print(key);
       var keyValue = await a.get(key).catchError((e) {
         // print('error in get ${e.errorCode} ${e.errorMessage}');
         print('error in get my chat history');
@@ -234,7 +235,7 @@ class ChatService {
       } else {
         chatHistoryMessages = [];
       }
-      print(key);
+      // print(key);
       print(chatHistoryMessages);
     } catch (error) {
       print('Error in getting my chat -> $error');
