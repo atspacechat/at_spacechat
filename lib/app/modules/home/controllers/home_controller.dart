@@ -86,7 +86,8 @@ class HomeController extends GetxController {
 
 //  Notifying the signal to spacesignal
   Future<void> notifysharesignal(AtKey key, String? value) async {
-    print("Notification value" + value!);
+    print("Notification key "+ key.toString());
+    print("Notification value " + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
     key.sharedWith = "@tallcaterpillar";
     Metadata _metadata = Metadata()..ttr = -1; //cached
@@ -176,9 +177,8 @@ class HomeController extends GetxController {
           gotMessage.value = true;
           var keyCut =
               notification.key.substring(notification.key.indexOf('headless'));
-
+          print(keyCut);
           String sCut = keyCut.substring(0, keyCut.indexOf('*'));
-
           String atSigns = keyCut.split('*').last;
           sCut = sCut.replaceAll('headless', '');
           String notification_atsign =

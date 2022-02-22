@@ -95,8 +95,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       });
       activeAtSign = widget.myAtSign;//(await clientSdkService.getAtSign())!;
       _chatService = ChatService();
-      var atClientManager = AtService.getInstance().atClientManager;
-      _chatService!.initChatService(atClientManager,activeAtSign,'root.atsign.org',64);
+      AtClientManager atClientManager = AtService.getInstance().atClientManager;
+      // _chatService!.initChatService(atClientManager,activeAtSign,'root.atsign.org',64);
+      initializeChatService(atClientManager, activeAtSign);
     });
     scaffoldKey = GlobalKey<ScaffoldState>();
     // print("activeatsign"+activeAtSign);

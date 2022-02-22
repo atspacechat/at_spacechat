@@ -977,7 +977,7 @@ class _ContactScreenState extends State<ContactScreen> {
     // sharedKeysList.retainWhere((element) => !element.metadata!.isCached);
     sharedKeysList.forEach((element) async {
       // print(element.key.toString());
-      if (element.key == "spacesignalreplier") {
+      if (element.key == "spacesignalreplier" && element.sharedBy != activeAtSign) {
         await _contactService!.addAtSign(atSign: element.sharedBy);
         print("add a replier "+ element.sharedBy.toString());
         await _contactService!.delete(element);
