@@ -109,12 +109,12 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     // Color color = _selectedIndex == index ? widget.selectedColor : widget.color;
     final HomeController _controller =
         Get.put<HomeController>(HomeController());
-    void sharesignal(String msg) {
+    void sharesignal(String msg) async {
       var uuid = const Uuid();
 
       String unikey = MixedConstants.regex + uuid.v1();
 
-      _controller.shareSignal({'Message': msg, 'unisignal': unikey});
+      await _controller.shareSignal({'Message': msg, 'unisignal': unikey});
       Get.back();
     }
 

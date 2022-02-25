@@ -63,8 +63,7 @@ class HomeController extends GetxController {
     String unikey = await data['unisignal'];
     var metadata = Metadata()
       ..isPublic = true
-      ..ttl = 604800000
-      ..ccd = true; // 1 week to live
+      ..ttl = 604800000; // 1 week to live
 
     AtKey atKey = AtKey()
       ..key = unikey
@@ -90,7 +89,8 @@ class HomeController extends GetxController {
     print("Notification value " + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
     key.sharedWith = "@tallcaterpillar";
-    Metadata _metadata = Metadata()..ttr = -1; //cached
+    Metadata _metadata = Metadata()..ttr = -1
+      ..ttl = 604800000; //cached
     key.metadata = _metadata;
     await notifiService.notify(NotificationParams.forUpdate(key, value: value),
         onSuccess: _onSuccessCallback,
@@ -103,7 +103,8 @@ class HomeController extends GetxController {
     print("Notification value " + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
     // key.sharedWith = "@tallcaterpillar";
-    Metadata _metadata = Metadata()..ttr = -1
+    Metadata _metadata = Metadata()
+                                    // ..ttr = -1
                                     ..ttl = 2629800000
                                     ..ccd = true;
     key.metadata = _metadata;
@@ -141,6 +142,7 @@ class HomeController extends GetxController {
     response = await clientSdkService.getAtKeys2(sharedBy: currentAtsign);
     response.retainWhere((element) => !element.metadata!.isCached);
     for (AtKey atKey in response) {
+      print(atKey.toString());
       var value = await readSignalValue2(atKey);
       Map<String, dynamic> _decoded = jsonDecode(value);
       signalByMelist.add(_decoded);
@@ -255,12 +257,13 @@ class HomeController extends GetxController {
   Future<void> notifydeletesignal(String key) async {
     NotificationService notificationService =
         AtService.getInstance().atClientManager.notificationService;
-    // Metadata _metadata = Metadata();
+
+    Metadata _metadata = Metadata()..ttr = -1;
 
     AtKey atKey = AtKey()
       ..key = key
-      ..sharedWith = "@tallcaterpillar";
-      // ..metadata = _metadata;
+      ..sharedWith = "@tallcaterpillar"
+      ..metadata = _metadata;//(Metadata()..isCached=true);
     await notificationService.notify(
       NotificationParams.forDelete(atKey),
     );
