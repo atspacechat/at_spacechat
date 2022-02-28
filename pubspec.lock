@@ -51,23 +51,19 @@ packages:
     source: hosted
     version: "3.0.3"
   at_client:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
-      path: at_client
-      ref: trunk
-      resolved-ref: "78abbe6b3a83fb2e1909c16de8a3f10356facd7f"
-      url: "https://github.com/atsign-foundation/at_client_sdk.git"
-    source: git
-    version: "3.0.9"
+      name: at_client
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.12"
   at_client_mobile:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
-      path: at_client_mobile
-      ref: trunk
-      resolved-ref: "78abbe6b3a83fb2e1909c16de8a3f10356facd7f"
-      url: "https://github.com/atsign-foundation/at_client_sdk.git"
-    source: git
-    version: "3.1.5"
+      name: at_client_mobile
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.8"
   at_common_flutter:
     dependency: transitive
     description:
@@ -118,7 +114,7 @@ packages:
       name: at_persistence_secondary_server
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.15"
+    version: "3.0.16"
   at_persistence_spec:
     dependency: transitive
     description:
@@ -146,7 +142,7 @@ packages:
       name: at_utils
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.5"
+    version: "3.0.6"
   biometric_storage:
     dependency: transitive
     description:

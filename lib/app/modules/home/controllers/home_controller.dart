@@ -63,7 +63,8 @@ class HomeController extends GetxController {
     String unikey = await data['unisignal'];
     var metadata = Metadata()
       ..isPublic = true
-      ..ttl = 604800000; // 1 week to live
+      ..ttl = 604800000
+      ..ccd = true; // 1 week to live
 
     AtKey atKey = AtKey()
       ..key = unikey
@@ -90,7 +91,8 @@ class HomeController extends GetxController {
     var notifiService = clientSdkService.atClientManager.notificationService;
     key.sharedWith = "@tallcaterpillar";
     Metadata _metadata = Metadata()..ttr = -1
-      ..ttl = 604800000; //cached
+      ..ttl = 604800000
+      ..ccd = true; //cached
     key.metadata = _metadata;
     await notifiService.notify(NotificationParams.forUpdate(key, value: value),
         onSuccess: _onSuccessCallback,
