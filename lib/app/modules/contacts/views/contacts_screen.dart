@@ -27,7 +27,7 @@ import 'package:spacesignal/app/modules/contacts/controllers/init_contacts_servi
 import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 // import 'package:spacesignal/utils/init_chat_service.dart';
 import 'package:spacesignal/app/modules/contacts/views/blocked_contact.dart';
-
+import 'package:at_utils/at_utils.dart';
 import 'dart:io';
 
 import 'package:at_client_mobile/at_client_mobile.dart';
@@ -980,7 +980,10 @@ class _ContactScreenState extends State<ContactScreen> {
       if (element.key == "spacesignalreplier" && element.sharedBy != activeAtSign) {
         await _contactService!.addAtSign(atSign: element.sharedBy);
         print("add a replier "+ element.sharedBy.toString());
-        await _contactService!.delete(element);
+        element.sharedBy = AtUtils.formatAtSign(element.sharedBy);
+        var r = await _contactService!.delete(element);
+        print(element);
+        print(r);
       }
     });
   }

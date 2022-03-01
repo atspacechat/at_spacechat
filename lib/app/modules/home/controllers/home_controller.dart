@@ -106,7 +106,7 @@ class HomeController extends GetxController {
     var notifiService = clientSdkService.atClientManager.notificationService;
     // key.sharedWith = "@tallcaterpillar";
     Metadata _metadata = Metadata()
-                                    // ..ttr = -1
+                                    ..ttr = -1
                                     ..ttl = 2629800000
                                     ..ccd = true;
     key.metadata = _metadata;
