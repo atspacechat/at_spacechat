@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:at_client_mobile/at_client_mobile.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -339,19 +341,55 @@ class Profile extends StatelessWidget {
                                             Icon(Icons.delete_forever_outlined),
                                         onPressed: () {
                                           Get.defaultDialog(
-                                            title: 'Delete Message !',
+                                            title: 'Recall Message!',
                                             titleStyle: GoogleFonts.patuaOne(
                                               fontWeight: FontWeight.w600,
                                               color: Colors.deepPurple,
                                               fontSize: 25,
                                             ),
                                             middleText:
-                                            'Are you sure you want to delete this message from outer space?',
+                                            'Are you sure you want to recall this message from outer space?',
                                             onConfirm: () async {
+
+                                              Get.back();
+                                              unawaited(Get.defaultDialog(
+                                                  barrierDismissible: false,
+                                                  titlePadding: const EdgeInsets.only(
+                                                    // top: 20,
+                                                    bottom: 0,
+                                                  ),
+                                                  title: "",
+                                                  titleStyle: GoogleFonts.patuaOne(
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.deepPurple,
+                                                    fontSize: 25,
+                                                  ),
+                                                  content: Container(
+                                                      child:Row(children: <Widget>[
+                                                        Container(
+                                                          height: 10.toHeight,
+                                                          width: 30.toWidth,
+                                                        ),
+                                                        CircularProgressIndicator(),
+                                                        Container(
+                                                          height: 10.toHeight,
+                                                          width: 30.toWidth,
+                                                        ),
+                                                        Text(
+                                                          "Recalling ...",
+                                                          textAlign: TextAlign.right,
+                                                          style: TextStyle(
+                                                              fontSize: 15.toFont,
+                                                              fontWeight: FontWeight.w500,
+                                                              color: Color(0xFF584797)),
+                                                          maxLines: null,
+                                                        )
+                                                      ]))));
                                               await controller.recallSignal(key);
-                                              Navigator.pop(context);
+                                              // Navigator.pop(context);
+                                              Get.back();
                                             },
-                                            textConfirm: 'Delete',
+                                            textConfirm: 'Recall',
                                             textCancel: 'Cancel',
                                             buttonColor: Colors.deepPurple,
                                             cancelTextColor:Colors.grey,

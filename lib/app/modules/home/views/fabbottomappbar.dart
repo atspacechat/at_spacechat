@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:at_common_flutter/services/size_config.dart';
@@ -52,7 +54,6 @@ String? activeAtSign;
 
 class FABBottomAppBarState extends State<FABBottomAppBar> {
   int _selectedIndex = 0;
-
   _updateIndex(int index) {
     widget.onTabSelected!(index);
     setState(() {
@@ -109,7 +110,8 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     // Color color = _selectedIndex == index ? widget.selectedColor : widget.color;
     final HomeController _controller =
         Get.put<HomeController>(HomeController());
-    void sharesignal(String msg) async {
+
+    Future<void> sharesignal(String msg) async {
       var uuid = const Uuid();
 
       String unikey = MixedConstants.regex + uuid.v1();
@@ -127,8 +129,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
             onTap: () => {
               if (item!.text == "Chats")
                 Get.to(() => ContactScreen(myImage: widget.myImage, myName: widget.myName))
-              else
-                {
+              else{
                   Get.defaultDialog(
                     barrierDismissible: false,
                     titlePadding: const EdgeInsets.only(
@@ -141,7 +142,29 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                       color: Colors.deepPurple,
                       fontSize: 25,
                     ),
-                    content: Container(
+                    content:
+                    // Obx(() => Container(
+                    //   child: loading_control.loading.value
+                    //   ? Container(
+                    //         child:Row(children: <Widget>[
+                    //           CircularProgressIndicator(),
+                    //           Container(
+                    //             height: 10.toHeight,
+                    //             width: 30.toWidth,
+                    //           ),
+                    //           Text(
+                    //             "Sending ...",
+                    //             textAlign: TextAlign.right,
+                    //             style: TextStyle(
+                    //                 fontSize: 15.toFont,
+                    //                 fontWeight: FontWeight.w500,
+                    //                 color: Color(0xFF584797)),
+                    //             maxLines: null,
+                    //           )
+                    //         ])
+                    //     )
+                    // :
+                      Container(
                         padding: const EdgeInsets.only(
                           left: 20.0,
                           top: 0,
@@ -171,7 +194,8 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                           ),
                           controller: _controller.signalEditingController,
                         )),
-                    actions: <Widget>[
+          // )),
+                      actions: <Widget>[
                       RaisedButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
@@ -199,10 +223,47 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                               side: const BorderSide(color: Colors.deepPurple)),
                           elevation: 5.0,
                           color: Colors.deepPurple,
-                          onPressed: () {
+                          onPressed: () async {
                             if(_controller.signalEditingController!.text.trim() != ""){
-                              sharesignal(
-                                  _controller.signalEditingController!.text);
+                              // loading_control.loading.value = true;
+                              Get.back();
+                              unawaited(Get.defaultDialog(
+                                  barrierDismissible: false,
+                                  titlePadding: const EdgeInsets.only(
+                                    // top: 20,
+                                    bottom: 0,
+                                  ),
+                                  title: "",
+                                  titleStyle: GoogleFonts.patuaOne(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.deepPurple,
+                                    fontSize: 25,
+                                  ),
+                                  content: Container(
+                                      child:Row(children: <Widget>[
+                                        Container(
+                                          height: 10.toHeight,
+                                          width: 30.toWidth,
+                                        ),
+                                        CircularProgressIndicator(),
+                                        Container(
+                                          height: 10.toHeight,
+                                          width: 30.toWidth,
+                                        ),
+                                        Text(
+                                          "Sending ...",
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                              fontSize: 15.toFont,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF584797)),
+                                          maxLines: null,
+                                        )
+                                      ]))));
+                              await sharesignal(_controller.signalEditingController!.text);
+                              // Get.back();
+                              // Navigator.pop(context);
+                              // loading_control.loading.value = false;
                             }
                           },
                           child: Text(
