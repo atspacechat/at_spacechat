@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // String currentAtSign = (await clientSdkService.getAtSign())!;
       // print("current"+currentAtSign);
       controllerx.gotMessage.value = false;
+      await control.readSharedByMeSignal();
       _contactService = ContactService();
       blocked_list = [];
       await _contactService!.initContactsService('root.atsign.org', 64)

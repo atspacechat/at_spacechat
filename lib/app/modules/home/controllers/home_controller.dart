@@ -29,11 +29,14 @@ class HomeController extends GetxController {
   String? currentAtsign;
   String middlemanAtsign = "tallcaterpillar";
   @override
-  void onInit() {
-    super.onInit();
-    readSharedByMeSignal();
+
+  void onInit() async {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+      await readSharedByMeSignal();
+    });
     signalEditingController = TextEditingController();
     monitorForSignals();
+    super.onInit();
   }
 
   void clearSignalEditingController() {
@@ -140,7 +143,10 @@ class HomeController extends GetxController {
   Future<void> readSharedByMeSignal() async {
     /// need to be defined clientSdkService.atsign
     String? atSign = clientSdkService.currentAtsign;
+    signalByMelist.clear();
+    print("signal list" + signalByMelist.toString());
     List<AtKey> response;
+    print("read atsign" + currentAtsign.toString());
     response = await clientSdkService.getAtKeys2(sharedBy: currentAtsign);
     response.retainWhere((element) => !element.metadata!.isCached);
     for (AtKey atKey in response) {
@@ -151,6 +157,7 @@ class HomeController extends GetxController {
       logger
           .d('Reading Shared by me Signanl          :::' + _decoded['Message']);
     }
+    print("signal list" + signalByMelist.toString());
   }
 
   Future<void> recallSignal(String unikey) async {

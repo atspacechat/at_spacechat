@@ -7,7 +7,6 @@ import 'package:at_utils/at_logger.dart';
 import 'package:at_client_mobile/at_client_mobile.dart';
 import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 import 'package:spacesignal/app/modules/home/views/home_screen.dart';
-import 'package:spacesignal/app/modules/home/views/loading.dart';
 import 'package:spacesignal/utils/constants.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:spacesignal/utils/initial_image.dart';
@@ -166,8 +165,7 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                             (Map<String?, AtClientService> value,
                                             String? atsign) async{
                                           c.isLoading.value = true;
-                                          AtService.getInstance()
-                                              .atClientServiceMap = value;
+                                          AtService.getInstance().atClientServiceMap = value;
                                           _logger.finer(
                                               'Successfully onboarded $atsign');
                                           clientSdkService.currentAtsign =  atsign;

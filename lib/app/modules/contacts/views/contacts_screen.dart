@@ -975,18 +975,31 @@ class _ContactScreenState extends State<ContactScreen> {
     List<AtKey> sharedKeysList = await _getSharedKeys();
     print(sharedKeysList.length);
     // sharedKeysList.retainWhere((element) => !element.metadata!.isCached);
-    sharedKeysList.forEach((element) async {
-      // print(element.key.toString());
-      if (element.key == "spacesignalreplier" && element.sharedBy != activeAtSign) {
-        await _contactService!.addAtSign(atSign: element.sharedBy);
-        print("add a replier "+ element.sharedBy.toString());
-        element.sharedBy = AtUtils.formatAtSign(element.sharedBy);
-        var r = await _contactService!.delete(element);
-        print(element);
-        print(r);
-      }
-    });
+    await Future.forEach(sharedKeysList, (AtKey element) =>
+    // print(element.key.toString());
+    _deleteCachedKeys(element));
   }
+
+  Future<void> _deleteCachedKeys(AtKey element) async {
+    if (element.key == "spacesignalreplier" && element.sharedBy != activeAtSign) {
+      await _contactService!.addAtSign(atSign: element.sharedBy);
+      print("add a replier " + element.sharedBy.toString());
+      element.sharedBy = AtUtils.formatAtSign(element.sharedBy);
+      var r = await _contactService!.delete(element);
+      print(element);
+      print(r);
+    }
+  }
+    //   if (element.key == "spacesignalreplier" && element.sharedBy != activeAtSign) {
+    //     await _contactService!.addAtSign(atSign: element.sharedBy);
+    //     print("add a replier "+ element.sharedBy.toString());
+    //     element.sharedBy = AtUtils.formatAtSign(element.sharedBy);
+    //     var r = await _contactService!.delete(element);
+    //     print(element);
+    //     print(r);
+    //   }
+    // });
+  // }
 }
 
 class loading_controller {
