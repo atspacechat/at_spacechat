@@ -27,9 +27,8 @@ class HomeController extends GetxController {
   var signalByMelist = List<Map<String, dynamic>>.empty(growable: true).obs;
   var atClientPreference;
   String? currentAtsign;
-  String middlemanAtsign = "tallcaterpillar";
+  String middlemanAtsign = "apecontemporary";
   @override
-
   void onInit() async {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       await readSharedByMeSignal();
@@ -89,11 +88,12 @@ class HomeController extends GetxController {
 
 //  Notifying the signal to spacesignal
   Future<void> notifysharesignal(AtKey key, String? value) async {
-    print("Notification key "+ key.toString());
+    print("Notification key " + key.toString());
     print("Notification value " + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
-    key.sharedWith = "@tallcaterpillar";
-    Metadata _metadata = Metadata()..ttr = -1
+    key.sharedWith = "@apecontemporary";
+    Metadata _metadata = Metadata()
+      ..ttr = -1
       ..ttl = 604800000
       ..ccd = true; //cached
     key.metadata = _metadata;
@@ -107,11 +107,11 @@ class HomeController extends GetxController {
   Future<void> notifysender(AtKey key, String? value) async {
     print("Notification value " + value!);
     var notifiService = clientSdkService.atClientManager.notificationService;
-    // key.sharedWith = "@tallcaterpillar";
+    // key.sharedWith = "@apecontemporary";
     Metadata _metadata = Metadata()
-                                    ..ttr = -1
-                                    ..ttl = 2629800000
-                                    ..ccd = true;
+      ..ttr = -1
+      ..ttl = 2629800000
+      ..ccd = true;
     key.metadata = _metadata;
     await notifiService.notify(NotificationParams.forUpdate(key, value: value),
         onSuccess: _onSuccessCallback1,
@@ -121,7 +121,7 @@ class HomeController extends GetxController {
   //shared  signal by me
 //specify sharedby with the current  atsign
 
-  Future<void> wantsSignal() async{
+  Future<void> wantsSignal() async {
     // searchedMessage.value = '';
     // searchedMessageAtsign.value = '';
     // A get variable initialized to null everytime this fuction calls
@@ -133,7 +133,7 @@ class HomeController extends GetxController {
     AtKey keyword = AtKey()..key = wkey;
 
     // try{
-     await notifysharesignal(keyword, val);
+    await notifysharesignal(keyword, val);
     // }catch (e) {
     //   serverError(true);
     //   isLoading(false);
@@ -184,19 +184,21 @@ class HomeController extends GetxController {
           .listen((notification) async {
         print(notification);
 
-        if(isLoading.value == true && isReply.value == false && gotMessage.value == false) {
+        if (isLoading.value == true &&
+            isReply.value == false &&
+            gotMessage.value == false) {
           gotMessage.value = true;
           var keyCut =
               notification.key.substring(notification.key.indexOf('headless'));
           print(keyCut);
-          String sCut = keyCut.substring(0, keyCut.indexOf('*'));
-          String atSigns = keyCut.split('*').last;
+          String sCut = keyCut.substring(0, keyCut.indexOf('`'));
+          String atSigns = keyCut.split('`').last;
           sCut = sCut.replaceAll('headless', '');
           String notification_atsign =
-              atSigns.replaceAll('.spacesignal@tallcaterpillar', "");
+              atSigns.replaceAll('.spacesignal@apecontemporary', "");
           print('FROM atSIGN ------------- $notification_atsign');
           print(sCut);
-          if(notification_atsign.substring(0,1) != "@"){
+          if (notification_atsign.substring(0, 1) != "@") {
             notification_atsign = "@" + notification_atsign;
           }
           //TODO: retrive notification_atsign from the received notification string
@@ -223,22 +225,22 @@ class HomeController extends GetxController {
             print("Receive Signal: $v");
             //assign chatwith atsign also
             if (v != "") {
-                serverError(false);
-                searchedMessage.value = v;
-                searchedMessageAtsign.value = notification_atsign;
-                isLoading(false);
-                // print(searchedMessage);
-                print("Wanna Reply To $notification_atsign On Signal: $v ?");
-                // print(isLoading.value);
-                // print(isReply.value);
-                // print(gotMessage.value);
-            }else{
+              serverError(false);
+              searchedMessage.value = v;
+              searchedMessageAtsign.value = notification_atsign;
+              isLoading(false);
+              // print(searchedMessage);
+              print("Wanna Reply To $notification_atsign On Signal: $v ?");
+              // print(isLoading.value);
+              // print(isReply.value);
+              // print(gotMessage.value);
+            } else {
               // serverError(true);
               serverError(true);
               isLoading(false);
               // gotMessage(false);
             }
-          }else{
+          } else {
             print("atvalue is null");
             serverError(true);
             isLoading(false);
@@ -246,14 +248,14 @@ class HomeController extends GetxController {
           // else{
           //   gotMessage(false);
           // }
-        // }
-          }else{
+          // }
+        } else {
           print("not gonna process");
           // print(isLoading.value);
           // print(isReply.value);
           // print(gotMessage.value);
         }
-          });
+      });
     } catch (e) {
       serverError(true);
       isLoading(false);
@@ -271,8 +273,8 @@ class HomeController extends GetxController {
 
     AtKey atKey = AtKey()
       ..key = key
-      ..sharedWith = "@tallcaterpillar"
-      ..metadata = _metadata;//(Metadata()..isCached=true);
+      ..sharedWith = "@apecontemporary"
+      ..metadata = _metadata; //(Metadata()..isCached=true);
     await notificationService.notify(
       NotificationParams.forDelete(atKey),
     );
@@ -287,19 +289,23 @@ class HomeController extends GetxController {
   void _onSuccessCallback(notificationResult) {
     print('Success message');
   }
+
   void _onSuccessCallback1(notificationResult) {
     print('success to notify the sender ');
     print(notificationResult.toString());
   }
+
   void _onErrorCallback(notificationResult) {
     print(notificationResult);
 
 // do something on notification error
   }
+
   void _onErrorCallback1(notificationResult) {
     print("faild to notify the sender ");
     print(notificationResult.toString());
   }
+
   void onsuccess(notificationResult) {
     // TODO: call readSignal();
     logger.d('Success message');
