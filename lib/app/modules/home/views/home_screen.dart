@@ -1,7 +1,7 @@
 // import 'package:at_chat_flutter/models/message_model.dart';
 // import 'package:at_chat_flutter/services/chat_service.dart';
 import 'dart:typed_data';
-
+import 'dart:async';
 import 'package:at_client_mobile/at_client_mobile.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:at_commons/at_commons.dart';
@@ -63,11 +63,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void reqAsignal() {
     control.wantsSignal();
-    Future.delayed(const Duration(seconds: 20), (){
-      if(controllerx.searchedMessageAtsign.value == "" && controllerx.serverError.value){
-        controllerx.isLoading(false);
-      }
-    });
+    // controllerx._timer = Timer(Duration(seconds: 10), (){
+    //   if(controllerx.isLoading.value && controllerx.noProcess.value){
+    //     controllerx.serverError(true);
+    //     controllerx.isLoading(false);
+    //     controllerx.noProcess(false);
+    //     controllerx.isReply.value = false;
+    //     controllerx.gotMessage(false);
+    //   }
+    // });
 
   }
 
@@ -77,7 +81,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // String currentAtSign = (await clientSdkService.getAtSign())!;
       // print("current"+currentAtSign);
       controllerx.gotMessage.value = false;
-      await control.readSharedByMeSignal();
+      // await control.readSharedByMeSignal();
+      control.onInit();
       _contactService = ContactService();
       blocked_list = [];
       await _contactService!.initContactsService('root.atsign.org', 64)
@@ -397,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     height: 120.toHeight,
                                     width: 400.toWidth,
                                     child: Text(
-                                      'Sorry! Your message got lost in the black hole. Please try again ~',
+                                      "Sorry! Didn't find any message. Please try again ~",
                                       // message,
                                       style: TextStyle(
                                           fontSize: 15.toFont,
@@ -773,38 +778,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                                   sender: chatWithAtSign,
                                                                   time: DateTime.now().millisecondsSinceEpoch,
                                                                   type: MessageType.INITIAL));
-                                                                    // .then((value){
-                                                                    //   _contactService!.getContactDetails(sender,"").then((Map<String, dynamic> result){
-                                                                    //     // setState(() {
-                                                                    //     if (result["image"]!=null){
-                                                                    //       senderImage = initialimage(image: Uint8List.fromList(result['image'].cast<int>()),
-                                                                    //           atsign: sender);
-                                                                    //     }
-                                                                        // close loading
+                                                            controllerx.isLoading(false);
+                                                            controllerx.isReply.value = false;
 
-
-                                                                        controllerx.isLoading(false);
-                                                                        controllerx.isReply.value = false;
-
-                                                                        print(controllerx.isLoading.value);
-                                                                        print(controllerx.isReply.value);
-                                                                        print(controllerx.gotMessage.value);
-                                                                        await Navigator.push(context, MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              chatwithatsign(
-                                                                                contactImage: senderImage,
-                                                                                myImage: widget.myImage,
-                                                                                myName: widget.myName,),
-                                                                          settings: RouteSettings(
-                                                                            arguments: chatWithAtSign.toString().substring(1),
-                                                                          ),
-                                                                        ));
-                                                              //
-                                                              //   });
-                                                              // });
-                                                            // });
-
-
+                                                            print(controllerx.isLoading.value);
+                                                            print(controllerx.isReply.value);
+                                                            print(controllerx.gotMessage.value);
+                                                            await Navigator.push(context, MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  chatwithatsign(
+                                                                    contactImage: senderImage,
+                                                                    myImage: widget.myImage,
+                                                                    myName: widget.myName,),
+                                                              settings: RouteSettings(
+                                                                arguments: chatWithAtSign.toString().substring(1),
+                                                              ),
+                                                            ));
 
                                                           },
                                                           child: Text(

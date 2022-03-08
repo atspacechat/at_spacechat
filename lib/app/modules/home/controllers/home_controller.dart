@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:at_commons/at_commons.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class HomeController extends GetxController {
   var isLoading = true.obs;
   var isReply = false.obs;
   var gotMessage = false.obs;
+  var noProcess = false.obs;
+  Timer? _timer;
   var atClient = AtService.getInstance().getAtClientForAtsign();
   var signalByMelist = List<Map<String, dynamic>>.empty(growable: true).obs;
   var atClientPreference;
@@ -126,6 +129,15 @@ class HomeController extends GetxController {
     // searchedMessageAtsign.value = '';
     // A get variable initialized to null everytime this fuction calls
     // searchedMessage?.value = '';
+    _timer = Timer(Duration(seconds: 10), (){
+      if(isLoading.value && noProcess.value){
+        serverError(true);
+        isLoading(false);
+        noProcess(false);
+        isReply.value = false;
+        gotMessage(false);
+      }
+    });
     var uuid = const Uuid();
     String wkey = 'wantedspacechat' + uuid.v1();
     String val = 'is nothing' + uuid.v1();
@@ -133,12 +145,30 @@ class HomeController extends GetxController {
     AtKey keyword = AtKey()..key = wkey;
 
     // try{
-    await notifysharesignal(keyword, val);
+    await notifywantsignal(keyword, val);
     // }catch (e) {
     //   serverError(true);
     //   isLoading(false);
     // };
   }
+
+  Future<void> notifywantsignal(AtKey key, String? value) async {
+    print("Notification key " + key.toString());
+    print("Notification value " + value!);
+    var notifiService = clientSdkService.atClientManager.notificationService;
+    key.sharedWith = "@apecontemporary";
+    Metadata _metadata = Metadata()
+      ..ttr = -1
+      ..ttl = 60000 //1 minute
+      ..ccd = true; //cached
+    key.metadata = _metadata;
+    await notifiService.notify(NotificationParams.forUpdate(key, value: value),
+        onSuccess: _onSuccessCallback,
+        //TODO: Try to resent
+        onError: _onErrorCallback);
+  }
+
+
 
   Future<void> readSharedByMeSignal() async {
     /// need to be defined clientSdkService.atsign
@@ -214,6 +244,7 @@ class HomeController extends GetxController {
             print(e.toString());
             print(serverError);
             print(isLoading);
+            _timer?.cancel();
           });
           // print(value);
           // we will receive a map so have to do a json decode
@@ -229,6 +260,7 @@ class HomeController extends GetxController {
               searchedMessage.value = v;
               searchedMessageAtsign.value = notification_atsign;
               isLoading(false);
+              _timer?.cancel();
               // print(searchedMessage);
               print("Wanna Reply To $notification_atsign On Signal: $v ?");
               // print(isLoading.value);
@@ -238,12 +270,14 @@ class HomeController extends GetxController {
               // serverError(true);
               serverError(true);
               isLoading(false);
+              _timer?.cancel();
               // gotMessage(false);
             }
           } else {
             print("atvalue is null");
             serverError(true);
             isLoading(false);
+            _timer?.cancel();
           }
           // else{
           //   gotMessage(false);
@@ -251,6 +285,7 @@ class HomeController extends GetxController {
           // }
         } else {
           print("not gonna process");
+          noProcess(true);
           // print(isLoading.value);
           // print(isReply.value);
           // print(gotMessage.value);
@@ -262,6 +297,7 @@ class HomeController extends GetxController {
       print(e.toString());
       print(serverError);
       print(isLoading);
+      _timer?.cancel();
     }
   }
 
