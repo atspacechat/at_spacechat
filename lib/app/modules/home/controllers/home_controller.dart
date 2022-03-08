@@ -191,8 +191,8 @@ class HomeController extends GetxController {
           var keyCut =
               notification.key.substring(notification.key.indexOf('headless'));
           print(keyCut);
-          String sCut = keyCut.substring(0, keyCut.indexOf('`'));
-          String atSigns = keyCut.split('`').last;
+          String sCut = keyCut.substring(0, keyCut.indexOf('*'));
+          String atSigns = keyCut.split('*').last;
           sCut = sCut.replaceAll('headless', '');
           String notification_atsign =
               atSigns.replaceAll('.spacesignal@apecontemporary', "");
