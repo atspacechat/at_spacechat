@@ -81,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // String currentAtSign = (await clientSdkService.getAtSign())!;
       // print("current"+currentAtSign);
       controllerx.gotMessage.value = false;
+      // controllerx.gotMessage.value = true;
       // await control.readSharedByMeSignal();
       control.onInit();
       _contactService = ContactService();
@@ -286,8 +287,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             Container(
                               width: 30.toWidth,
                             ),
-                            Container(
-                              // height: 40.toHeight,
+                            SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+
+                  // height: 40.toHeight,
                               child: controllerx.isReply.value
                               ? Text(
                                 "Loading the chat ...",
@@ -401,7 +404,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     ),
                                     height: 120.toHeight,
                                     width: 400.toWidth,
-                                    child: Text(
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      child: Text(
                                       "Sorry! Didn't find any message. Please try again ~",
                                       // message,
                                       style: TextStyle(
@@ -409,7 +414,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           fontWeight: FontWeight.w500,
                                           color: Color(0xFF584797)),
                                       maxLines: null,
-                                    ),
+                                    )),
                                   ),
                                   Flexible(
                                     child: Container(
@@ -519,7 +524,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                         // reqAsignal();
                                                         // controllerx.isLoading(true);
                                                         controllerx.gotMessage.value = false;
-                                                        Navigator.pop(context);
+                                                        // Navigator.pop(context);
+                                                        controllerx.isLoading(true);
+                                                        reqAsignal();
+                                                        // showLoaderDialog(context);
                                                       },
                                                       child: Text(
                                                         "Sure",
@@ -628,7 +636,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         ),
                                         height: 120.toHeight,
                                         width: 400.toWidth,
-                                        child: Text(
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.vertical,
+                                          child: Text(
                                           '${controllerx.searchedMessage}',
                                           // message,
                                           style: TextStyle(
@@ -636,7 +646,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                               fontWeight: FontWeight.w500,
                                               color: Color(0xFF584797)),
                                           maxLines: null,
-                                        ),
+                                        )),
                                       ),
                                       // controller: controller,
                                       //  onChanged: (String value)async{if(value!=''){return _hascontent=true; }},
@@ -774,10 +784,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                               //   .then((value){
                                                             await _chatService!.setChatHistory(
                                                                 Message(
-                                                                  message: controllerx.searchedMessage.value,
+                                                                  message: "Hello! I got your message \""+ controllerx.searchedMessage.value + "\" from outer space.",
                                                                   sender: chatWithAtSign,
                                                                   time: DateTime.now().millisecondsSinceEpoch,
-                                                                  type: MessageType.INITIAL));
+                                                                  // type: MessageType.INITIAL
+                                                                  type: MessageType.OUTGOING
+                                                                ));
                                                             controllerx.isLoading(false);
                                                             controllerx.isReply.value = false;
 
