@@ -33,9 +33,9 @@ class HomeController extends GetxController {
   String middlemanAtsign = "apecontemporary";
   @override
   void onInit() async {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      await readSharedByMeSignal();
-    });
+    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+    //   await readSharedByMeSignal();
+    // });
     signalEditingController = TextEditingController();
     monitorForSignals();
     super.onInit();

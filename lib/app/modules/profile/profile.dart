@@ -254,7 +254,6 @@ class Profile extends StatelessWidget {
                                               //top: 10,
                                             ),
                                             icon: Icon(
-                                              // Icons.logout,
                                               Icons.settings,
                                               color: Colors.grey[300],
                                               size: 35.toFont,

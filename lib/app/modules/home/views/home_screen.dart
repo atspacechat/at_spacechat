@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // print("current"+currentAtSign);
       controllerx.gotMessage.value = false;
       // controllerx.gotMessage.value = true;
-      // await control.readSharedByMeSignal();
+      await control.readSharedByMeSignal();
       control.onInit();
       _contactService = ContactService();
       blocked_list = [];

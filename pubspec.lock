@@ -125,7 +125,7 @@ packages:
     source: hosted
     version: "2.0.3"
   at_server_status:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: at_server_status
       url: "https://pub.dartlang.org"

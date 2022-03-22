@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:at_server_status/at_server_status.dart';
 import 'package:flutter/material.dart';
 import 'package:at_onboarding_flutter/at_onboarding_flutter.dart';
 import 'package:at_utils/at_logger.dart';
 import 'package:at_client_mobile/at_client_mobile.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 import 'package:spacesignal/app/modules/home/views/home_screen.dart';
 import 'package:spacesignal/utils/constants.dart';
@@ -12,6 +14,8 @@ import 'package:at_common_flutter/services/size_config.dart';
 import 'package:spacesignal/utils/initial_image.dart';
 import '../../../../sdk_service.dart';
 import 'package:get/get.dart';
+import 'package:at_client/src/service/notification_service_impl.dart';
+
 class OnbordingScreen extends StatefulWidget {
   // String? snackBarText;
   // OnbordingScreen({Key? key,
@@ -166,9 +170,61 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                             String? atsign) async{
                                           c.isLoading.value = true;
                                           AtService.getInstance().atClientServiceMap = value;
-                                          _logger.finer(
-                                              'Successfully onboarded $atsign');
+                                          _logger.finer('Successfully onboarded $atsign');
                                           clientSdkService.currentAtsign =  atsign;
+
+                                          // Future<AtStatus> getAtStatus(atSign) async {
+                                          //   AtStatus atStatus;
+                                          //   AtStatusImpl atStatusImpl;
+                                          //   // AtStatus atStatus = await atStatusImpl.get(atSign);
+                                          //   // AtSignStatus atSignStatus = atStatus.status();
+                                          //   // int httpStatus = atStatus.httpStatus();
+                                          //   atStatusImpl = AtStatusImpl();
+                                          //   atStatus = await atStatusImpl.get(atSign);
+                                          //   print('status for : $atSign');
+                                          //   print('rootStatus: ${atStatus.rootStatus}');
+                                          //   print('serverStatus: ${atStatus.serverStatus}');
+                                          //   print('status: ${atStatus.status()}');
+                                          //   print('httpStatus: ${atStatus.httpStatus()}');
+                                            // if(atStatus.rootStatus.toString() != "RootStatus.found" ||
+                                            //     atStatus.serverStatus.toString()!="ServerStatus.activated" ||
+                                            //     atStatus.status().toString()!="AtSignStatus.activated" ||
+                                            //     atStatus.httpStatus().toString()!="200")
+                                            // {
+                                            // await Get.defaultDialog(
+                                            //   title: 'Oops!',
+                                            //   titleStyle: GoogleFonts.patuaOne(
+                                            //   fontWeight: FontWeight.w600,
+                                            //   color: Colors.deepPurple,
+                                            //   fontSize: 25,
+                                            //   ),
+                                            //   middleText:
+                                            //   'Please check your internet and try again.',
+                                            //   onConfirm: () async {
+                                            //     KeyChainManager _keyChainManager =
+                                            //     KeyChainManager.getInstance();
+                                            //     var _atSignsList = await _keyChainManager
+                                            //         .getAtSignListFromKeychain();
+                                            //     _atSignsList?.forEach((element) {
+                                            //       _keyChainManager
+                                            //           .deleteAtSignFromKeychain(element);
+                                            //     });
+                                            //     c.isLoading.value = false;
+                                            //     await Get.to(() => OnbordingScreen());
+                                            //   });
+                                            // }
+                                          //   return atStatus;
+                                          // }
+                                          // await getAtStatus(atsign);
+                                          // var notifiService = clientSdkService.atClientManager.notificationService;
+                                          // notifiService.;
+                                          // var notificationService = NotificationServiceImpl._(clientSdkService.atClientManager.atClient,
+                                          //     atClientManager: clientSdkService.atClientManager);
+                                          // final notificationService1 = new NotificationServiceImpl._(clientSdkService.atClientManager, clientSdkService.atClientManager.atClient);
+                                          // notificationService.getMonitorStatus();
+                                          // await NotificationServiceImpl.getMonitorStatus();
+
+
                                           ContactService _contactService = ContactService();
                                           await _contactService.initContactsService('root.atsign.org', 64);
                                           if(_contactService.loggedInUserDetails!.tags != null) {
@@ -203,10 +259,19 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                             }
                                           });
                                           },
-                                        onError: (Object? error) {
+                                        onError: (Object? error) async{
                                           _logger.severe(
                                               'Onboarding throws $error error');
                                           // showLoaderDialog(context);
+                                          // KeyChainManager _keyChainManager =
+                                          // KeyChainManager.getInstance();
+                                          // var _atSignsList =
+                                          //     await _keyChainManager
+                                          //     .getAtSignListFromKeychain();
+                                          // _atSignsList?.forEach((element) {
+                                          //   _keyChainManager
+                                          //       .deleteAtSignFromKeychain(element);
+                                          // });
                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                               content: Text(
                                                 'Please check your internet and try again later.',
