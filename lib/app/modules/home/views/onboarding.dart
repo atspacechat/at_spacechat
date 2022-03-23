@@ -248,17 +248,44 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                             myImage = initialimage(atsign: atsign);
                                             myName = atsign.toString();
                                           }
-                                          Timer.periodic(Duration(seconds: 1), (timer) {
+                                          var notificationService = clientSdkService.atClientManager.notificationService as NotificationServiceImpl;
+                                          var monitorStatus = notificationService.getMonitorStatus();
+                                          print(monitorStatus);
+                                          if(monitorStatus.toString() == "MonitorStatus.started"){
+                                          Timer.periodic(Duration(seconds: 1), (timer) async {
                                             // do something or call a function
-                                            if(myName != "") {
-                                              timer.cancel();
-                                              // c.isLoading.value = false;
-                                              Get.to(() =>
-                                                  HomeScreen(myImage: myImage,
-                                                    myName: myName,myAtSign: atsign.toString()));
-                                            }
-                                          });
+                                              if(myName != "") {
+                                                timer.cancel();
+                                                // c.isLoading.value = false;
+                                                await Get.to(() =>
+                                                    HomeScreen(myImage: myImage,
+                                                      myName: myName,myAtSign: atsign.toString()));
+                                              };});
+                                          }else{
+                                                await Get.defaultDialog(
+                                                  title: 'Oops!',
+                                                  titleStyle: GoogleFonts.patuaOne(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.deepPurple,
+                                                  fontSize: 25,
+                                                  ),
+                                                  middleText:
+                                                  'Please try log in again.',
+                                                  onConfirm: () async {
+                                                    KeyChainManager _keyChainManager =
+                                                    KeyChainManager.getInstance();
+                                                    var _atSignsList = await _keyChainManager
+                                                        .getAtSignListFromKeychain();
+                                                    _atSignsList?.forEach((element) {
+                                                      _keyChainManager
+                                                          .deleteAtSignFromKeychain(element);
+                                                    });
+                                                    c.isLoading.value = false;
+                                                    await Get.to(() => OnbordingScreen());
+                                                  });
+                                          };
                                           },
+
                                         onError: (Object? error) async{
                                           _logger.severe(
                                               'Onboarding throws $error error');
