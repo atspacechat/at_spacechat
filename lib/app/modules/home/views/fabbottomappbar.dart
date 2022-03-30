@@ -116,7 +116,8 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
       var uuid = DateTime.now().toUtc().millisecondsSinceEpoch.toString();
       String unikey = MixedConstants.regex + uuid;
       await _controller.shareSignal({'Message': msg, 'unisignal': unikey});
-      Get.back();
+      // Get.back();
+      Navigator.pop(context);
     }
 
     return Expanded(
@@ -225,7 +226,8 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                           onPressed: () async {
                             if(_controller.signalEditingController!.text.trim() != ""){
                               // loading_control.loading.value = true;
-                              Get.back();
+                              // Get.back();
+                              Navigator.pop(context);
                               unawaited(Get.defaultDialog(
                                   barrierDismissible: false,
                                   titlePadding: const EdgeInsets.only(
@@ -261,7 +263,7 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                                       ]))));
                               await sharesignal(_controller.signalEditingController!.text);
                               // Get.back();
-                              // Navigator.pop(context);
+                              Navigator.pop(context);
                               // loading_control.loading.value = false;
                             }
                           },

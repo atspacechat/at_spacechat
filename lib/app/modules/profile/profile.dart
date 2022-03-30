@@ -349,8 +349,8 @@ class Profile extends StatelessWidget {
                                             middleText:
                                             'Are you sure you want to recall this message from outer space?',
                                             onConfirm: () async {
-
-                                              Get.back();
+                                              // Get.back();
+                                              Navigator.pop(context);
                                               unawaited(Get.defaultDialog(
                                                   barrierDismissible: false,
                                                   titlePadding: const EdgeInsets.only(
@@ -385,8 +385,8 @@ class Profile extends StatelessWidget {
                                                         )
                                                       ]))));
                                               await controller.recallSignal(key);
-                                              // Navigator.pop(context);
-                                              Get.back();
+                                              Navigator.pop(context);
+                                              // Get.back();
                                             },
                                             textConfirm: 'Recall',
                                             textCancel: 'Cancel',
