@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:at_client/src/service/notification_service.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 class HomeController extends GetxController {
   TextEditingController? signalEditingController;
@@ -33,9 +34,10 @@ class HomeController extends GetxController {
   String middlemanAtsign = "apecontemporary";
   @override
   void onInit() async {
-    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-    //   await readSharedByMeSignal();
-    // });
+    // String key = "headlessspacechat-68742ac0-a0ae-11ec-8290-4b0c6a949be1*barbaras🐕🐕.spacesignal@apecontemporary";
+    // String kcut = key.substring(key.indexOf('-')+1 ,key.indexOf('*'));
+    // print(kcut);
+
     signalEditingController = TextEditingController();
     monitorForSignals();
     super.onInit();
@@ -76,7 +78,7 @@ class HomeController extends GetxController {
       ..metadata = metadata;
 
     String encodedValue = jsonEncode(data);
-    print(encodedValue);
+    print(atKey.key);
     bool result = await clientSdkService.put(atKey, encodedValue);
     print(result);
     if (result == true) {

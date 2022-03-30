@@ -112,10 +112,9 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
         Get.put<HomeController>(HomeController());
 
     Future<void> sharesignal(String msg) async {
-      var uuid = const Uuid();
-
-      String unikey = MixedConstants.regex + uuid.v1();
-
+      // var uuid = const Uuid();
+      var uuid = DateTime.now().toUtc().millisecondsSinceEpoch.toString();
+      String unikey = MixedConstants.regex + uuid;
       await _controller.shareSignal({'Message': msg, 'unisignal': unikey});
       Get.back();
     }

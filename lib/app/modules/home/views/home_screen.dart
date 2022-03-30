@@ -63,16 +63,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void reqAsignal() {
     control.wantsSignal();
-    // controllerx._timer = Timer(Duration(seconds: 10), (){
-    //   if(controllerx.isLoading.value && controllerx.noProcess.value){
-    //     controllerx.serverError(true);
-    //     controllerx.isLoading(false);
-    //     controllerx.noProcess(false);
-    //     controllerx.isReply.value = false;
-    //     controllerx.gotMessage(false);
-    //   }
-    // });
-
   }
 
   @override
