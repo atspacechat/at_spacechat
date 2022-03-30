@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:at_common_flutter/services/size_config.dart';
 import 'package:spacesignal/app/modules/contacts/views/contacts_screen.dart';
 import 'package:spacesignal/app/modules/home/controllers/home_controller.dart';
+import 'package:spacesignal/app/modules/profile/profile.dart';
 import 'package:spacesignal/sdk_service.dart';
 import 'package:get/get.dart';
 import 'package:spacesignal/utils/constants.dart';
@@ -29,6 +30,7 @@ class FABBottomAppBar extends StatefulWidget {
     this.selectedColor,
     this.notchedShape,
     this.onTabSelected,
+    required this.myAtSign,
     required this.myImage,
     required this.myName,
   }) {
@@ -45,6 +47,7 @@ class FABBottomAppBar extends StatefulWidget {
   final ValueChanged<int>? onTabSelected;
   final initialimage myImage;
   final String myName;
+  final String myAtSign;
 
   @override
   State<StatefulWidget> createState() => FABBottomAppBarState();
@@ -262,8 +265,9 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                                         )
                                       ]))));
                               await sharesignal(_controller.signalEditingController!.text);
+                              await Get.to(() => Profile(myAtSign: widget.myAtSign,myImage: widget.myImage,myName: widget.myName,));
                               // Get.back();
-                              Navigator.pop(context);
+                              // Navigator.pop(context);
                               // loading_control.loading.value = false;
                             }
                           },

@@ -219,6 +219,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               FABBottomAppBarItem(iconData: Icons.send, text: 'Send'),
               FABBottomAppBarItem(iconData: Icons.chat, text: 'Chats'),
             ],
+            myAtSign: widget.myAtSign,
             myName: widget.myName,
             myImage: widget.myImage,
           ),
