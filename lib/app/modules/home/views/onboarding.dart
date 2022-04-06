@@ -16,6 +16,8 @@ import '../../../../sdk_service.dart';
 import 'package:get/get.dart';
 import 'package:at_client/src/service/notification_service_impl.dart';
 
+import 'package:at_client/src/listener/sync_progress_listener.dart';
+
 class OnbordingScreen extends StatefulWidget {
   // String? snackBarText;
   // OnbordingScreen({Key? key,
@@ -172,60 +174,11 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                           AtService.getInstance().atClientServiceMap = value;
                                           _logger.finer('Successfully onboarded $atsign');
                                           clientSdkService.currentAtsign =  atsign;
-
-                                          // Future<AtStatus> getAtStatus(atSign) async {
-                                          //   AtStatus atStatus;
-                                          //   AtStatusImpl atStatusImpl;
-                                          //   // AtStatus atStatus = await atStatusImpl.get(atSign);
-                                          //   // AtSignStatus atSignStatus = atStatus.status();
-                                          //   // int httpStatus = atStatus.httpStatus();
-                                          //   atStatusImpl = AtStatusImpl();
-                                          //   atStatus = await atStatusImpl.get(atSign);
-                                          //   print('status for : $atSign');
-                                          //   print('rootStatus: ${atStatus.rootStatus}');
-                                          //   print('serverStatus: ${atStatus.serverStatus}');
-                                          //   print('status: ${atStatus.status()}');
-                                          //   print('httpStatus: ${atStatus.httpStatus()}');
-                                            // if(atStatus.rootStatus.toString() != "RootStatus.found" ||
-                                            //     atStatus.serverStatus.toString()!="ServerStatus.activated" ||
-                                            //     atStatus.status().toString()!="AtSignStatus.activated" ||
-                                            //     atStatus.httpStatus().toString()!="200")
-                                            // {
-                                            // await Get.defaultDialog(
-                                            //   title: 'Oops!',
-                                            //   titleStyle: GoogleFonts.patuaOne(
-                                            //   fontWeight: FontWeight.w600,
-                                            //   color: Colors.deepPurple,
-                                            //   fontSize: 25,
-                                            //   ),
-                                            //   middleText:
-                                            //   'Please check your internet and try again.',
-                                            //   onConfirm: () async {
-                                            //     KeyChainManager _keyChainManager =
-                                            //     KeyChainManager.getInstance();
-                                            //     var _atSignsList = await _keyChainManager
-                                            //         .getAtSignListFromKeychain();
-                                            //     _atSignsList?.forEach((element) {
-                                            //       _keyChainManager
-                                            //           .deleteAtSignFromKeychain(element);
-                                            //     });
-                                            //     c.isLoading.value = false;
-                                            //     await Get.to(() => OnbordingScreen());
-                                            //   });
-                                            // }
-                                          //   return atStatus;
-                                          // }
-                                          // await getAtStatus(atsign);
-                                          // var notifiService = clientSdkService.atClientManager.notificationService;
-                                          // notifiService.;
-                                          // var notificationService = NotificationServiceImpl._(clientSdkService.atClientManager.atClient,
-                                          //     atClientManager: clientSdkService.atClientManager);
-                                          // final notificationService1 = new NotificationServiceImpl._(clientSdkService.atClientManager, clientSdkService.atClientManager.atClient);
-                                          // notificationService.getMonitorStatus();
-                                          // await NotificationServiceImpl.getMonitorStatus();
-
-
                                           ContactService _contactService = ContactService();
+                                          var notificationService = clientSdkService.atClientManager.notificationService as NotificationServiceImpl;
+                                          var monitorStatus = notificationService.getMonitorStatus();
+                                          final progressListener = MySyncProgressListener();
+                                          clientSdkService.atClientManager.syncService.addProgressListener(progressListener);
                                           await _contactService.initContactsService('root.atsign.org', 64);
                                           if(_contactService.loggedInUserDetails!.tags != null) {
                                             mydetails = _contactService.loggedInUserDetails!.tags!.cast<dynamic, dynamic>();
@@ -248,42 +201,47 @@ class OnbordingScreenState extends State<OnbordingScreen> {
                                             myImage = initialimage(atsign: atsign);
                                             myName = atsign.toString();
                                           }
-                                          var notificationService = clientSdkService.atClientManager.notificationService as NotificationServiceImpl;
-                                          var monitorStatus = notificationService.getMonitorStatus();
-                                          print(monitorStatus);
-                                          if(monitorStatus.toString() == "MonitorStatus.started"){
+
                                           Timer.periodic(Duration(seconds: 1), (timer) async {
-                                            // do something or call a function
-                                              if(myName != "") {
-                                                timer.cancel();
-                                                // c.isLoading.value = false;
-                                                await Get.to(() =>
-                                                    HomeScreen(myImage: myImage,
-                                                      myName: myName,myAtSign: atsign.toString()));
-                                              };});
-                                          }else{
-                                                await Get.defaultDialog(
-                                                  title: 'Oops!',
-                                                  titleStyle: GoogleFonts.patuaOne(
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.deepPurple,
-                                                  fontSize: 25,
-                                                  ),
-                                                  middleText:
-                                                  'Please try log in again.',
-                                                  onConfirm: () async {
-                                                    KeyChainManager _keyChainManager =
-                                                    KeyChainManager.getInstance();
-                                                    var _atSignsList = await _keyChainManager
-                                                        .getAtSignListFromKeychain();
-                                                    _atSignsList?.forEach((element) {
-                                                      _keyChainManager
-                                                          .deleteAtSignFromKeychain(element);
-                                                    });
-                                                    c.isLoading.value = false;
-                                                    await Get.to(() => OnbordingScreen());
-                                                  });
-                                          };
+                                            if (progressListener.result == "SyncStatus.success"){
+                                              print("sync success");
+                                              timer.cancel();
+                                              if(monitorStatus.toString() == "MonitorStatus.started"){
+                                              Timer.periodic(Duration(seconds: 1), (timer) async {
+                                                // do something or call a function
+                                                  if(myName != "") {
+                                                    timer.cancel();
+                                                    // c.isLoading.value = false;
+                                                    await Get.to(() =>
+                                                        HomeScreen(myImage: myImage,
+                                                          myName: myName,myAtSign: atsign.toString()));
+                                                  };});
+                                              }else{
+                                                    await Get.defaultDialog(
+                                                      title: 'Oops!',
+                                                      titleStyle: GoogleFonts.patuaOne(
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.deepPurple,
+                                                      fontSize: 25,
+                                                      ),
+                                                      middleText:
+                                                      'Please try log in again.',
+                                                      onConfirm: () async {
+                                                        KeyChainManager _keyChainManager =
+                                                        KeyChainManager.getInstance();
+                                                        var _atSignsList = await _keyChainManager
+                                                            .getAtSignListFromKeychain();
+                                                        _atSignsList?.forEach((element) {
+                                                          _keyChainManager
+                                                              .deleteAtSignFromKeychain(element);
+                                                        });
+                                                        c.isLoading.value = false;
+                                                        await Get.to(() => OnbordingScreen());
+                                                      });
+                                              };
+                                            }
+                                          });
+
                                           },
 
                                         onError: (Object? error) async{
@@ -381,3 +339,22 @@ class OnbordingScreenState extends State<OnbordingScreen> {
 class Controller1 extends GetxController {
   RxBool isLoading = false.obs;
 }
+
+
+class MySyncProgressListener extends SyncProgressListener {
+  // @override
+  String result = "";
+
+  void onSyncProgressEvent(SyncProgress syncProgress) {
+    print('received sync progress: $syncProgress.syncStatus');
+    result = syncProgress.syncStatus.toString();
+    // expect(syncProgress.syncStatus, SyncStatus.success);
+    // return syncProgress.syncStatus.toString();
+  }
+
+//   String returnResult() {
+//     return result;
+// }
+
+}
+//received sync progress: SyncProgress{atSign: @64coloringswift, syncStatus: SyncStatus.success, isInitialSync: false, startedAt: 2022-04-06 15:47:20.005012Z, completedAt: 2022-04-06 15:47:21.962823Z, message: null}

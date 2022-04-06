@@ -26,7 +26,7 @@ class HomeController extends GetxController {
   var isReply = false.obs;
   var gotMessage = false.obs;
   var noProcess = false.obs;
-  Timer? _timer;
+  late Timer _timer;
   var atClient = AtService.getInstance().getAtClientForAtsign();
   var signalByMelist = List<Map<String, dynamic>>.empty(growable: true).obs;
   var atClientPreference;
@@ -131,8 +131,8 @@ class HomeController extends GetxController {
     // searchedMessageAtsign.value = '';
     // A get variable initialized to null everytime this fuction calls
     // searchedMessage?.value = '';
-    _timer = Timer(Duration(seconds: 10), (){
-      if(isLoading.value && noProcess.value){
+    _timer = Timer(Duration(seconds: 15), (){
+      if(isLoading.value){
         serverError(true);
         isLoading(false);
         noProcess(false);
@@ -143,15 +143,8 @@ class HomeController extends GetxController {
     var uuid = const Uuid();
     String wkey = 'wantedspacechat' + uuid.v1();
     String val = 'is nothing' + uuid.v1();
-
     AtKey keyword = AtKey()..key = wkey;
-
-    // try{
     await notifywantsignal(keyword, val);
-    // }catch (e) {
-    //   serverError(true);
-    //   isLoading(false);
-    // };
   }
 
   Future<void> notifywantsignal(AtKey key, String? value) async {
@@ -246,7 +239,7 @@ class HomeController extends GetxController {
             print(e.toString());
             print(serverError);
             print(isLoading);
-            _timer?.cancel();
+            _timer.cancel();
           });
           // print(value);
           // we will receive a map so have to do a json decode
@@ -262,7 +255,7 @@ class HomeController extends GetxController {
               searchedMessage.value = v;
               searchedMessageAtsign.value = notification_atsign;
               isLoading(false);
-              _timer?.cancel();
+              _timer.cancel();
               // print(searchedMessage);
               print("Wanna Reply To $notification_atsign On Signal: $v ?");
               // print(isLoading.value);
@@ -270,21 +263,18 @@ class HomeController extends GetxController {
               // print(gotMessage.value);
             } else {
               // serverError(true);
+              print("null value");
               serverError(true);
               isLoading(false);
-              _timer?.cancel();
+              _timer.cancel();
               // gotMessage(false);
             }
           } else {
             print("atvalue is null");
             serverError(true);
             isLoading(false);
-            _timer?.cancel();
+            _timer.cancel();
           }
-          // else{
-          //   gotMessage(false);
-          // }
-          // }
         } else {
           print("not gonna process");
           noProcess(true);
@@ -299,7 +289,7 @@ class HomeController extends GetxController {
       print(e.toString());
       print(serverError);
       print(isLoading);
-      _timer?.cancel();
+      _timer.cancel();
     }
   }
 
@@ -334,7 +324,7 @@ class HomeController extends GetxController {
   }
 
   void _onErrorCallback(notificationResult) {
-    print(notificationResult);
+    print("error result: "+notificationResult.toString());
 
 // do something on notification error
   }

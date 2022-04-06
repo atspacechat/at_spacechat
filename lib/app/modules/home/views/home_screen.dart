@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   String activeAtSign = "";
   late GlobalKey<ScaffoldState> scaffoldKey;
   ContactService? _contactService;
-  ChatService? _chatService;
+  late ChatService _chatService;
   var blocked_list = [];
 
 
@@ -68,10 +68,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-      // String currentAtSign = (await clientSdkService.getAtSign())!;
-      // print("current"+currentAtSign);
       controllerx.gotMessage.value = false;
-      // controllerx.gotMessage.value = true;
       await control.readSharedByMeSignal();
       control.onInit();
       _contactService = ContactService();
@@ -769,21 +766,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                             // print("check add contact "+_contactService!.getAtSignError);
                                                             String chatWithAtSign = sender;
                                                             await _notifysender(chatWithAtSign);
-                                                            _chatService!.setAtsignToChatWith(chatWithAtSign,false,"",[]);
+                                                            _chatService.setAtsignToChatWith(chatWithAtSign,false,"",[]);
                                                             // _chatService!.getChatHistory(atsign:chatWithAtSign);
-                                                            await _chatService!.getMyChatHistory();
+                                                            await _chatService.getMyChatHistory();
                                                               //   .then((value){
-                                                            await _chatService!.setChatHistory(
-                                                                Message(
-                                                                  message: "Hello! I got your message \""+ controllerx.searchedMessage.value + "\" from outer space.",
-                                                                  sender: chatWithAtSign,
-                                                                  time: DateTime.now().millisecondsSinceEpoch,
-                                                                  // type: MessageType.INITIAL
-                                                                  type: MessageType.OUTGOING
-                                                                ));
+                                                            // await _chatService!.setChatHistory(
+                                                            //     Message(
+                                                            //       message: "Hello! I got your message \""+ controllerx.searchedMessage.value + "\" from outer space.",
+                                                            //       sender: chatWithAtSign,
+                                                            //       time: DateTime.now().millisecondsSinceEpoch,
+                                                            //       // type: MessageType.INITIAL
+                                                            //       type: MessageType.OUTGOING
+                                                            //     ));
                                                             controllerx.isLoading(false);
                                                             controllerx.isReply.value = false;
-
                                                             print(controllerx.isLoading.value);
                                                             print(controllerx.isReply.value);
                                                             print(controllerx.gotMessage.value);
