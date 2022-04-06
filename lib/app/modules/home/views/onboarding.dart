@@ -349,12 +349,8 @@ class MySyncProgressListener extends SyncProgressListener {
     print('received sync progress: $syncProgress.syncStatus');
     result = syncProgress.syncStatus.toString();
     // expect(syncProgress.syncStatus, SyncStatus.success);
-    // return syncProgress.syncStatus.toString();
   }
-
-//   String returnResult() {
-//     return result;
-// }
+//received sync progress: SyncProgress{atSign: @64coloringswift, syncStatus: SyncStatus.success, isInitialSync: false, startedAt: 2022-04-06 15:47:20.005012Z, completedAt: 2022-04-06 15:47:21.962823Z, message: null}
 
 }
-//received sync progress: SyncProgress{atSign: @64coloringswift, syncStatus: SyncStatus.success, isInitialSync: false, startedAt: 2022-04-06 15:47:20.005012Z, completedAt: 2022-04-06 15:47:21.962823Z, message: null}
+
