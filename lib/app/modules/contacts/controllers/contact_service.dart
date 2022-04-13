@@ -379,6 +379,7 @@ class ContactService {
     String? atSign,
     String? nickName,
   }) async {
+    print("here1");
     var contactDetails = <String, dynamic>{};
     contactDetails['name'] = null;
     contactDetails['image'] = null;
@@ -416,7 +417,9 @@ class ContactService {
           }
         }
       }
+      print("here2");
       if (!isContactPresent && checkAtSign!) {
+        print("here3");
         var details = await getContactDetails(atSign, nickName);
         contact = AtContact(
           atSign: atSign,
@@ -426,14 +429,14 @@ class ContactService {
         var result = await atContactImpl.add(contact).catchError((e) {
           print('error to add contact => $e');
         });
-        print(result);
+        print("add new contact result" + result.toString());
         await fetchContacts();
         return details;
       } else {
         return contactDetails;
       }
     } catch (e) {
-      print(e);
+      print("contact error" + e.toString());
       return contactDetails;
     }
   }
