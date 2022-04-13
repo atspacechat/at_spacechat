@@ -37,7 +37,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     String activeAtSign = myAtSign;
     SizeConfig().init(context);
-
+    // print(controller.signalByMelist.length);
     return Material(
         child: SlidingUpPanel(
             minHeight: 0,
@@ -318,22 +318,64 @@ class Profile extends StatelessWidget {
                         Expanded(
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.7,
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(30.0),
                                   topRight: Radius.circular(30.0)),
                             ),
-                            child: Container(
+                            child: (controller.signalByMelist.length == 0)
+                                ? Container(
+                                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.18,left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        "You don't have any active message",
+                                        style: GoogleFonts.quicksand(
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.deepPurple,
+                                          fontSize: 16.toFont,
+                                        ),),
+                                      SizedBox(height: 20.toHeight,),
+                                      Text(
+                                        "You haven't sent any message to the space or your message has expired (after one week).",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(color:Colors.grey[700]),),
+                                      SizedBox(height: 20.toHeight,),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.deepPurple,
+                                            alignment: Alignment.center,
+                                            textStyle: GoogleFonts.quicksand(
+                                              fontWeight: FontWeight.w900,
+                                              color: Colors.white,
+                                              fontSize: 16.toFont,
+                                            ),
+                                            fixedSize: Size(MediaQuery.of(context).size.width * 0.7,MediaQuery.of(context).size.height * 0.06),
+                                            shape: new RoundedRectangleBorder(
+                                              borderRadius: new BorderRadius.circular(20.0),
+                                            ),
+
+                                        ),
+                                        onPressed:() {Get.to(()=>HomeScreen(myImage: myImage,myName: myName,myAtSign: myAtSign,));},
+                                        child:
+                                            Text("Send a message now"),
+                                      ),
+
+                                ]))
+
+
+                            :Container(
                               margin: EdgeInsets.only(
                                 top: 5.toHeight,
                               ),
                               child: Obx(() => ListView.builder(
                                   itemCount: controller.signalByMelist.length,
                                   itemBuilder: (context, index) {
-                                    var _item =
-                                        controller.signalByMelist[index];
+                                    var _item = controller.signalByMelist[index];
                                     String key = _item['unisignal'];
+
                                     return ListTile(
                                       trailing: IconButton(
                                         icon:

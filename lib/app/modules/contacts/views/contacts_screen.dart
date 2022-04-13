@@ -241,9 +241,48 @@ class _ContactScreenState extends State<ContactScreen> {
                                   if ((snapshot.data == null ||
                                       snapshot.data!.isEmpty)) {
                                     return Center(
-                                      child:
-                                          Text("You don't have any chat yet"),
-                                    );
+                                      // child:
+                                      //     Text("You don't have any chat yet"),
+                                        child:Container(
+                                        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.18,left: MediaQuery.of(context).size.width * 0.1, right: MediaQuery.of(context).size.width * 0.1),
+
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                "You don't have any chat",
+                                                style: GoogleFonts.quicksand(
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Colors.deepPurple,
+                                                  fontSize: 16.toFont,
+                                                ),),
+                                              SizedBox(height: 20.toHeight,),
+                                              Text(
+                                                "You can build connections by exploring or sending messages in the outer space.",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(color:Colors.grey[700]),),
+                                              SizedBox(height: 20.toHeight,),
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: Colors.deepPurple,
+                                                  alignment: Alignment.center,
+                                                  textStyle: GoogleFonts.quicksand(
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.white,
+                                                    fontSize: 16.toFont,
+                                                  ),
+                                                  fixedSize: Size(MediaQuery.of(context).size.width * 0.7,MediaQuery.of(context).size.height * 0.06),
+                                                  shape: new RoundedRectangleBorder(
+                                                    borderRadius: new BorderRadius.circular(20.0),
+                                                  ),
+
+                                                ),
+                                                onPressed:() {Get.to(() => HomeScreen(myName: widget.myName,myImage: widget.myImage,myAtSign: activeAtSign.toString(),));},
+                                                child:
+                                                Text("Explore outer space now"),
+                                              ),
+
+                                            ])
+                                    ));
                                   } else {
                                     List<BaseContact?> _filteredList = [];
                                     snapshot.data!.forEach((c) {

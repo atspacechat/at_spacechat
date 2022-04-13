@@ -134,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       )
                           : (snapshot.data == null || snapshot.data!.isEmpty)
                           ? Center(
-                             child: Text('No chat history found'),
+                             child: Text("Let's chat!"),
                       )
                           : ListView.builder(
                           reverse: true,
