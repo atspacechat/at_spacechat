@@ -33,9 +33,9 @@ class _InitialMessageBubbleState extends State<InitialMessageBubble> {
       direction: Axis.horizontal,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          width: 20.toWidth,
-        ),
+        // SizedBox(
+        //   width: 20.toWidth,
+        // ),
         // Container(
         //   // margin: EdgeInsets.only(bottom: 20),
         //   height: 40.toFont,
@@ -52,16 +52,17 @@ class _InitialMessageBubbleState extends State<InitialMessageBubble> {
         //   width: 10.toWidth,
         // ),
         Container(
-          padding: EdgeInsets.symmetric(vertical: 10.toHeight,horizontal: 13.toWidth),
+          width: MediaQuery.of(context).size.width * 0.8,
+          padding: EdgeInsets.symmetric(vertical: 3.toHeight,horizontal: 13.toWidth),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(10.toWidth),
           ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 210.toWidth),
+          // child: ConstrainedBox(
+            // constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
             child: Text(
                 widget.message?.message ?? ' ',
-                textAlign: TextAlign.left,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   height: 1.5.toHeight,
                   fontSize: 15.toFont,
@@ -69,7 +70,7 @@ class _InitialMessageBubbleState extends State<InitialMessageBubble> {
               //maxLines: 3,
             ),
           ),
-        ),
+        // ),
       ],
     );
   }

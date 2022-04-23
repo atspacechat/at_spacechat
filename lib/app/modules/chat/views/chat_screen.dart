@@ -137,11 +137,11 @@ class _ChatScreenState extends State<ChatScreen> {
                              child: Text("Let's chat!"),
                       )
                           : ListView.builder(
-                          reverse: true,
-                          controller: _scrollController,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
+                            reverse: true,
+                            controller: _scrollController,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
                             return Padding(
                               padding:
                               EdgeInsets.symmetric(vertical: 10.0),

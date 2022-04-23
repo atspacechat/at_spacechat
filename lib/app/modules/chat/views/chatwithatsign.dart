@@ -27,7 +27,9 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
   @override
   Widget build(BuildContext context) {
     // cast
-    final String? chatWithAtSign = ModalRoute.of(context)!.settings.arguments as String;
+    var arg = ModalRoute.of(context)!.settings.arguments as atsignandname;
+    String chatwithatsign = arg.atsign;
+    String chatwithatsignname = arg.name;
     SizeConfig().init(context);
     final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
@@ -71,6 +73,9 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 15.toHeight,
+                    ),
                     Container(
                       height: 70.toHeight,
                       width: 600.toWidth,
@@ -79,23 +84,36 @@ class _ChatWithAtsignState extends State<chatwithatsign> {
                         left: 13.toWidth,
                         bottom: 10.toHeight,
                       ),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Flexible(
                             child:Text(
-                              chatWithAtSign!,
+                              chatwithatsignname,
                               style: GoogleFonts.quicksand(
                                 fontSize: 30.toFont,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,),
                                 overflow: TextOverflow.ellipsis,
                             ),
-                          )],
+                          ),
+
+                          Flexible(
+                            child:Text(
+                              chatwithatsign,
+                              style: GoogleFonts.quicksand(
+                                fontSize: 18.toFont,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.white,),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        ],
                       ),
                       alignment: Alignment.centerLeft,
                     ),
                     SizedBox(
-                      height: 25.toHeight,
+                      height: 10.toHeight,
                     ),
                   ])),
           Container(

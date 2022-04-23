@@ -21,6 +21,7 @@ import 'package:get/get.dart';
 import 'package:spacesignal/app/modules/contacts/controllers/contact_service.dart';
 import 'package:spacesignal/app/modules/chat/controllers/chat_service.dart';
 import 'package:spacesignal/app/modules/chat/utils/message_model.dart';
+import 'package:spacesignal/app/modules/contacts/views/contacts_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final initialimage myImage;
@@ -762,27 +763,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                               senderImage = initialimage(image: Uint8List.fromList(senderDetails['image']),
                                                                   atsign: sender);
                                                             }
-
+                                                            String chatWithAtSignName = senderDetails['name']== null ?sender.substring(1) : senderDetails['name'];
                                                             // print("check add contact "+_contactService!.getAtSignError);
                                                             String chatWithAtSign = sender;
                                                             await _notifysender(chatWithAtSign);
                                                             _chatService.setAtsignToChatWith(chatWithAtSign,false,"",[]);
                                                             // _chatService!.getChatHistory(atsign:chatWithAtSign);
                                                             await _chatService.getMyChatHistory();
-                                                              //   .then((value){
-                                                            // await _chatService!.setChatHistory(
-                                                            //     Message(
-                                                            //       message: "Hello! I got your message \""+ controllerx.searchedMessage.value + "\" from outer space.",
-                                                            //       sender: chatWithAtSign,
-                                                            //       time: DateTime.now().millisecondsSinceEpoch,
-                                                            //       // type: MessageType.INITIAL
-                                                            //       type: MessageType.OUTGOING
-                                                            //     ));
+                                                                // .then((value){
+                                                            await _chatService.setChatHistory(
+                                                                Message(
+                                                                  message: controllerx.searchedMessage.value,
+                                                                  sender: chatWithAtSign,
+                                                                  time: DateTime.now().millisecondsSinceEpoch,
+                                                                  type: MessageType.INITIAL
+                                                                  // type: MessageType.OUTGOING
+                                                                ));
                                                             controllerx.isLoading(false);
                                                             controllerx.isReply.value = false;
                                                             print(controllerx.isLoading.value);
                                                             print(controllerx.isReply.value);
                                                             print(controllerx.gotMessage.value);
+                                                            var arg = new atsignandname();
+                                                            arg.addatsign(chatWithAtSign);
+                                                            arg.addname(chatWithAtSignName);
                                                             await Navigator.push(context, MaterialPageRoute(
                                                               builder: (context) =>
                                                                   chatwithatsign(
@@ -790,7 +794,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                                     myImage: widget.myImage,
                                                                     myName: widget.myName,),
                                                               settings: RouteSettings(
-                                                                arguments: chatWithAtSign.toString().substring(1),
+                                                                arguments: arg,
                                                               ),
                                                             ));
 

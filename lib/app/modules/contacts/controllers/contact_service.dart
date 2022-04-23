@@ -417,9 +417,9 @@ class ContactService {
           }
         }
       }
-      print("here2");
+
       if (!isContactPresent && checkAtSign!) {
-        print("here3");
+
         var details = await getContactDetails(atSign, nickName);
         contact = AtContact(
           atSign: atSign,

@@ -274,7 +274,6 @@ class _ContactScreenState extends State<ContactScreen> {
                                                   shape: new RoundedRectangleBorder(
                                                     borderRadius: new BorderRadius.circular(20.0),
                                                   ),
-
                                                 ),
                                                 onPressed:() {Get.to(() => HomeScreen(myName: widget.myName,myImage: widget.myImage,myAtSign: activeAtSign.toString(),));},
                                                 child:
@@ -913,6 +912,9 @@ class _ContactScreenState extends State<ContactScreen> {
                                                             _filteredList[index]!.contact!.tags!['name'] != null
                                                             ? chatWithAtSignName = _filteredList[index]!.contact!.tags!['name']
                                                             : chatWithAtSignName = _filteredList[index]!.contact!.atSign!.substring(1);
+                                                        var arg = new atsignandname();
+                                                        arg.addatsign(chatWithAtSign!);
+                                                        arg.addname(chatWithAtSignName);
                                                         await Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
@@ -926,8 +928,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                                                   )),
                                                               settings:
                                                               RouteSettings(
-                                                                arguments:
-                                                                chatWithAtSignName,
+                                                                arguments: arg,
+                                                                // chatWithAtSignName,
                                                               ),
                                                             ));
                                                       },
@@ -1049,4 +1051,16 @@ class _ContactScreenState extends State<ContactScreen> {
 
 class loading_controller {
   var loading = false.obs;
+}
+
+class atsignandname {
+  String atsign = '';
+  String name = '';
+
+  void addatsign(String atsign) {
+    this.atsign = atsign;
+  }
+  void addname(String name) {
+    this.name = name;
+  }
 }
